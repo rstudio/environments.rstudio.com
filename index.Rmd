@@ -1,0 +1,197 @@
+---
+title: "Environments"
+description: |
+  Manage environments for data science.
+site: radix::radix_website
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+library(DiagrammeR)
+```
+
+# Intro
+
+Great data science work should be reproducible. Being able to repeat experiments is the foundation of all science. Reproducing work is also critical for buisness applications: scheduled reporting, team collaboration, project validation. In order to reproduce work done in R, you need to communicate 3 things: your code, your reasoning, and the environment where your code runs. There are many excellent tools and strategies for managing code - Git - and communicating methods - R Markdown. Unfortunately, environments are often neglected.  
+
+This website breaks down common use cases and strategies for solving them. It also explains the components that make up an environment. It is important to remember that no single tool will solve every environment challenge. Instead, you or your team should discuss how different tools working together can meet your requirements.
+
+```{r fig.cap="R Packages Flow Through An Organization", layout="l-body-outset", echo=FALSE}
+DiagrammeR("
+  graph TD
+    A[CRAN]-->D[Local Repository]
+    B[GitHub]-->D[Local Repository]
+    C[Internal]-->D[Local Repository]
+    D[Local Repository]-->E[Shared Dev Server]
+    D[Local Repository]-->F[Docker Container]
+    D[Local Repository]-->G[Desktop]
+    G[Desktop]-->H(Package Cache)
+    H(Package Cache)-->I((Project 1 Library))
+    H(Package Cache)-->U((Project 2 Library))
+    E[Shared Dev Server]-->J(R 3.3.1 Cache)
+    E[Shared Dev Server]-->L(R 3.5.0 Cache)
+    D[Local Repository]-->R[Validated Environment]
+    R[Validated Environment]--> X(Validated Cache)
+    X(Validated Cache)-->P((Validated Project)) 
+    J(R 3.3.1 Cache)-->K((Project 3 Library))
+    L(R 3.5.0 Cache)-->M((Shared Project))
+    K((Project 4 Library))-->Z{Ad-hoc Job}
+    K((Project 4 Library))-->Q{Ad-hoc Job}
+    O[Prod]-->AA>API]
+    O[Prod]-->N>Web App]
+    D[Local Repository]-->O[Prod]
+")
+
+```
+
+### 3 Signs You Need A Better Strategy
+
+While everyone should have a plan for reproducible environments, here are a few anti-patterns to suggest environment management has gone wrong:
+
+- Code that used to run no longer runs, but the code has not changed
+- You are afraid to upgrade or install a new package, because it might break your code or someone else's
+- Typing `install.packages` in your environment doesn't do anything
+
+### Where to go next?
+
+Check out [Getting Started](./index.html#getting-started) for a simple strategy or look for your use case. 
+
+Interested in exploring the architecture first? Read about the [components of an environment](./index.html#what-makes-up-an-environment).
+
+# Getting Started
+
+Not everyone needs the same environment management strategy. This section covers a simple approach that will greatly increase the chances your work can be reproduced. Teams of R users, or R users working within an organization, may need to adopt a more complex strategy.
+
+```{r fig.cap="Simple Workflow for Reproducible Environments", layout="l-body", echo=FALSE}
+DiagrammeR("
+ graph LR
+   A[1. Create a Project]-->C((Write Code))
+   B((2. Install Packages))-->C((Write Code))
+   C((Write Code))-->B((2. Install Packages))
+   C((Write Code))-->D[3. Snapshot]
+   D[3. Snapshot]-->E[4. Restore]
+")
+```
+
+<aside>
+1. `renv::create()`
+2. `pak::pkg_install(...)`
+3. `renv::snapshot()`
+4. `renv::restore()`
+</aside>
+
+
+### Step 1: Create a Project Library
+
+A *key* to package management is to isolate projects from one another. This allows you to upgrade or add packages for one project without breaking other work. New to projects? [Start here!](https://r4ds.had.co.nz/workflow-projects.html#rstudio-projects) Once you have a project, isolating project dependencies is done using the [`renv` package](https://github.com/rstudio/renv)^[What happened to `packrat`? This is a great question, because it means you've thought about environment management before! `renv` is the next generation of packrat.].
+
+Whether you are in an existing project or just starting a brand new project, use:
+
+```{r eval=FALSE}
+renv::init()
+```
+
+
+Behind the scenes, `renv` works by creating a new library. Interested? [Learn more about libraries](./libraries.html).
+
+### Step 2: Install and Use Packages 
+
+With the project configured, you can now install and use packages as you normally would. If you are working on your Desktop or a shared server, we recommend using [`pak`](https://github.com/r-lib/pak) to make installing packages faster and safer. In contrast, if you are in a lightweight environment like Docker, you may prefer to use [`remotes`](https://github.com/r-lib/remotes). We recommend [learning more about package installation](./installation.html).
+
+```{r eval=FALSE}
+# You can use install.packages
+install.packages('ggplot2')
+
+# But we recommend using pak in interactive settings
+pak::pkg_install('ggplot2')
+
+# Or use remotes if you're working on an automated script or 
+# in a lightweight environment like Docker
+remotes::install_cran('ggplot2')
+```
+
+Reference packages just how you normally would!
+
+```{r eval = FALSE}
+library(ggplot2)
+```
+
+Don't have access to install packages yourself? [Check out repositories](./repositories) to learn more about where packages come from.
+
+### Step 3: Record and Communicate your Environment
+
+Once you are ready to share your work, or simply "freeze" it for later, you'll want to make a record of the current environment. 
+
+```{r eval=FALSE}
+renv::snapshot()
+```
+
+This step creates a new entry in your project. For example, if the project is called `churn-model`, your files might look like:
+
+```
+churn-model
+  - model.R
+  + renv
+    + manifest
+      + 2019-03-01
+        - 2019-03-01T09-30-22GMT
+    + ... other directories
+```
+
+The file `churn-model/renv/2018-03-01/2019-03-01T09-30-22GMT` contains all the information you need to communicate your project's dependencies _at the moment you call `snapshot`_. 
+
+If you are familiar with version control for your code, we recommend calling `snapshot` anytime you push or checkin changes to your code. Learn more about [recording environments with version control](./libraries.html#record-keeping).
+
+
+
+### Step 4: Recreate the Environment
+
+This step is where the work above pays off! If you need to share your work with others, or need to return to your work after time on other projects, cash in!
+
+```{r eval=FALSE}
+# open the project, and use
+renv::restore()
+```
+
+`renv` will recreate the package environment for you, and you'll be back to working on R code instead of troubleshooting problems!
+
+### Wrap Up
+
+This strategy provides an easy way to start managing R packages for your project. There are many other goals and use cases that might motivate a different strategy or a more complex strategy. Look for your use case!
+
+
+
+# What makes up an environment?
+
+Environments can look different in different organizations, but they are composed of common elements. 
+
+```{r fig.cap="Components of an Environment", echo=FALSE}
+DiagrammeR("
+  graph BT
+  A[Operating System]---B[R Installation]
+  A[Operating System]---C[System Dependencies]
+  C[System Dependencies]---D(Project Library)
+  C[System Dependencies]---G(Project virutalenv)
+  B[R Installation]---D(Project Library)
+  A[Operating System]---F[Python Installation]
+  F[Python Installation]---G(Project virtualenv)
+  G(Project virtualenv)---H((User))
+  D(Project Library)---H((User))
+")
+```
+
+If you use a shared server, some elements might be shared amongst projects and
+some elements might exist more than once; e.g. your server might have multiple
+versions of R installed. If your organization uses Docker containers, you might
+have a base image with some of these components, and runtime installation of
+others. When you communicate the requirements of your project, it is important to communicate all of the components in play.
+
+- **Operating System** Operating system configurations can be documented with tools like Docker or through Infrastructure-as-code solutions like Chef and Puppet. Often this step is managed outside of the data science team. Learn more about [best practices for Docker](./docker.html).
+
+- **R Installation** Packages like `renv` will normally document the version of R used by the project. On shared servers, it is common to install multiple versions of R. Organizations using Docker will typically include R in a base image. Learn more [best practices for R installations](./R-installation.html).
+
+- **System Dependencies** R, Python, and their packages can depend on underlying software that needs to be installed on the system. For example, the `xml2` R package depends on the `libxml` system package. Learn more about how [system dependencies are documented and managed](./installation.html#system-dependencies).
+
+- **R Packages** Managing and recording R packages makes up the bulk of the website, specifically learn about [repositories](./repositories.html), [installating packages](./installation.html), and [managing libraries](./libraries).
+
+- **Other Languages** Often data science projects are multi-lingual. Combining R and Python is the most common use case, and tools like `renv` have affordances for recording [Python](./python.html) dependencies.

@@ -1,0 +1,11 @@
+---
+title: "Upgrading Packages"
+description: |
+  How to Safely Upgrade Packages
+---
+
+Project isolation 
+
+New library
+
+Snapshot restore

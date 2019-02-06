@@ -1,0 +1,38 @@
+name: "environments"
+title: "Environments"
+description: |
+  Environments
+output_dir: "_site"
+navbar:
+  right:
+    - text: "Use Cases"
+      menu:
+      - text: "Upgrading Packages Safely"
+        href: upgrades.html
+      - text: "Reproduce Environments"
+        href: reproduce.html
+      - text: "How to Pick a Package"
+        href: picking.html
+      - text: "Validated Environments"
+        href: validation.html
+      - text: "Production Deployments"
+        href: deploy.html
+      - text: "Team Collaboration"
+        href: collaborate.html
+    - text: "R Packages"
+      menu:
+      - text: "Installing - pak / remotes"
+        href: installation.html
+      - text: "Repositories - RStudio Package Manager"
+        href: repositories.html
+      - text: "Libraries - renv"
+        href: libraries.html
+    - text: "Other Components"
+      menu:
+      - text: "R Installations"
+        href: R-installation.html
+      - text: "Docker"
+        href: Docker.html
+      - text: "Python"
+        href: Python.html
+output: radix::radix_article

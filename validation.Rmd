@@ -1,0 +1,18 @@
+---
+title: "Validation"
+description: |
+  Using R for Validated Work
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = FALSE)
+```
+
+This section will cover things like:
+
+- How recording the versions in use is important for validation
+- Information on "vetting" a pacakage
+- Given a set of packages, how to confirm that they run in R (unit tests, additional tests)
+- References to the R in Pharma working group on validation 
+- Background on how R itself is developed / validated
+

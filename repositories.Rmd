@@ -1,0 +1,19 @@
+---
+title: "Repositories"
+description: |
+  R Package Repositories
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = FALSE)
+```
+
+Benefits of an internal repository 
+How to create one:
+  - drat
+  - miniCRAN 
+  - RSPM
+
+What the archive is
+
+Binary vs source

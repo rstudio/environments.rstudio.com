@@ -1,0 +1,11 @@
+---
+title: "Docker"
+description: |
+  Installing and Managing R
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = FALSE)
+```
+
+Discuss installing R from source, handling multiple versions of R.

@@ -1,0 +1,13 @@
+---
+title: "Python"
+description: |
+ Environments with R and Python
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = FALSE)
+```
+
+Reference the reticulate `use_*` functions
+
+Pointers to conda, virtualenv, requirements.txt, etc

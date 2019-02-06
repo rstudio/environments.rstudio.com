@@ -1,0 +1,20 @@
+---
+title: "Reproduce"
+description: |
+  Reproduce Environments Over Time
+---
+
+Problem and goal statement
+
+## Time Traveling
+
+RSPM
+
+## Stable
+
+docker with a fixed point in time
+
+## Snapshot and Restore
+
+renv
+

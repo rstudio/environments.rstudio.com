@@ -1,0 +1,19 @@
+---
+title: "Docker"
+description: |
+  Environment Management with Docker
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = FALSE)
+```
+
+
+Discusses how Docker fits into the rest of the topics:
+
+- Docker does not equal reproducibility
+- How should packages be managed in Docker? 
+  - In the container?
+  - Mounted in? 
+- How to layer R into an image (our pre-built R versions)
+- Future: discuss RSPM support for Linux binaries

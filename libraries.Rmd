@@ -1,0 +1,19 @@
+---
+title: "Libraries"
+description: |
+   Managing Installed Packages in Libraries
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = FALSE)
+```
+
+# What is a library?
+
+# Multiple Libraries
+
+# The role of renv
+
+# Record Keeping 
+- what to commit alongside your code
+- how to restore an environment given this info

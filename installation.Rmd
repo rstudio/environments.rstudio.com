@@ -1,0 +1,24 @@
+---
+title: "Installation"
+description: |
+  Installing Packages
+---
+
+
+# Package Installation
+- pak vs remotes
+- bootstrapping with install.packages (chicken meet egg)
+
+# Repositories and Libraries 
+aka where do they come from, where do they go?
+- Links to repos 
+- Links to libraries
+
+# Details
+- binaries
+- caches
+
+# System Dependencies
+
+# Upgrades (renv)
+- link to use case
