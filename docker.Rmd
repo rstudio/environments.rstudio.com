@@ -4,16 +4,13 @@ description: |
   Environment Management with Docker
 ---
 
-```{r setup, include=FALSE}
-knitr::opts_chunk$set(echo = FALSE)
-```
+This page covers how Docker can be used as a component of an environment and best practices for using Docker to complement a package management strategy.
 
+## Where does Docker fit in?
 
-Discusses how Docker fits into the rest of the topics:
+## Best Practices
+- Whats in a base image?
+- Installing packages from a fixed point
+- Using Docker with renv
+- Why caching Linux package binaries (in a repo) is critical for Docker
 
-- Docker does not equal reproducibility
-- How should packages be managed in Docker? 
-  - In the container?
-  - Mounted in? 
-- How to layer R into an image (our pre-built R versions)
-- Future: discuss RSPM support for Linux binaries

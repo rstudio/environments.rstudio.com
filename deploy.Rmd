@@ -4,11 +4,11 @@ description: |
   Easily Work Together
 ---
 
-Problem and goal statement
+This page is part of the use cases section, and describes how project dependencies can be accounted for (and isolated) during production deployments.
+
+Each strategy should be arranged as: 1-2-3 steps; longer explanation, troubleshooting.
 
 ## Isolate and Snapshot
+- Mention how RSC does this automatically
 
-RSC
-
-## Docker
 

@@ -4,8 +4,15 @@ description: |
   Installing and Managing R
 ---
 
-```{r setup, include=FALSE}
-knitr::opts_chunk$set(echo = FALSE)
-```
+The goal of this page is to discuss best practices for managing R installations.
 
-Discuss installing R from source, handling multiple versions of R.
+# R Installations & Packages
+- discuss system libraries
+- discuss binary caches
+- (or links to other sections that cover the above)
+
+# Shared Servers
+- lay out the need to install multiple versions of R from source
+
+# Docker
+- Link to docker references

@@ -4,6 +4,7 @@ description: |
   Installing Packages
 ---
 
+This page will talk about how users can install packages, it will cover the tools: `pak`, `remotes`, and `install.packages` and describe when to use each. Thge site will link to pages on repositories and libraries (to put package installation in the context of installing from a repo to a library). This page will also cover how to handle system dependencies and the differences between binary and source packages.
 
 # Package Installation
 - pak vs remotes

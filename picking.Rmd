@@ -4,9 +4,16 @@ description: |
   How to Pick Packages
 ---
 
+This page is part of the use cases section, and describes how organizations can think about the question "what packages should we use?". The page will cover common metrics R users consider such as the package's lifecycle, test coverage, dependencies, and downloads. This page is similar to the `itdepends` discussion Jim Hester led, and is less use-case oriented.
 
- Lifecycle
- 
- Test Coverage
- 
- 
+While the page is different in scope than the rest of the website, it is a very common side question asked during discussions about environment management.
+
+## Life Cycle
+
+## Test Coverage
+
+## Downloads
+
+## Dependencies
+
+Link to validation

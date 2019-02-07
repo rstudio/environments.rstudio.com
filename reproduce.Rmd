@@ -4,17 +4,19 @@ description: |
   Reproduce Environments Over Time
 ---
 
-Problem and goal statement
+This page is at the heart of most user's questions; and describes a variety of strategies for creating reproducible environments.
 
-## Time Traveling
-
-RSPM
-
-## Stable
-
-docker with a fixed point in time
+Each strategy should be arranged as: 1-2-3 steps; longer explanation, troubleshooting.
 
 ## Snapshot and Restore
 
 renv
+
+## Time Traveling
+Discusses how to use RSPM's "frozen" repos to recreate environments, including instructions for creating point-in-time libraries.
+
+## Stable
+Discusses how to pre-emptively "freeze" folks against a point in time (using RSPM) with a link to how Docker fits in.
+docker with a fixed point in time
+
 

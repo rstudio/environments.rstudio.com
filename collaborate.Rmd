@@ -4,9 +4,14 @@ description: |
   Easily Work Together
 ---
 
-Problem and goal statement
+This page is in the "use cases" section. The goal is to describe how admins can
+help R users in a team operate on a shared, common library of packages to ease
+collaboration. This type of shared library is usually a starting place that
+evolves into a more flexible strategy of per-project libraries. This page also describes the case where admins only want to make parts of CRAN accessible.
 
-## Pinning to Same Point in Time
+Each strategy should be arranged as: 1-2-3 steps; longer explanation, troubleshooting.
 
-RSPM
+## Strategy 1: Pinning to the Same Point in Time
+
+## Strategy 2: Curated Repository
 

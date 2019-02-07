@@ -4,16 +4,18 @@ description: |
   R Package Repositories
 ---
 
-```{r setup, include=FALSE}
-knitr::opts_chunk$set(echo = FALSE)
-```
+This page covers the structure CRAN-like R package repository. This page will also cover at a high level some features of RStudio Package Manager (a souped up repository), as well as alternatives for creating local CRAN-like repositories. We'll also discuss the archive.
 
-Benefits of an internal repository 
-How to create one:
-  - drat
-  - miniCRAN 
-  - RSPM
+# What is a repository?
 
-What the archive is
+## Archive
 
-Binary vs source
+## Binary Packages
+
+# Local Repositories 
+
+## Open Source Packages
+
+## RStudio Package Manager
+
+

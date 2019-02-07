@@ -4,8 +4,19 @@ description: |
   How to Safely Upgrade Packages
 ---
 
-Project isolation 
+This page is in the use case section, and describes a common problem, "how do I safely test if upgrading a package will break my code?"
 
-New library
+Each strategy should be arranged as: 1-2-3 steps; longer explanation, troubleshooting.
 
-Snapshot restore
+
+## Project isolation 
+- First, outline why isolating projects is so critical
+
+### Snapshot restore
+This strategy outlines `renv` and the ability to restore if an upgrade fails.
+
+### New library
+This strategy outlines a more manual approach to the prior strategy, and has users create a new library that contains the packages for the point in time they're upgrading to. Rollback is achieved by switching back to the old library.
+
+### RSPM Curated Sources
+How to use the update command in RSPM to see what will happen in a curated repository.

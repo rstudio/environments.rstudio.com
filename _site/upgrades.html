@@ -1295,9 +1295,18 @@ Other Components
 
 
 <div class="d-article">
-<p>Project isolation</p>
-<p>New library</p>
-<p>Snapshot restore</p>
+<p>This page is in the use case section, and describes a common problem, “how do I safely test if upgrading a package will break my code?”</p>
+<p>Each strategy should be arranged as: 1-2-3 steps; longer explanation, troubleshooting.</p>
+<h2 id="project-isolation">Project isolation</h2>
+<ul>
+<li>First, outline why isolating projects is so critical</li>
+</ul>
+<h3 id="snapshot-restore">Snapshot restore</h3>
+<p>This strategy outlines <code>renv</code> and the ability to restore if an upgrade fails.</p>
+<h3 id="new-library">New library</h3>
+<p>This strategy outlines a more manual approach to the prior strategy, and has users create a new library that contains the packages for the point in time they’re upgrading to. Rollback is achieved by switching back to the old library.</p>
+<h3 id="rspm-curated-sources">RSPM Curated Sources</h3>
+<p>How to use the update command in RSPM to see what will happen in a curated repository.</p>
 <!--radix_placeholder_article_footer-->
 <!--/radix_placeholder_article_footer-->
 </div>

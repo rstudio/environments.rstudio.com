@@ -4,10 +4,12 @@ description: |
  Environments with R and Python
 ---
 
-```{r setup, include=FALSE}
-knitr::opts_chunk$set(echo = FALSE)
-```
+The goal of this page is to introduce readers to how projects that rely on R and Python can account for Python dependencies. The main goal is to introduce `renv` and push folks towards tools like `virtualenv` and `conda` PLUS `reticulate`.
 
-Reference the reticulate `use_*` functions
+# Python and R 
 
-Pointers to conda, virtualenv, requirements.txt, etc
+## The Role of Reticulate
+
+## Managing Python Components 
+
+## renv Record Keeping

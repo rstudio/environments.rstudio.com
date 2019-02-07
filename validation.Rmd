@@ -4,9 +4,7 @@ description: |
   Using R for Validated Work
 ---
 
-```{r setup, include=FALSE}
-knitr::opts_chunk$set(echo = FALSE)
-```
+This page falls into the use case section and answers the question "how do I use R for validated work?". The page should be designed as checklist of things to think about if you are doing validated work, with links to other pages and external resources.
 
 This section will cover things like:
 

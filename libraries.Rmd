@@ -4,9 +4,7 @@ description: |
    Managing Installed Packages in Libraries
 ---
 
-```{r setup, include=FALSE}
-knitr::opts_chunk$set(echo = FALSE)
-```
+This page talks about package libraries and will primarily focus on creating isolated project libraries using `renv`. The page will also cover the standard user and system libraries, how you might want to share libaries with others (with a link to the team collaboration use case), and what to track in a version control repo to communicate the state of a library.
 
 # What is a library?
 
