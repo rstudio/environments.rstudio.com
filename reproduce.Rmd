@@ -12,10 +12,10 @@ Each strategy should be arranged as: 1-2-3 steps; longer explanation, troublesho
 
 renv
 
-## Time Traveling
+## Shared Baselines
 Discusses how to use RSPM's "frozen" repos to recreate environments, including instructions for creating point-in-time libraries.
 
-## Stable
+## Validated
 Discusses how to pre-emptively "freeze" folks against a point in time (using RSPM) with a link to how Docker fits in.
 docker with a fixed point in time
 
