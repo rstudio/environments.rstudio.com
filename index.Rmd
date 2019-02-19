@@ -194,4 +194,13 @@ others. When you communicate the requirements of your project, it is important t
 
 - **R Packages** Managing and recording R packages makes up the bulk of the website, specifically learn about [repositories](./repositories.html), [installating packages](./installation.html), and [managing libraries](./libraries).
 
+```{r echo=FALSE}
+DiagrammeR("
+  graph LR
+  A[Repository] --> B(Package Cache)
+  B(Package Cache) --> C>Project Library]
+  B(Package Cache) --> D>Project Library]
+")
+```
+
 - **Other Languages** Often data science projects are multi-lingual. Combining R and Python is the most common use case, and tools like `renv` have affordances for recording [Python](./python.html) dependencies.

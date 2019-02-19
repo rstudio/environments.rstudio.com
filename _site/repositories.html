@@ -1214,6 +1214,14 @@
   </script>
   
   <!--/radix_placeholder_distill-->
+  <script src="site_libs/htmlwidgets-1.2.1/htmlwidgets.js"></script>
+  <script src="site_libs/d3-3.3.8/d3.min.js"></script>
+  <script src="site_libs/dagre-0.4.0/dagre-d3.min.js"></script>
+  <link href="site_libs/mermaid-0.3.0/dist/mermaid.css" rel="stylesheet" />
+  <script src="site_libs/mermaid-0.3.0/dist/mermaid.slim.min.js"></script>
+  <link href="site_libs/DiagrammeR-styles-0.2/styles.css" rel="stylesheet" />
+  <script src="site_libs/chromatography-0.1/chromatography.js"></script>
+  <script src="site_libs/DiagrammeR-binding-1.0.0/DiagrammeR.js"></script>
   <script src="site_libs/jquery-1.11.3/jquery.min.js"></script>
   <script src="site_libs/bowser-1.9.3/bowser.min.js"></script>
   <script src="site_libs/webcomponents-2.0.0/webcomponents.js"></script>
@@ -1294,10 +1302,14 @@ Other Components
 
 
 <div class="d-article">
-<p>Ever wondered where R packages come from? The majority of R users install packages from CRAN. CRAN, the _C_omprehenisve <em>R</em> _A_rchive _N_etwork, is a network of servers that distribute R along with R packages.</p>
+<div class="layout-chunk" data-layout="l-body">
+<div id="htmlwidget-430061c0636bfdd12f2f" style="width:576px;height:384px;" class="DiagrammeR html-widget"></div>
+<script type="application/json" data-for="htmlwidget-430061c0636bfdd12f2f">{"x":{"diagram":"\n  graph LR\n  A[Repository] --> B(Package Cache)\n  B(Package Cache) --> C>Project Library]\n  B(Package Cache) --> D>Project Library]\n  style A fill:#5a9ddb\n"},"evals":[],"jsHooks":[]}</script>
+</div>
+<p>Ever wondered where R packages come from? The majority of R users install packages from CRAN. CRAN, the Comprehenisve R Archive Network, is a network of servers that distribute R along with R packages.</p>
 <p>CRAN is not the only place where users can access packages. In addition to CRAN, there are a number of other CRAN-like repositories, such as <a href="./repositories.html#r-forge">R-Forge</a> and <a href="./repositories.html#bioconductor">BioConductor</a>. These CRAN-like repositories have a similar structure to CRAN, and normally work with <code>install.packages</code>. Finally, some users access packages from locations such as GitHub. Unlike CRAN-like repositories, these locations require a different installation client.</p>
 <p>This page outlines the <a href="./repositories.html#structure-of-a-cran-like-repository">structure of a CRAN-like repository</a>, covers specific <a href="./repositories.html#Characteristics-Specific-to-CRAN">details about CRAN</a>, and discusses options for creating <a href="./repositories.html#internal-repositories">internal repositories</a>.</p>
-<p>Looking for an way to manage your own repository? Try <a href="https://rstudio.com/products/package-manager">RStudio Package Manager</a>.</p>
+<p>Looking for a way to manage your own repository? Try <a href="https://rstudio.com/products/package-manager">RStudio Package Manager</a>.</p>
 <h2 id="structure-of-a-cran-like-repository">Structure of a CRAN-like Repository</h2>
 <p>CRAN-like repositories organize R packages in a specific structure designed to work with R’s functions for accessing and installing packages.</p>
 <p>This structure can be seen in the file system of a CRAN-like repository, parts of which are highlighted below.</p>
@@ -1355,7 +1367,7 @@ Other Components
 <h3 id="r-forge">R-Forge</h3>
 <p><a href="https://r-forge.r-project.org/">R-Forge</a> is a collection of R projects and packages. Many R-forge packages are available in the R-Forge repository and CRAN. R-Forge projects additionally have mailing lists, message boards, forums, and other options that provide details about the related packages.</p>
 <h3 id="ropensci">rOpenSci</h3>
-<p><a href="https://ropensci.org/">rOpenSci</a> is a collection of packages that adhere to a stricter set of development standards, curated by a community of package maintainers and reviewers. The majority of rOpenSci packages are also available on CRAN, though they can be downloaded directly from a CRAN-like repository built directly on-top of the packages’ Git repositories using a <a href="https://cran.r-project.org/web/packages/drat/index.html">drat</a>.</p>
+<p><a href="https://ropensci.org/">rOpenSci</a> is a collection of packages that adhere to a stricter set of development standards, curated by a community of package maintainers and reviewers. The majority of rOpenSci packages are also available on CRAN, though they can be downloaded directly from a CRAN-like repository built directly on-top of the packages’ Git repositories using <a href="https://cran.r-project.org/web/packages/drat/index.html">drat</a>.</p>
 <h2 id="internal-repositories">Internal Repositories</h2>
 <p>Many organizations find value in hosting their own package repository. Hosting an internal repository allows organizations to:</p>
 <ul>
@@ -1365,9 +1377,7 @@ Other Components
 </li>
 <li>audit package use</li>
 </ul>
-<p>Internal repositories also play a critical role in many <a href="./reproduce.html">reproducibility strategies</a> and can help teams <a href="./collaborate.html">collaborate</a> on code.</p>
-<p>There are many ways organizations can create internal repositories. An open source option is the <a href="https://cran.r-project.org/web/packages/miniCRAN/index.html">miniCRAN</a> package.</p>
-<p>A professional, supported option is <a href="https://rstudio.com/products/package-manager">RStudio Package Manager</a>. In addition to hosting an internal repository, RStudio Package Manager includes support for:</p>
+<p>Internal repositories also play a critical role in many <a href="./reproduce.html">reproducibility strategies</a> and can help teams <a href="./collaborate.html">collaborate</a> on code. There are many ways organizations can create internal repositories. An open source option is the <a href="https://cran.r-project.org/web/packages/miniCRAN/index.html">miniCRAN</a> package. A <strong>professional, supported option</strong> is <a href="https://rstudio.com/products/package-manager">RStudio Package Manager</a>. In addition to hosting an internal repository, RStudio Package Manager includes support for:</p>
 <ul>
 <li>repository versioning<br />
 </li>
