@@ -4,9 +4,10 @@ description: |
   Reproduce Environments Over Time
 ---
 
-This page is at the heart of most user's questions; and describes a variety of strategies for creating reproducible environments.
+This section covers a variety of strategies for reproducing R environments overtime. Selecting a strategy will depend on two factors: who is responsible for managing the environment and how open the environment is; e.g. can users install their own R packages? At first these two questions might seem similar, but separating the two uncovers common "danger zones" or "anti-strategies", which are areas on the map below that look like strategies but result in problems!
 
-Each strategy should be arranged as: 1-2-3 steps; longer explanation, troubleshooting.
+
+
 
 ```{r mental-map}
 library(ggplot2)
