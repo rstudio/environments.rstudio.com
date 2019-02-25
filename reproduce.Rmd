@@ -4,9 +4,12 @@ description: |
   Reproduce Environments Over Time
 ---
 
-This section covers a variety of strategies for reproducing R environments overtime. Selecting a strategy will depend on two factors: who is responsible for managing the environment and how open the environment is; e.g. can users install their own R packages? At first these two questions might seem similar, but separating the two uncovers common "danger zones" or "anti-strategies", which are areas on the map below that look like strategies but result in problems!
+This section covers a variety of strategies for reproducing R environments overtime. Selecting a strategy will depend on two factors:
 
+1. Who is responsible for managing the environment?
+2. How open is the environment is? 
 
+At first these two questions might seem similar, but separating the two uncovers common "danger zones" or "anti-strategies", which are areas on the map below that look like strategies but result in problems! This section outlines three complementary strategies and covers these anti-patterns.
 
 
 ```{r mental-map}
@@ -53,14 +56,14 @@ good2 <- tribble(
   0.2, 0, NA, NA, NA
 )
 
-p <- ggplot(mm, aes(x, y, label = Description)) + 
+p <- ggplot(mm, aes(x, y)) + 
   geom_abline(slope = 1, intercept = 0.2, alpha = 0.2) + 
-  geom_polygon(aes(x,y), fill = "red", data=bad1, alpha = 0.1) + 
-  geom_polygon(aes(x,y), fill = "green", data=good, alpha = 0.1) + 
-  geom_polygon(aes(x,y), fill = "green", data=good2, alpha = 0.1) + 
-  geom_polygon(aes(x,y), fill = "red", data=bad2, alpha = 0.1) +
+  geom_polygon(aes(x,y, text = Description), fill = "red", data=bad1, alpha = 0.1) + 
+  geom_polygon(aes(x,y, text = Description), fill = "green", data=good, alpha = 0.1) + 
+  geom_polygon(aes(x,y, text = NULL), fill = "green", data=good2, alpha = 0.1) + 
+  geom_polygon(aes(x,y, text = Description), fill = "red", data=bad2, alpha = 0.1) +
   geom_abline(slope = 1, intercept = -0.2, alpha = 0.2) + 
-  geom_point(aes(x, y, color = status)) + 
+  geom_point(aes(x, y, color = status, text = Description)) + 
   geom_text(aes(x, y, label = label), nudge_y = 0.025, nudge_x  = 0.025) + 
   scale_x_continuous(limits = c(0,1), breaks = seq(0,1,0.25), labels = c("Admins","", "", "", "Users")) +
   scale_y_continuous(limits = c(0,1), breaks = seq(0,1,0.25), labels =  c("Locked Down","", "", "", "Open")) +
@@ -74,8 +77,11 @@ p <- ggplot(mm, aes(x, y, label = Description)) +
     title = "Reproducing Environments: Strategies and Danger Zones"
   ) # + 
   # theme(axis.line = element_line(linetype = 'solid', arrow = grid::arrow(length = grid::unit(1, units = 'mm'))))
-pi <- ggplotly(p, tooltip = c('label'))
-hide_legend(pi)
+ggplotly(p, tooltip = c('text')) %>% 
+  config(displayModeBar = FALSE) %>% 
+  style(hoverinfo = 'skip', traces = 1:5) %>% 
+  hide_legend()
+
 ```
 
 ## Snapshot and Restore
@@ -88,5 +94,14 @@ Discusses how to use RSPM's "frozen" repos to recreate environments, including i
 ## Validated
 Discusses how to pre-emptively "freeze" folks against a point in time (using RSPM) with a link to how Docker fits in.
 docker with a fixed point in time
+
+
+## Anti-Patterns
+
+### Wild West
+
+### Ticket  System
+
+### Blocked
 
 
