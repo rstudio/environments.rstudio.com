@@ -14,10 +14,11 @@ DiagrammeR("
 ")
 ```
 
-
-Ever wondered where R packages come from? The majority of R users install
-packages from CRAN. CRAN, the Comprehenisve R Archive Network, is a
-network of servers that distribute R along with R packages.
+Every new R user quickly discovers that packages are how work gets done in R. To
+understand how to manage R packages, it is important to start by understanding
+where R packages come from. The majority of R users install packages from the
+Comprehenisve R Archive Network (CRAN). CRAN is a network of servers that
+distribute R along with R packages.
 
 CRAN is not the only place where users can access packages. In addition to CRAN,
 there are a number of other CRAN-like repositories, such as
