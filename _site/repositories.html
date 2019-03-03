@@ -369,9 +369,8 @@
   
   </style>
   
-  <link href="site_libs/font-awesome-5.0.13/css/fa-svg-with-js.css" rel="stylesheet"/>
-  <script src="site_libs/font-awesome-5.0.13/js/fontawesome-all.min.js"></script>
-  <script src="site_libs/font-awesome-5.0.13/js/fa-v4-shims.min.js"></script>
+  <link href="site_libs/font-awesome-5.1.0/css/all.css" rel="stylesheet"/>
+  <link href="site_libs/font-awesome-5.1.0/css/v4-shims.css" rel="stylesheet"/>
   <script src="site_libs/headroom-0.9.4/headroom.min.js"></script>
   <!--/radix_placeholder_navigation_in_header-->
   <!--radix_placeholder_distill-->
@@ -1215,6 +1214,10 @@
   </script>
   
   <!--/radix_placeholder_distill-->
+  <script src="site_libs/htmlwidgets-1.2.1/htmlwidgets.js"></script>
+  <script src="site_libs/viz-0.3/viz.js"></script>
+  <link href="site_libs/DiagrammeR-styles-0.2/styles.css" rel="stylesheet" />
+  <script src="site_libs/grViz-binding-1.0.0/grViz.js"></script>
   <script src="site_libs/jquery-1.11.3/jquery.min.js"></script>
   <script src="site_libs/bowser-1.9.3/bowser.min.js"></script>
   <script src="site_libs/webcomponents-2.0.0/webcomponents.js"></script>
@@ -1295,13 +1298,93 @@ Other Components
 
 
 <div class="d-article">
-<p>This page covers the structure CRAN-like R package repository. This page will also cover at a high level some features of RStudio Package Manager (a souped up repository), as well as alternatives for creating local CRAN-like repositories. We’ll also discuss the archive.</p>
-<h1 id="what-is-a-repository">What is a repository?</h1>
-<h2 id="archive">Archive</h2>
-<h2 id="binary-packages">Binary Packages</h2>
-<h1 id="local-repositories">Local Repositories</h1>
-<h2 id="open-source-packages">Open Source Packages</h2>
-<h2 id="rstudio-package-manager">RStudio Package Manager</h2>
+<div class="layout-chunk" data-layout="l-body">
+<div id="htmlwidget-a3967842b0263c7179ac" style="width:576px;height:384px;" class="grViz html-widget"></div>
+<script type="application/json" data-for="htmlwidget-a3967842b0263c7179ac">{"x":{"diagram":"\ndigraph repos {\n  graph [layout = dot\n         rankdir = LR]\n  node[shape = box]\n  \"Project Cache\"; \"Project 1 Library\"; \"Project 2 Library\"\n  \n  node[fillcolor = grey, style = filled]\n  Repository\n  \n  \"Repository\"-> \"Project Cache\"\n  \"Project Cache\" -> \"Project 1 Library\"\n  \"Project Cache\" -> \"Project 2 Library\"\n}      \n","config":{"engine":"dot","options":null}},"evals":[],"jsHooks":[]}</script>
+</div>
+<p>Every new R user quickly discovers that packages are how work gets done in R. To understand how to manage R packages, it is important to start by understanding where R packages come from. The majority of R users install packages from the Comprehenisve R Archive Network (CRAN). CRAN is a network of servers that distribute R along with R packages.</p>
+<p>CRAN is not the only place where users can access packages. In addition to CRAN, there are a number of other CRAN-like repositories, such as <a href="./repositories.html#r-forge">R-Forge</a> and <a href="./repositories.html#bioconductor">BioConductor</a>. These CRAN-like repositories have a similar structure to CRAN, and normally work with <code>install.packages</code>. Finally, some users access packages from locations such as GitHub. Unlike CRAN-like repositories, these locations require a different installation client.</p>
+<p>This page outlines the <a href="./repositories.html#structure-of-a-cran-like-repository">structure of a CRAN-like repository</a>, covers specific <a href="./repositories.html#Characteristics-Specific-to-CRAN">details about CRAN</a>, and discusses options for creating <a href="./repositories.html#internal-repositories">internal repositories</a>.</p>
+<p>Looking for a way to manage your own repository? Try <a href="https://rstudio.com/products/package-manager">RStudio Package Manager</a>.</p>
+<h2 id="structure-of-a-cran-like-repository">Structure of a CRAN-like Repository</h2>
+<p>CRAN-like repositories organize R packages in a specific structure designed to work with R’s functions for accessing and installing packages.</p>
+<p>This structure can be seen in the file system of a CRAN-like repository, parts of which are highlighted below.</p>
+<pre><code>
+/
+/src/contrib
+  package_1.0.tar.gz
+  PACKAGES.rds
+  PACKAGES.gz
+  PACKAGES
+    /PATH
+      package_1.2.tar.gz
+    /Archive/
+      /package/
+        package_0.9.tar.gz
+/bin
+  /windows/contrib
+    /3.3
+    /3.4
+      /PACKAGES
+      /package_1.0.zip
+  /macosx/
+    /contrib
+      /3.3
+      /3.4
+        /PACKAGES
+        /package_1.0.tgz
+    /mavericks
+    /leopard
+    /el-capitan</code></pre>
+<p>The structure of the repository is built around the different ways users might access packages. The <code>/src/contrib</code> directory contains the package source bundles. The <code>/bin</code> directory contains compiled packages, built for different distributions. More information about binary packages is available <a href="./repositories.html#binary-packages">below</a>.</p>
+<h3 id="package-metadata">Package Metadata</h3>
+<p>At the heart of a CRAN-like repository is a metadata file named PACKAGES. The metadata file enumerates what packages are available in the repository, as well as information about each package such as the packages name, version, and dependencies. The metadata file is available in three formats, not all three are required.</p>
+<h3 id="archive-packages">Archive Packages</h3>
+<p>CRAN, and some CRAN-like repositories, have an Archive directory inside of <code>/src/contrib</code>. This directory contains older versions of source packages, or packages that have <a href="https://cran.r-project.org/web/packages/policies.html">been archived</a>. On CRAN, there is additional metadata in an archive.rds file with information on the prior versions. These copies of prior package versions are critical to many <a href="./reproduce.html">reproducibility strategies</a>. ### Binary Packages</p>
+<p>The <code>/bin</code> directory contains binary versions of R packages along with appropriate metadata. The binaries are organized by distribution. A binary package is an R package that has been installed onto a specific operating system. The installation process can include compiling code as well as package documentation and metadata. Binaries can be reused on similar operating systems, and are <strong>important because they allow users who want access to a package to install it much faster</strong>. For example, if you use R on a Windows desktop, and want access to ggplot2, you have two options. You could use <code>install.packages('ggplot2', type = 'source')</code>, in which case R would request the latest ggplot2 source bundle, e.g. <code>/src/contrib/ggplot2_1.0.tar.gz</code>. After downloading the bundle, R would unpack the source code and compile it. This process can take significant time. In contrast, the second and default option, <code>install.packages('ggplot2')</code>, instructs R to first try and download a binary, e.g. <code>/bin/windows/contrib/ggplot2_1.0.zip</code>. If the binary is available, R can download and use the code as-is, with no installation necessary. You can think of CRAN binaries as being a global cache, the work of compiling is done once (per operating system), and all users benefit!</p>
+<p>More detailed information on <a href="./installation.html">package installation</a> is available as well as information on the <a href="http://r-pkgs.had.co.nz/package.html#package">different states</a> of an R package.</p>
+<p>CRAN provides binaries for Windows and Mac. In addition to being distribution-specific, binaries are also specific to the version of R that created them. A repository serving binary packages indexes them by both attributes. Typically if a binary is not available for the version of R in-use, R will provide the user with an option to install the latest version from source, or install an older, binary version of the package that was built with the appropriate version of R. Additional details are available in the <a href="./installation.html">package installation</a> section.</p>
+<h2 id="characteristics-specific-to-cran">Characteristics Specific to CRAN</h2>
+<p>CRAN-like repositories share many of the structural attributes described above, but there are specific features of CRAN that make it unique and remarkably successful. Two notable features include a distribution network of CRAN mirrors and testing of submitted packages. CRAN documents these policies and all of its policies <a href="https://cran.r-project.org/web/packages/policies.html">here</a>.</p>
+<h3 id="cran-mirrors">CRAN Mirrors</h3>
+<p>CRAN distributes R and and R packages through a network of <a href="https://cran.r-project.org/mirrors.html">“mirror” servers</a>. Currently, the majority of R users install packages from two unique mirrors: httpd://cloud.r-project.org and httpd://cran.rstudio.com. These two mirrors are actually CDNs that use many servers world-wide to distribute packages. The RStudio CRAN mirror includes download logs that can be used to <a href="https://www.r-pkg.org/">analyze package data</a>.</p>
+<h3 id="cran-checks">CRAN checks</h3>
+<p>A unique feature of CRAN is the package submission process. Unlike many language repositories, CRAN requires R packages to pass a series of tests before the packages are accepted into the repository. These checks test to ensure the package is correctly formatted, and notably, also check to ensure the package does not break any other current packages on CRAN. You can read <a href="http://r-pkgs.had.co.nz/release.html">details and advice on the CRAN checks</a> as well as related advice on <a href="./picking.html">how to pick a package</a> and <a href="./validation.html">how to think about using packages in validated environments</a>.</p>
+<h2 id="other-cran-like-repositories">Other CRAN-like Repositories</h2>
+<p>In addition to CRAN, there are a handful of other popular package repositories. The following list is not comprehensive.</p>
+<h3 id="bioconductor">BioConductor</h3>
+<p><a href="http://bioconductor.org/">BioConductor</a> is a set of repositories containing R packages used in the analysis of genomic data. Three critical ways BioConductor differs from CRAN:</p>
+<ol type="1">
+<li><p>BioConductor includes a number of data packages that are significantly larger than the max size limit for CRAN packages.</p></li>
+<li><p>BioConductor packages are all versioned and released together, as opposed to CRAN packages which are released individually on a rolling basis. This release mechanism is necessary because the packages are closely coupled.</p></li>
+<li><p>While BioConductor follows a CRAN-like structure, users are encourage to interact with the repository through a custom installation client instead of using <code>install.packages</code> directly.</p></li>
+</ol>
+<p>BioConductor packages are often used alongside of CRAN packages.</p>
+<h3 id="r-forge">R-Forge</h3>
+<p><a href="https://r-forge.r-project.org/">R-Forge</a> is a collection of R projects and packages. Many R-forge packages are available in the R-Forge repository and CRAN. R-Forge projects additionally have mailing lists, message boards, forums, and other options that provide details about the related packages.</p>
+<h3 id="ropensci">rOpenSci</h3>
+<p><a href="https://ropensci.org/">rOpenSci</a> is a collection of packages that adhere to a stricter set of development standards, curated by a community of package maintainers and reviewers. The majority of rOpenSci packages are also available on CRAN, though they can be downloaded directly from a CRAN-like repository built directly on-top of the packages’ Git repositories using <a href="https://cran.r-project.org/web/packages/drat/index.html">drat</a>.</p>
+<h2 id="internal-repositories">Internal Repositories</h2>
+<p>Many organizations find value in hosting their own package repository. Hosting an internal repository allows organizations to:</p>
+<ul>
+<li>share and version their internal packages<br />
+</li>
+<li>access and govern packages from external sources<br />
+</li>
+<li>audit package use</li>
+</ul>
+<p>Internal repositories also play a critical role in many <a href="./reproduce.html">reproducibility strategies</a> and can help teams <a href="./collaborate.html">collaborate</a> on code. There are many ways organizations can create internal repositories. An open source option is the <a href="https://cran.r-project.org/web/packages/miniCRAN/index.html">miniCRAN</a> package. A <strong>professional, supported option</strong> is <a href="https://rstudio.com/products/package-manager">RStudio Package Manager</a>. In addition to hosting an internal repository, RStudio Package Manager includes support for:</p>
+<ul>
+<li>repository versioning<br />
+</li>
+<li>usage tracking<br />
+</li>
+<li>browsing packages<br />
+</li>
+<li>automatically building internal packages from Git<br />
+</li>
+<li>serving subsets of CRAN</li>
+</ul>
 <!--radix_placeholder_article_footer-->
 <!--/radix_placeholder_article_footer-->
 </div>
