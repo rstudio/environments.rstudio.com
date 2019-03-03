@@ -5,12 +5,20 @@ description: |
 ---
 
 ```{r echo=FALSE}
-DiagrammeR("
-  graph LR
-  A[Repository] --> B(Package Cache)
-  B(Package Cache) --> C>Project Library]
-  B(Package Cache) --> D>Project Library]
-  style A fill:#5a9ddb
+grViz("
+digraph repos {
+  graph [layout = dot
+         rankdir = LR]
+  node[shape = box]
+  'Project Cache'; 'Project 1 Library'; 'Project 2 Library'
+  
+  node[fillcolor = grey, style = filled]
+  Repository
+  
+  'Repository'-> 'Project Cache'
+  'Project Cache' -> 'Project 1 Library'
+  'Project Cache' -> 'Project 2 Library'
+}      
 ")
 ```
 

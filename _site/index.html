@@ -1215,13 +1215,9 @@
   
   <!--/radix_placeholder_distill-->
   <script src="site_libs/htmlwidgets-1.2.1/htmlwidgets.js"></script>
-  <script src="site_libs/d3-3.3.8/d3.min.js"></script>
-  <script src="site_libs/dagre-0.4.0/dagre-d3.min.js"></script>
-  <link href="site_libs/mermaid-0.3.0/dist/mermaid.css" rel="stylesheet" />
-  <script src="site_libs/mermaid-0.3.0/dist/mermaid.slim.min.js"></script>
+  <script src="site_libs/viz-0.3/viz.js"></script>
   <link href="site_libs/DiagrammeR-styles-0.2/styles.css" rel="stylesheet" />
-  <script src="site_libs/chromatography-0.1/chromatography.js"></script>
-  <script src="site_libs/DiagrammeR-binding-1.0.0/DiagrammeR.js"></script>
+  <script src="site_libs/grViz-binding-1.0.0/grViz.js"></script>
   <script src="site_libs/jquery-1.11.3/jquery.min.js"></script>
   <script src="site_libs/bowser-1.9.3/bowser.min.js"></script>
   <script src="site_libs/webcomponents-2.0.0/webcomponents.js"></script>
@@ -1307,8 +1303,8 @@ Other Components
 <p>This website breaks down common use cases and strategies for solving them. It also explains the components that make up an environment. It is important to remember that no single tool will solve every environment challenge. Instead, you or your team should discuss how different tools working together can meet your requirements.</p>
 <div class="layout-chunk" data-layout="l-body-outset">
 <div class="figure">
-<div id="htmlwidget-c878e3441c5ae6670bb6" style="width:576px;height:384px;" class="DiagrammeR html-widget"></div>
-<script type="application/json" data-for="htmlwidget-c878e3441c5ae6670bb6">{"x":{"diagram":"\n  graph TD\n    A[CRAN]-->D[Local Repository]\n    B[GitHub]-->D[Local Repository]\n    C[Internal]-->D[Local Repository]\n    D[Local Repository]-->E[Shared Dev Server]\n    D[Local Repository]-->F[Docker Container]\n    D[Local Repository]-->G[Desktop]\n    G[Desktop]-->H(Package Cache)\n    H(Package Cache)-->I((Project 1 Library))\n    H(Package Cache)-->U((Project 2 Library))\n    E[Shared Dev Server]-->J(R 3.3.1 Cache)\n    E[Shared Dev Server]-->L(R 3.5.0 Cache)\n    D[Local Repository]-->R[Validated Environment]\n    R[Validated Environment]--> X(Validated Cache)\n    X(Validated Cache)-->P((Validated Project)) \n    J(R 3.3.1 Cache)-->K((Project 3 Library))\n    L(R 3.5.0 Cache)-->M((Shared Project))\n    K((Project 4 Library))-->Z{Ad-hoc Job}\n    K((Project 4 Library))-->Q{Ad-hoc Job}\n    O[Prod]-->AA>API]\n    O[Prod]-->N>Web App]\n    D[Local Repository]-->O[Prod]\n"},"evals":[],"jsHooks":[]}</script>
+<div id="htmlwidget-40b5dbc644e0cb59f9c3" style="width:576px;height:384px;" class="grViz html-widget"></div>
+<script type="application/json" data-for="htmlwidget-40b5dbc644e0cb59f9c3">{"x":{"diagram":"\ndigraph boxes_and_circles {\n  node [shape = box]\n  CRAN; GitHub; Internal; \"Local Repository\"\n  \n  node [shape = egg]\n  \"Project 1\"; \"Project 2\"; API; \"Shiny App\"; \"ETL Job\"; \"Shared Project\"; \"Docker Container\"\n  \n  node [shape = oval]\n  Desktop; \"Dev Server\"; Production\n  \n  subgraph legend {\n  node [fillcolor = grey, style = filled, shape = box]\n  \"Package Source / Binary\"\n  node [fillcolor = grey, style = filled, shape = egg]\n  \"Library\"\n  node [fillcolor = grey, style = filled, shape = oval]\n  \"Installed Cache\"\n  \n  \"Package Source / Binary\" -> \"Installed Cache\"\n  \"Installed Cache\" -> \"Library\"\n  }\n\nCRAN->\"Local Repository\"\nGitHub->\"Local Repository\"\nInternal->\"Local Repository\"\n\"Local Repository\" -> Desktop\n\"Local Repository\" -> \"Docker Container\"\n\"Local Repository\" -> \"Dev Server\"\n\"Local Repository\" -> Production\nDesktop -> \"Project 1\"\nDesktop -> \"Project 2\"\nProduction -> API\nProduction -> \"Shiny App\"\nProduction -> \"ETL Job\"\n\"Dev Server\" ->  \"Shared Project\"\n}\n","config":{"engine":"dot","options":null}},"evals":[],"jsHooks":[]}</script>
 <p class="caption">
 R Packages Flow Through An Organization
 </p>
@@ -1328,8 +1324,8 @@ R Packages Flow Through An Organization
 <p>Not everyone needs the same environment management strategy. This section covers a simple approach that will greatly increase the chances your work can be reproduced. Teams of R users, or R users working within an organization, may need to adopt a more complex strategy.</p>
 <div class="layout-chunk" data-layout="l-body">
 <div class="figure">
-<div id="htmlwidget-c8c603a7270d904e3e6e" style="width:576px;height:384px;" class="DiagrammeR html-widget"></div>
-<script type="application/json" data-for="htmlwidget-c8c603a7270d904e3e6e">{"x":{"diagram":"\n graph LR\n   A[1. Create a Project]-->C((Write Code))\n   B((2. Install Packages))-->C((Write Code))\n   C((Write Code))-->B((2. Install Packages))\n   C((Write Code))-->D[3. Snapshot]\n   D[3. Snapshot]-->E[4. Restore]\n"},"evals":[],"jsHooks":[]}</script>
+<div id="htmlwidget-94689c960e1e72fd6b7a" style="width:576px;height:384px;" class="grViz html-widget"></div>
+<script type="application/json" data-for="htmlwidget-94689c960e1e72fd6b7a">{"x":{"diagram":"\ndigraph renv {\n  graph [layout = dot\n         rankdir = LR]\n  node [shape = box]\n  \"1. Create a Project\"; \"Write Code\"; \"2. Install Packages\"; \"3. Snapshot\"; \"4. Restore\"\n  \n  \"1. Create a Project\"->\"Write Code\"\n  \"Write Code\"->\"2. Install Packages\" \n  \"2. Install Packages\" -> \"Write Code\"\n  \"Write Code\"->\"3. Snapshot\"\n  \"3. Snapshot\"->\"4. Restore\"\n  \n}      \n","config":{"engine":"dot","options":null}},"evals":[],"jsHooks":[]}</script>
 <p class="caption">
 Simple Workflow for Reproducible Environments
 </p>
@@ -1402,8 +1398,8 @@ renv::restore()</code></pre>
 <p>Environments can look different in different organizations, but they are composed of common elements.</p>
 <div class="layout-chunk" data-layout="l-body">
 <div class="figure">
-<div id="htmlwidget-7d011e5879ce42ad9d09" style="width:576px;height:384px;" class="DiagrammeR html-widget"></div>
-<script type="application/json" data-for="htmlwidget-7d011e5879ce42ad9d09">{"x":{"diagram":"\n  graph BT\n  A[Operating System]---B[R Installation]\n  A[Operating System]---C[System Dependencies]\n  C[System Dependencies]---D(Project Library)\n  C[System Dependencies]---G(Project virutalenv)\n  B[R Installation]---D(Project Library)\n  A[Operating System]---F[Python Installation]\n  F[Python Installation]---G(Project virtualenv)\n  G(Project virtualenv)---H((User))\n  D(Project Library)---H((User))\n"},"evals":[],"jsHooks":[]}</script>
+<div id="htmlwidget-5848159b3bc5e3c1282c" style="width:576px;height:384px;" class="grViz html-widget"></div>
+<script type="application/json" data-for="htmlwidget-5848159b3bc5e3c1282c">{"x":{"diagram":"digraph env {\n\n graph [layout = dot\n        rankdir = BT]\n node [shape = box]\n \"Operating System\"\n \n node [shape = oval]\n \"R Installation\"; \"System Libraries\"; \"Python Installation\"; \"virtualenv\"; \"Project Library\"\n \n node [shape = egg]\n User\n \n \"Operating System\" -> \"Python Installation\"\n \"Operating System\" -> \"System Libraries\"\n \"Operating System\" -> \"R Installation\"\n \"R Installation\" -> \"Project Library\"\n \"System Libraries\" -> \"Project Library\"\n \"System Libraries\" -> \"virtualenv\"\n virtualenv -> User\n \"Project Library\" -> User\n \"Python Installation\" -> virtualenv\n}\n","config":{"engine":"dot","options":null}},"evals":[],"jsHooks":[]}</script>
 <p class="caption">
 Components of an Environment
 </p>
@@ -1417,8 +1413,8 @@ Components of an Environment
 <li><p><strong>R Packages</strong> Managing and recording R packages makes up the bulk of the website, specifically learn about <a href="./repositories.html">repositories</a>, <a href="./installation.html">installating packages</a>, and <a href="./libraries">managing libraries</a>.</p></li>
 </ul>
 <div class="layout-chunk" data-layout="l-body">
-<div id="htmlwidget-783cb390e2edd1737b54" style="width:576px;height:384px;" class="DiagrammeR html-widget"></div>
-<script type="application/json" data-for="htmlwidget-783cb390e2edd1737b54">{"x":{"diagram":"\n  graph LR\n  A[Repository] --> B(Package Cache)\n  B(Package Cache) --> C>Project Library]\n  B(Package Cache) --> D>Project Library]\n"},"evals":[],"jsHooks":[]}</script>
+<div id="htmlwidget-641e625c95ddccde0eff" style="width:576px;height:384px;" class="grViz html-widget"></div>
+<script type="application/json" data-for="htmlwidget-641e625c95ddccde0eff">{"x":{"diagram":"\ndigraph repos {\n  graph [layout = dot\n         rankdir = LR]\n  node[shape = box]\n  Repository; \"Project Cache\"; \"Project 1 Library\"; \"Project 2 Library\"\n  \n  \"Repository\"-> \"Project Cache\"\n  \"Project Cache\" -> \"Project 1 Library\"\n  \"Project Cache\" -> \"Project 2 Library\"\n}      \n","config":{"engine":"dot","options":null}},"evals":[],"jsHooks":[]}</script>
 </div>
 <ul>
 <li><strong>Other Languages</strong> Often data science projects are multi-lingual. Combining R and Python is the most common use case, and tools like <code>renv</code> have affordances for recording <a href="./python.html">Python</a> dependencies.</li>

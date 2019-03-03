@@ -17,31 +17,44 @@ Great data science work should be reproducible. Being able to repeat experiments
 This website breaks down common use cases and strategies for solving them. It also explains the components that make up an environment. It is important to remember that no single tool will solve every environment challenge. Instead, you or your team should discuss how different tools working together can meet your requirements.
 
 ```{r fig.cap="R Packages Flow Through An Organization", layout="l-body-outset", echo=FALSE}
-DiagrammeR("
-  graph TD
-    A[CRAN]-->D[Local Repository]
-    B[GitHub]-->D[Local Repository]
-    C[Internal]-->D[Local Repository]
-    D[Local Repository]-->E[Shared Dev Server]
-    D[Local Repository]-->F[Docker Container]
-    D[Local Repository]-->G[Desktop]
-    G[Desktop]-->H(Package Cache)
-    H(Package Cache)-->I((Project 1 Library))
-    H(Package Cache)-->U((Project 2 Library))
-    E[Shared Dev Server]-->J(R 3.3.1 Cache)
-    E[Shared Dev Server]-->L(R 3.5.0 Cache)
-    D[Local Repository]-->R[Validated Environment]
-    R[Validated Environment]--> X(Validated Cache)
-    X(Validated Cache)-->P((Validated Project)) 
-    J(R 3.3.1 Cache)-->K((Project 3 Library))
-    L(R 3.5.0 Cache)-->M((Shared Project))
-    K((Project 4 Library))-->Z{Ad-hoc Job}
-    K((Project 4 Library))-->Q{Ad-hoc Job}
-    O[Prod]-->AA>API]
-    O[Prod]-->N>Web App]
-    D[Local Repository]-->O[Prod]
-")
+grViz("
+digraph boxes_and_circles {
+  node [shape = box]
+  CRAN; GitHub; Internal; 'Local Repository'
+  
+  node [shape = egg]
+  'Project 1'; 'Project 2'; API; 'Shiny App'; 'ETL Job'; 'Shared Project'; 'Docker Container'
+  
+  node [shape = oval]
+  Desktop; 'Dev Server'; Production
+  
+  subgraph legend {
+  node [fillcolor = grey, style = filled, shape = box]
+  'Package Source / Binary'
+  node [fillcolor = grey, style = filled, shape = egg]
+  'Library'
+  node [fillcolor = grey, style = filled, shape = oval]
+  'Installed Cache'
+  
+  'Package Source / Binary' -> 'Installed Cache'
+  'Installed Cache' -> 'Library'
+  }
 
+CRAN->'Local Repository'
+GitHub->'Local Repository'
+Internal->'Local Repository'
+'Local Repository' -> Desktop
+'Local Repository' -> 'Docker Container'
+'Local Repository' -> 'Dev Server'
+'Local Repository' -> Production
+Desktop -> 'Project 1'
+Desktop -> 'Project 2'
+Production -> API
+Production -> 'Shiny App'
+Production -> 'ETL Job'
+'Dev Server' ->  'Shared Project'
+}
+")
 ```
 
 ### 3 Signs You Need A Better Strategy
@@ -63,13 +76,20 @@ Interested in exploring the architecture first? Read about the [components of an
 Not everyone needs the same environment management strategy. This section covers a simple approach that will greatly increase the chances your work can be reproduced. Teams of R users, or R users working within an organization, may need to adopt a more complex strategy.
 
 ```{r fig.cap="Simple Workflow for Reproducible Environments", layout="l-body", echo=FALSE}
-DiagrammeR("
- graph LR
-   A[1. Create a Project]-->C((Write Code))
-   B((2. Install Packages))-->C((Write Code))
-   C((Write Code))-->B((2. Install Packages))
-   C((Write Code))-->D[3. Snapshot]
-   D[3. Snapshot]-->E[4. Restore]
+grViz("
+digraph renv {
+  graph [layout = dot
+         rankdir = LR]
+  node [shape = box]
+  '1. Create a Project'; 'Write Code'; '2. Install Packages'; '3. Snapshot'; '4. Restore'
+  
+  '1. Create a Project'->'Write Code'
+  'Write Code'->'2. Install Packages' 
+  '2. Install Packages' -> 'Write Code'
+  'Write Code'->'3. Snapshot'
+  '3. Snapshot'->'4. Restore'
+  
+}      
 ")
 ```
 
@@ -166,18 +186,32 @@ This strategy provides an easy way to start managing R packages for your project
 Environments can look different in different organizations, but they are composed of common elements. 
 
 ```{r fig.cap="Components of an Environment", echo=FALSE}
-DiagrammeR("
-  graph BT
-  A[Operating System]---B[R Installation]
-  A[Operating System]---C[System Dependencies]
-  C[System Dependencies]---D(Project Library)
-  C[System Dependencies]---G(Project virutalenv)
-  B[R Installation]---D(Project Library)
-  A[Operating System]---F[Python Installation]
-  F[Python Installation]---G(Project virtualenv)
-  G(Project virtualenv)---H((User))
-  D(Project Library)---H((User))
+grViz(
+"digraph env {
+
+ graph [layout = dot
+        rankdir = BT]
+ node [shape = box]
+ 'Operating System'
+ 
+ node [shape = oval]
+ 'R Installation'; 'System Libraries'; 'Python Installation'; 'virtualenv'; 'Project Library'
+ 
+ node [shape = egg]
+ User
+ 
+ 'Operating System' -> 'Python Installation'
+ 'Operating System' -> 'System Libraries'
+ 'Operating System' -> 'R Installation'
+ 'R Installation' -> 'Project Library'
+ 'System Libraries' -> 'Project Library'
+ 'System Libraries' -> 'virtualenv'
+ virtualenv -> User
+ 'Project Library' -> User
+ 'Python Installation' -> virtualenv
+}
 ")
+
 ```
 
 If you use a shared server, some elements might be shared amongst projects and
@@ -195,11 +229,17 @@ others. When you communicate the requirements of your project, it is important t
 - **R Packages** Managing and recording R packages makes up the bulk of the website, specifically learn about [repositories](./repositories.html), [installating packages](./installation.html), and [managing libraries](./libraries).
 
 ```{r echo=FALSE}
-DiagrammeR("
-  graph LR
-  A[Repository] --> B(Package Cache)
-  B(Package Cache) --> C>Project Library]
-  B(Package Cache) --> D>Project Library]
+grViz("
+digraph repos {
+  graph [layout = dot
+         rankdir = LR]
+  node[shape = box]
+  Repository; 'Project Cache'; 'Project 1 Library'; 'Project 2 Library'
+  
+  'Repository'-> 'Project Cache'
+  'Project Cache' -> 'Project 1 Library'
+  'Project Cache' -> 'Project 2 Library'
+}      
 ")
 ```
 
