@@ -4,13 +4,18 @@ description: |
   Reproduce Environments Over Time
 ---
 
-This section covers a variety of strategies for reproducing R environments overtime. Selecting a strategy will depend on two factors:
+Reproducing data science work is the main objective of environment management. This page details three strategies for reproducing R environments overtime. To select a strategy, you will need to answer two questions:  
 
-1. Who is responsible for managing the environment?
-2. How open is the environment is? 
+1. Who is responsible for managing the environment?  
+2. How open is the environment?  
 
-At first these two questions might seem similar, but separating the two uncovers common "danger zones" or "anti-strategies", which are areas on the map below that look like strategies but result in problems! This section outlines three complementary strategies and covers these anti-patterns.
-
+At first these two questions might seem similar, but separating the two uncovers
+common "danger zones" or "anti-strategies". The map below depicts these danger
+zones as well as three successful strategies. Use the map and the two questions
+above to determine where your organization currently operates and identify which
+strategy to move towards. Once selected, the sections below outline how to
+implement each strategy. Characteristics of each danger zone are detailed as
+well.
 
 ```{r mental-map}
 library(ggplot2)
@@ -84,19 +89,203 @@ ggplotly(p, tooltip = c('text')) %>%
 
 ```
 
+## Quicklinks
+
+Successful Strategies:  
+- [Snapshot and Restore](./reproduce.html#snapshot-and-restore)  
+- [Shared Baseline](./reproduce.html#shared-baseline)  
+- [Snapshot](./reproduce.html#snapshot)  
+
+Danger Zones:  
+- [IT Tickets]
+- [Wild West]
+- [Blocked]
+
 ## Snapshot and Restore
 
-renv
+The snapshot strategy has two key characteristics:
+
+1. Users are able to _freely_ access and install packages _for_ _a_ _project_
+2. Users  have the full responsibility to _record_ the dependencies needed for a project
+
+The key to the strategy is isolating project dependencies and recording them. The strategy is implemented with the following steps:
+
+1. Start a project be creating a project-specific library
+2. Install and use packages from the projet-specific library
+3. Record the state of the library alongside of the code 
+4. Restore the library when the environment needs to be recreated
+
+A specific implementation can be done using the [`renv`](https://github.com/rstudio/renv) package:
+
+Pre-requisites:
+
+1. (Administrators) Install each desired version of [R from source](./installation.Rmd)
+2. (Users) Install the `renv` package
+
+Per-project (user steps):
+
+1. Be sure you are using version control for your code. We also recommend using RStudio Projects. Within the project folder, initialize a project environment:
+```
+# From within the project working directory
+renv::init()
+```
+
+2. Install and use packages as normal. See [package installation](./installation.Rmd) for details on `pak`, `remotes`, or `install.packages`. Use `library` or `require` within your project code.
+
+3. Prior to commiting or pushing code changes, record the project's dependencies:
+```
+renv::snapshot()
+# commit the manifest file,  ./renv/<date>/<date-time>, alongside your project code
+```
+
+4. To restore the environment, pull the code and manifest from your version control repository, then run:
+```
+renv::restore()
+```
+
+### Common Challenges and Resolutions:
+
+> Restoring projects that rely on older versions of R 
+
+To ensure the library is restorable, you'll need to _record_ and _make_ _available_ the same version of R used during development. The `renv` package automatically records the version of R used by a project. We recommend having multiple versions of R available, so that users can pick the version of R and then restore. This approach is also an effective way to [test if a project is ready to upgrade](./upgrades.html) to a new version of R.
+
+> Restoring projects that rely on non-current CRAN packages
+
+Often, by the time a project is restored, some of the versions of packages in use may have updated on CRAN. For example:
+
+1. On January 1st, a project manifest is committed that records `ISLR` version 1.0 as a dependency.
+2. On February 1st, the `ISLR` package is upgraded to `1.1`.
+3. On March 1st, a user wishes to restore the environment.
+
+In this case, it is critical that version 1.0 of `ISLR` is used in the restored enviornment. To make this happen, the older version of the package needs to be accessed and installed. Luckily, this is possible using a [repository's archive](./repositories.html#). *Internal repositories used to support the snapshot strategy must record archived versions.* RStudio Package Manager is an easy way to ensure your internal repository handles this case appropriately.
+
+> Tracking and restoring internal (or non-CRAN) packages
+
+If your package is publicly available, tools like `renv` will work automatically. If you wish to use the snapshot strategy along with internal packages (packages that are not publicly available on CRAN or a _public_ Git repository), it is easiest to store and source those internal packages in a [CRAN-like](./repositories.html) repository. Follow these steps:
+
+1. Release the internal package to the CRAN-like repository
+2. Install and use the package in the project, installing from the repository
+3. Record the project dependencies
+4. Restore the project by accessing the appropriate version of the package from the CRAN-like repository
+
+It is critical that older versions of the internal package are appropriately stored in the repository's archive. 
+
+The easiest way to create a correct internal repository, distribute internal packages, and support the snapshot strategy is using RStudio Package Manager.
+
+> Applying the snapshot strategy to multi-lingual projects
+
+If your project uses more than R, you'll need to capture the project's other dependencies as well. A common scenario is a [reticulated project](https://rstudio.github.io/reticulate) that uses Python and R. In this case:
+
+1. Use `renv` as described previously to manage R packages
+2. Record Python dependencies using `pip freeze` alo
+
+> Keeping things fast: using binaries or a cache
+
+> Docker and Snapshot
+
+### Implementing the "Snapshot" Strategy in Production
+
+In some organizations, you may only want to worry about recording project dependencies when a project is ready for production. Generating a manifest of dependencies can be the first step in a deployment handoff between a development environment and a production deployment. _This scenario is especially common for web applications, APIs, and reports_ written in R using [shiny](https://shiny.rstudio.com), [plumber](https://rplumber.io), and [rmarkdown](https://rmarkdown.rstudio.com).
+
+**If you are using [RStudio Connect](https://rstudio.com/products/connect) then the snapshot strategy is automatically applied when content is deployed**. 
+
+### Additional Resources:
+
+- Learn more about [libraries](./libraries.html)
+- Learn more about [repositories](./repositories.html)
+- Learn more about [package installation](./installation.html)
 
 ## Shared Baselines
-Discusses how to use RSPM's "frozen" repos to recreate environments, including instructions for creating point-in-time libraries.
+
+The benefits and key characteristics of a the "shared baseline" strategy are:
+
+1. Users do not have to take full responsibility for managing reproducibility, this is especially important for new R users coming from a background without dependency management experience.
+2. There are no restrictions on what can be installed. The main motivation is not approval, but ease of sharing. 
+
+### Option 1 - No Versioned Repository:
+
+1. Install a version of R from source. This results in a versioned system library.
+
+2. Run R as root, and install all the packages desired for this version of R **immediately**. Users will need to wait until a new version of R is added to get new or updated packages. 
+
+3. Disable user package installation. Have users access packages via `library` calls.
+
+> Why must the administrator install everything at once?
+
+###  Option 2 - Using a Versioned Repository
+
+//TODO: Add references and instructions specific to RSPM
+
+1. Install a version of R from source. This results in a versioned system library.
+
+2. In the Rprofile.site file, set the repo option for this versoin of R to point to the repository checkpoint.
+
+3. Disable the user option to change the repository setting.
+
+3. Run R as root, and install the desired baseline packages. Overtime, as requests for new packages come in, install them in the same way. Consistency is guaranteed because you are always installing from the same frozen repository.
+
+4. Optionally, allow users to install packages into their personal user libraries. The user library is still tied to the R version, and the repository is still frozen due to the Rprofile.site option. While users won't all have the same packages, if they share code and go to install packages, they'll get the same versions.
+
+### Common Challenges and Resolutions
+
+> Why must the "baseline" packages be tied to a version of R?
+
+> What if one user needs something different?
+
+> Do administrators need to install everything?
+
+Discuss the option of user libraries and installation iff a versioned repository is in place.
+
+> How do I upgrade?
+
+> Can I upgrade packages without changing the version of R?
 
 ## Validated
-Discusses how to pre-emptively "freeze" folks against a point in time (using RSPM) with a link to how Docker fits in.
-docker with a fixed point in time
+
+//TODO Add references and instructions specific to RSPM
+
+The validated strategy is distinct from the "shared baseline" strategy above because the primary motivation, in addition to collaboration and reproducibility, is restricting access to a particular set of packages. These approved sets might require:  
+
+- licensing checks  
+- tests to ensure accurate package methods  
+- security audits  
+
+Please refer to these sections on [validation](./validation.html) and [picking packages](./picking.html) for more ideas on how to arrive at an approved set of packages. Once a set is determined, this strategy ensures users accurately use those packages.
+
+//TODO Discuss why you should store validated packages in a repo
+
+There are two options for implementing this strategy, depending on how you want to handle updates to the validated set... 
+
+### Option 1: Using system libraries
+
+1. Install the desired version of R from source.
+
+2. Set the Rprofile.site file to point to a repository containing the validated packages
+
+3. Install the validated packages from the repository into the system library
+
+4. Disable package installation 
+
+5. If the validated set is updated, either:  
+- Remove the system library and reinstall all the packages. This will force apply the changes to all users  
+- Install a new version of R and repeat steps 1-4. Users will opt into this new updates by using the different installation of R.
+
+### Option 2: Using project libraries
+
+1. Install the desired version of R from source
+
+2. Set the Rprofile.site file to point to a repository containing the validated packages^[RStudio Package Manager is the easiest way to create these repositories, see: https://docs.rstudio.com/rspm/]
+
+3. Create a project library using `renv`, and install packages and record their use following the instructions from the [snapshot](./reproduce.html#snapshot-and-restore) strategy above.
 
 
-## Anti-Patterns
+### Common Challenges and Resolutions
+ 
+> Docker and the "Validated" Strategy
+
+## Danger Zones
+
+Each section covers an area of our map where "who" is in control and "what" can be installed are mis-aligned to create painful environments that can not be reliably recreated. In addition to describing the characteristics of each zone, a recommendation is made on how to identify a more appropriate strategy.
 
 ### Wild West
 
