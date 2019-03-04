@@ -8,6 +8,12 @@ This page is part of the use cases section, and describes how organizations can 
 
 While the page is different in scope than the rest of the website, it is a very common side question asked during discussions about environment management.
 
+Current thoughts:
+https://docs.google.com/document/d/1ofyYHecc6CJPFOZF8FkYd-uZ7dty03KeIGdu5dJplpw/edit?usp=sharing
+
+Related:
+https://www.pharmar.org/packages/
+
 ## Life Cycle
 
 ## Test Coverage

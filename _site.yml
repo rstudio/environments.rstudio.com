@@ -19,6 +19,8 @@ navbar:
         href: deploy.html
       - text: "Team Collaboration"
         href: collaborate.html
+    - text: "Strategies"
+      href: reproduce.html
     - text: "R Packages"
       menu:
       - text: "Installing - pak / remotes"

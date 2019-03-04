@@ -14,47 +14,34 @@ library(DiagrammeR)
 
 Great data science work should be reproducible. Being able to repeat experiments is the foundation of all science. Reproducing work is also critical for buisness applications: scheduled reporting, team collaboration, project validation. In order to reproduce work done in R, you need to communicate 3 things: your code, your reasoning, and the environment where your code runs. There are many excellent tools and strategies for managing code - Git - and communicating methods - R Markdown. Unfortunately, environments are often neglected.  
 
-This website breaks down common use cases and strategies for solving them. It also explains the components that make up an environment. It is important to remember that no single tool will solve every environment challenge. Instead, you or your team should discuss how different tools working together can meet your requirements.
+This website breaks down common use cases and strategies for solving them. It also explains the components that make up a data science environment. It is important to remember that no single tool will solve every environment challenge. Instead, you or your team should discuss how different tools working together can meet your requirements.
 
 ```{r fig.cap="R Packages Flow Through An Organization", layout="l-body-outset", echo=FALSE}
-grViz("
-digraph boxes_and_circles {
-  node [shape = box]
-  CRAN; GitHub; Internal; 'Local Repository'
-  
-  node [shape = egg]
-  'Project 1'; 'Project 2'; API; 'Shiny App'; 'ETL Job'; 'Shared Project'; 'Docker Container'
-  
-  node [shape = oval]
-  Desktop; 'Dev Server'; Production
-  
-  subgraph legend {
-  node [fillcolor = grey, style = filled, shape = box]
-  'Package Source / Binary'
-  node [fillcolor = grey, style = filled, shape = egg]
-  'Library'
-  node [fillcolor = grey, style = filled, shape = oval]
-  'Installed Cache'
-  
-  'Package Source / Binary' -> 'Installed Cache'
-  'Installed Cache' -> 'Library'
-  }
-
-CRAN->'Local Repository'
-GitHub->'Local Repository'
-Internal->'Local Repository'
-'Local Repository' -> Desktop
-'Local Repository' -> 'Docker Container'
-'Local Repository' -> 'Dev Server'
-'Local Repository' -> Production
-Desktop -> 'Project 1'
-Desktop -> 'Project 2'
-Production -> API
-Production -> 'Shiny App'
-Production -> 'ETL Job'
-'Dev Server' ->  'Shared Project'
-}
+DiagrammeR("
+  graph TD
+    A[CRAN]-->D[Local Repository]
+    B[GitHub]-->D[Local Repository]
+    C[Internal]-->D[Local Repository]
+    D[Local Repository]-->E[Shared Dev Server]
+    D[Local Repository]-->F[Docker Container]
+    D[Local Repository]-->G[Desktop]
+    G[Desktop]-->H(Package Cache)
+    H(Package Cache)-->I((Project 1 Library))
+    H(Package Cache)-->U((Project 2 Library))
+    E[Shared Dev Server]-->J(R 3.3.1 Cache)
+    E[Shared Dev Server]-->L(R 3.5.0 Cache)
+    D[Local Repository]-->R[Validated Environment]
+    R[Validated Environment]--> X(Validated Cache)
+    X(Validated Cache)-->P((Validated Project)) 
+    J(R 3.3.1 Cache)-->K((Project 3 Library))
+    L(R 3.5.0 Cache)-->M((Shared Project))
+    K((Project 4 Library))-->Z{Ad-hoc Job}
+    K((Project 4 Library))-->Q{Ad-hoc Job}
+    O[Prod]-->AA>API]
+    O[Prod]-->N>Web App]
+    D[Local Repository]-->O[Prod]
 ")
+
 ```
 
 ### 3 Signs You Need A Better Strategy
@@ -65,31 +52,69 @@ While everyone should have a plan for reproducible environments, here are a few 
 - You are afraid to upgrade or install a new package, because it might break your code or someone else's
 - Typing `install.packages` in your environment doesn't do anything
 
+It is also important to recognize that not everyone needs the same approach or concern for reproducibility. If you're a student reporting an error to your professor, capturing your `sessionInfo()` may be all you need. In contrast, a statistician working on a clinical trial will need a robust framework for recreating their environment. **Reproducibility is not binary!**
+
+If you're an individual data scientist, there are two things you should do **before you continue any further** with environment management: [learn about RStudio Projects](https://r4ds.had.co.nz/workflow-projects.html#rstudio-projects) and [use version control](https://happygitwithr.com/).
+
+```{r spectrum, layout="l-screen", fig.cap="Strategies for reproducibility fall on a spectrum. One side is not better than the other. Pick based on your goals."}
+library(ggplot2)
+library(tibble)
+timeline <- tribble(
+  ~x, ~y, 
+  0, 1,
+  16, 1
+)
+
+labels <- tribble(
+  ~x, ~y, ~label,
+  0, 1.1, "No Strategy",
+  4, 1.1, "Aware & Record",
+  8, 1.1, "Easy Sharing",
+  12, 1.1, "Record & Restore",
+  16, 1.1, "Validated",
+)
+
+details <- tribble(
+  ~x, ~y, ~label,
+  0, 0.9, "scary upgrades \n no sharing \n old stuff is borked",
+  4, 0.9, "reprex \n sessioninfo()", 
+  8, 0.9, "site library \n frozen repo",
+  12, 0.9, "renv",
+  16, 0.9, "internal repo \ncustom tests"
+)
+
+
+ggplot() + 
+  geom_path(data = timeline, aes(x,y),  color = "black") + 
+  geom_label(data = labels, aes(x,y,label=label)) + 
+  geom_text(data = details, aes(x,y,label=label)) + 
+  theme_minimal() + 
+  scale_x_continuous(breaks = NULL, limits = c(-2,17)) + 
+  scale_y_continuous(breaks = NULL, limits = c(0.5, 1.5)) + 
+  labs(
+    title = NULL,
+    x = NULL,
+    y = NULL
+  )
+
+```
+
 ### Where to go next?
 
-Check out [Getting Started](./index.html#getting-started) for a simple strategy or look for your use case. 
-
-Interested in exploring the architecture first? Read about the [components of an environment](./index.html#what-makes-up-an-environment).
+Check out [Getting Started](./index.html#getting-started) for a strategy that fits most users, or review the [full set of strategies](./reproduce.html). Alternatively, look for your use case: [upgrading](./upgrades.html), [picking packages](./picking), [validation](./validation.html), [collaboration](./collaborate.html), [production deployments](./deploy.html). Interested in exploring the architecture first? Read about the [components of an environment](./index.html#what-makes-up-an-environment).
 
 # Getting Started
 
-Not everyone needs the same environment management strategy. This section covers a simple approach that will greatly increase the chances your work can be reproduced. Teams of R users, or R users working within an organization, may need to adopt a more complex strategy.
+Not everyone needs the same environment management strategy. This section covers an approach that will greatly increase the chances your work can be reproduced. Teams of R users, R users working within an organization, or new R users, may find a [different strategy](./reproduce.html) more appropriate.
 
 ```{r fig.cap="Simple Workflow for Reproducible Environments", layout="l-body", echo=FALSE}
-grViz("
-digraph renv {
-  graph [layout = dot
-         rankdir = LR]
-  node [shape = box]
-  '1. Create a Project'; 'Write Code'; '2. Install Packages'; '3. Snapshot'; '4. Restore'
-  
-  '1. Create a Project'->'Write Code'
-  'Write Code'->'2. Install Packages' 
-  '2. Install Packages' -> 'Write Code'
-  'Write Code'->'3. Snapshot'
-  '3. Snapshot'->'4. Restore'
-  
-}      
+DiagrammeR("
+ graph LR
+   A[1. Create a Project]-->C((Write Code))
+   B((2. Install Packages))-->C((Write Code))
+   C((Write Code))-->B((2. Install Packages))
+   C((Write Code))-->D[3. Snapshot]
+   D[3. Snapshot]-->E[4. Restore]
 ")
 ```
 
@@ -186,32 +211,18 @@ This strategy provides an easy way to start managing R packages for your project
 Environments can look different in different organizations, but they are composed of common elements. 
 
 ```{r fig.cap="Components of an Environment", echo=FALSE}
-grViz(
-"digraph env {
-
- graph [layout = dot
-        rankdir = BT]
- node [shape = box]
- 'Operating System'
- 
- node [shape = oval]
- 'R Installation'; 'System Libraries'; 'Python Installation'; 'virtualenv'; 'Project Library'
- 
- node [shape = egg]
- User
- 
- 'Operating System' -> 'Python Installation'
- 'Operating System' -> 'System Libraries'
- 'Operating System' -> 'R Installation'
- 'R Installation' -> 'Project Library'
- 'System Libraries' -> 'Project Library'
- 'System Libraries' -> 'virtualenv'
- virtualenv -> User
- 'Project Library' -> User
- 'Python Installation' -> virtualenv
-}
+DiagrammeR("
+  graph BT
+  A[Operating System]---B[R Installation]
+  A[Operating System]---C[System Dependencies]
+  C[System Dependencies]---D(Project Library)
+  C[System Dependencies]---G(Project virutalenv)
+  B[R Installation]---D(Project Library)
+  A[Operating System]---F[Python Installation]
+  F[Python Installation]---G(Project virtualenv)
+  G(Project virtualenv)---H((User))
+  D(Project Library)---H((User))
 ")
-
 ```
 
 If you use a shared server, some elements might be shared amongst projects and
@@ -227,20 +238,5 @@ others. When you communicate the requirements of your project, it is important t
 - **System Dependencies** R, Python, and their packages can depend on underlying software that needs to be installed on the system. For example, the `xml2` R package depends on the `libxml` system package. Learn more about how [system dependencies are documented and managed](./installation.html#system-dependencies).
 
 - **R Packages** Managing and recording R packages makes up the bulk of the website, specifically learn about [repositories](./repositories.html), [installating packages](./installation.html), and [managing libraries](./libraries).
-
-```{r echo=FALSE}
-grViz("
-digraph repos {
-  graph [layout = dot
-         rankdir = LR]
-  node[shape = box]
-  Repository; 'Project Cache'; 'Project 1 Library'; 'Project 2 Library'
-  
-  'Repository'-> 'Project Cache'
-  'Project Cache' -> 'Project 1 Library'
-  'Project Cache' -> 'Project 2 Library'
-}      
-")
-```
 
 - **Other Languages** Often data science projects are multi-lingual. Combining R and Python is the most common use case, and tools like `renv` have affordances for recording [Python](./python.html) dependencies.

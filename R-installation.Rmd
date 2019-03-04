@@ -6,13 +6,17 @@ description: |
 
 The goal of this page is to discuss best practices for managing R installations.
 
+# Building R from Source
+- instructions and motivation
+- current instructions: https://support.rstudio.com/hc/en-us/articles/218004217-Building-R-from-source
+
 # R Installations & Packages
 - discuss system libraries
-- discuss binary caches
-- (or links to other sections that cover the above)
+- discuss user libraries
+- current resource: http://shiny.rstudio.com/articles/upgrade-R.html
 
 # Shared Servers
 - lay out the need to install multiple versions of R from source
 
 # Docker
-- Link to docker references
+- Answer the question: If I'm using Docker, where do I get R?
