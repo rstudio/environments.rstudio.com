@@ -1259,6 +1259,7 @@ Use Cases
 <a href="collaborate.html">Team Collaboration</a>
 </div>
 </div>
+<a href="reproduce.html">Strategies</a>
 <div class="nav-dropdown">
 <button class="nav-dropbtn">
 R Packages
@@ -1300,7 +1301,7 @@ Other Components
 <div class="d-article">
 <h1 id="intro">Intro</h1>
 <p>Great data science work should be reproducible. Being able to repeat experiments is the foundation of all science. Reproducing work is also critical for buisness applications: scheduled reporting, team collaboration, project validation. In order to reproduce work done in R, you need to communicate 3 things: your code, your reasoning, and the environment where your code runs. There are many excellent tools and strategies for managing code - Git - and communicating methods - R Markdown. Unfortunately, environments are often neglected.</p>
-<p>This website breaks down common use cases and strategies for solving them. It also explains the components that make up an environment. It is important to remember that no single tool will solve every environment challenge. Instead, you or your team should discuss how different tools working together can meet your requirements.</p>
+<p>This website breaks down common use cases and strategies for solving them. It also explains the components that make up a data science environment. It is important to remember that no single tool will solve every environment challenge. Instead, you or your team should discuss how different tools working together can meet your requirements.</p>
 <div class="layout-chunk" data-layout="l-body-outset">
 <div class="figure">
 <div id="htmlwidget-40b5dbc644e0cb59f9c3" style="width:576px;height:384px;" class="grViz html-widget"></div>
@@ -1317,11 +1318,20 @@ R Packages Flow Through An Organization
 <li>You are afraid to upgrade or install a new package, because it might break your code or someone else’s</li>
 <li>Typing <code>install.packages</code> in your environment doesn’t do anything</li>
 </ul>
+<p>It is also important to recognize that not everyone needs the same approach or concern for reproducibility. If you’re a student reporting an error to your professor, capturing your <code>sessionInfo()</code> may be all you need. In contrast, a statistician working on a clinical trial will need a robust framework for recreating their environment. <strong>Reproducibility is not binary!</strong></p>
+<p>If you’re an individual data scientist, there are two things you should do <strong>before you continue any further</strong> with environment management: <a href="https://r4ds.had.co.nz/workflow-projects.html#rstudio-projects">learn about RStudio Projects</a> and <a href="https://happygitwithr.com/">use version control</a>.</p>
+<div class="layout-chunk" data-layout="l-page">
+<div class="figure">
+<img src="index_files/figure-html5/spectrum-1.png" alt="Strategies for reproducibility fall on a spectrum. One side is not better than the other. Pick based on your goals." width="768" />
+<p class="caption">
+Strategies for reproducibility fall on a spectrum. One side is not better than the other. Pick based on your goals.
+</p>
+</div>
+</div>
 <h3 id="where-to-go-next">Where to go next?</h3>
-<p>Check out <a href="./index.html#getting-started">Getting Started</a> for a simple strategy or look for your use case.</p>
-<p>Interested in exploring the architecture first? Read about the <a href="./index.html#what-makes-up-an-environment">components of an environment</a>.</p>
+<p>Check out <a href="./index.html#getting-started">Getting Started</a> for a strategy that fits most users, or review the <a href="./reproduce.html">full set of strategies</a>. Alternatively, look for your use case: <a href="./upgrades.html">upgrading</a>, <a href="./picking">picking packages</a>, <a href="./validation.html">validation</a>, <a href="./collaborate.html">collaboration</a>, <a href="./deploy.html">production deployments</a>. Interested in exploring the architecture first? Read about the <a href="./index.html#what-makes-up-an-environment">components of an environment</a>.</p>
 <h1 id="getting-started">Getting Started</h1>
-<p>Not everyone needs the same environment management strategy. This section covers a simple approach that will greatly increase the chances your work can be reproduced. Teams of R users, or R users working within an organization, may need to adopt a more complex strategy.</p>
+<p>Not everyone needs the same environment management strategy. This section covers an approach that will greatly increase the chances your work can be reproduced. Teams of R users, R users working within an organization, or new R users, may find a <a href="./reproduce.html">different strategy</a> more appropriate.</p>
 <div class="layout-chunk" data-layout="l-body">
 <div class="figure">
 <div id="htmlwidget-94689c960e1e72fd6b7a" style="width:576px;height:384px;" class="grViz html-widget"></div>
@@ -1377,13 +1387,14 @@ renv::snapshot()</code></pre>
 <pre><code>
 churn-model
   - model.R
+  - renv.lock
   + renv
     + manifest
       + 2019-03-01
         - 2019-03-01T09-30-22GMT
     + ... other directories</code></pre>
-<p>The file <code>churn-model/renv/2018-03-01/2019-03-01T09-30-22GMT</code> contains all the information you need to communicate your project’s dependencies <em>at the moment you call <code>snapshot</code></em>.</p>
-<p>If you are familiar with version control for your code, we recommend calling <code>snapshot</code> anytime you push or checkin changes to your code. Learn more about <a href="./libraries.html#record-keeping">recording environments with version control</a>.</p>
+<p>The file <code>churn-model/renv/2018-03-01/2019-03-01T09-30-22GMT</code> contains all the information you need to communicate your project’s dependencies <em>at the moment you call <code>snapshot</code></em>. The next time you call <code>snapshot</code>, a new file will be created with a new timestamp. The file <code>renv.lock</code> contains similar information, but will be over-written the next time you call <code>snapshot</code>.</p>
+<p>If you are familiar with version control for your code, we recommend calling <code>snapshot</code> anytime you push or checkin changes to your code. Learn more about <a href="./libraries.html#record-keeping">recording environments with version control</a>. <strong>In short, you should commit <code>renv.lock</code> alongside your code.</strong></p>
 <h3 id="step-4-recreate-the-environment">Step 4: Recreate the Environment</h3>
 <p>This step is where the work above pays off! If you need to share your work with others, or need to return to your work after time on other projects, cash in!</p>
 <div class="layout-chunk" data-layout="l-body">
