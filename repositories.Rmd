@@ -2,6 +2,10 @@
 title: "Repositories"
 description: |
   R Package Repositories
+output:
+  distill::distill_article:
+    toc: true
+    toc_depth: 3
 ---
 
 ```{r echo=FALSE}

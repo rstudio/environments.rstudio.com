@@ -2,6 +2,10 @@
 title: "Reproduce"
 description: |
   Reproduce Environments Over Time
+output:
+  distill::distill_article:
+    toc: true
+    toc_depth: 3
 ---
 
 Reproducing data science work is the main objective of environment management. This page details three strategies for reproducing R environments overtime. To select a strategy, you will need to answer two questions:  
@@ -89,17 +93,6 @@ ggplotly(p, tooltip = c('text')) %>%
 
 ```
 
-## Quicklinks
-
-Successful Strategies:  
-- [Snapshot and Restore](./reproduce.html#snapshot-and-restore)  
-- [Shared Baseline](./reproduce.html#shared-baseliness)  
-- [Validated](./reproduce.html#validated)  
-
-Danger Zones:  
-- [Ticket System](./reproduce.html#ticket-system)  
-- [Wild West](./reproduce.html#wild-west)  
-- [Blocked](./reproduce.html#blocked)  
 
 ## Snapshot and Restore
 

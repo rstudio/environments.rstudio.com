@@ -3,6 +3,7 @@ title: "Environments"
 description: |
   Environments
 output_dir: "_site"
+google_analytics: "UA-20375833-24"
 navbar:
   right:
     - text: "Use Cases"
@@ -37,4 +38,4 @@ navbar:
         href: Docker.html
       - text: "Python"
         href: Python.html
-output: radix::radix_article
+output: distill::distill_article
