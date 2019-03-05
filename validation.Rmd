@@ -6,6 +6,11 @@ description: |
 
 This page falls into the use case section and answers the question "how do I use R for validated work?". The page should be designed as checklist of things to think about if you are doing validated work, with links to other pages and external resources.
 
+Validation consists of 2 elements:
+
+1. Confidently recreating the same environment
+2. Trusting what is in the recreatable environment
+
 This section will cover things like:
 
 - How recording the versions in use is important for validation
@@ -14,3 +19,7 @@ This section will cover things like:
 - References to the R in Pharma working group on validation 
 - Background on how R itself is developed / validated
 
+https://www.pharmar.org/packages/
+
+
+We'll also include links to the RStudio validation docs and R validation docs.

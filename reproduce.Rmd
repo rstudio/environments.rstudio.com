@@ -4,19 +4,754 @@ description: |
   Reproduce Environments Over Time
 ---
 
-This page is at the heart of most user's questions; and describes a variety of strategies for creating reproducible environments.
+Reproducing data science work is the main objective of environment management. This page details three strategies for reproducing R environments overtime. To select a strategy, you will need to answer two questions:  
 
-Each strategy should be arranged as: 1-2-3 steps; longer explanation, troubleshooting.
+1. Who is responsible for managing the environment?  
+2. How open is the environment?  
+
+At first these two questions might seem similar, but separating the two uncovers
+common "danger zones" or "anti-strategies". The map below depicts these danger
+zones as well as three successful strategies. Use the map and the two questions
+above to determine where your organization currently operates and identify which
+strategy to move towards. Once selected, the sections below outline how to
+implement each strategy. Characteristics of each danger zone are detailed as
+well.
+
+```{r mental-map, layout="l-body-outset"}
+library(ggplot2)
+library(tibble)
+library(ggrepel)
+library(plotly)
+mm <- tribble(
+  ~x, ~y, ~label, ~Description, ~status,
+  0.1, 0.1, 'Validated', 'Admins test and approve \n a subset of CRAN', TRUE,
+  0.5, 0.5, 'Shared Baseline', 'All or most of CRAN, \n updated with R versions, \n tied to a system library', TRUE,
+  0.5, 0.75, 'Wild West', 'Open access, \n not reproducible, \n how we learn', FALSE,
+  0.8,0.8, 'Snapshot', 'Open access, user or system \n records per-project dependencies', TRUE,
+  0.75, 0.2, 'Blocked', 'Backdoor package access, \n offline systems without a strategy', FALSE,
+  0.2, 0.8, 'Ticket System', 'Admins involved, \n no testing, \n slow updates, \n high risk of breakage', FALSE
+)
+bad1 <- tribble(
+  ~x, ~y, ~label, ~Description, ~status,
+  0, 0.2, NA, NA, NA,
+  0, 1,NA, NA, NA,
+  0.8, 1, NA, NA, NA
+)
+
+bad2 <- tribble(
+  ~x, ~y, ~label, ~Description, ~status,
+  0.2, 0, NA, NA, NA,
+  1, 0,NA, NA, NA,
+  1, 0.8, NA, NA, NA
+)
+
+good <- tribble(
+  ~x, ~y, ~label, ~Description, ~status,
+  0, -0.2,NA, NA, NA,
+  1, 0.8, NA, NA, NA,
+  0.8, 1, NA, NA, NA,
+  0, 0.2, NA, NA, NA
+)
+
+good2 <- tribble(
+  ~x, ~y, ~label, ~Description, ~status,
+  0, 0,NA, NA, NA,
+  0, 0.2, NA, NA, NA,
+  1, 0.8, NA, NA, NA,
+  0.2, 0, NA, NA, NA
+)
+
+p <- ggplot(mm, aes(x, y)) + 
+  geom_abline(slope = 1, intercept = 0.2, alpha = 0.2) + 
+  geom_polygon(aes(x,y, text = Description), fill = "red", data=bad1, alpha = 0.1) + 
+  geom_polygon(aes(x,y, text = Description), fill = "green", data=good, alpha = 0.1) + 
+  geom_polygon(aes(x,y, text = NULL), fill = "green", data=good2, alpha = 0.1) + 
+  geom_polygon(aes(x,y, text = Description), fill = "red", data=bad2, alpha = 0.1) +
+  geom_abline(slope = 1, intercept = -0.2, alpha = 0.2) + 
+  geom_point(aes(x, y, color = status, text = Description)) + 
+  geom_text(aes(x, y, label = label), nudge_y = 0.025, nudge_x  = 0.025) + 
+  scale_x_continuous(limits = c(0,1), breaks = seq(0,1,0.25), labels = c("Admins","", "", "", "Users")) +
+  scale_y_continuous(limits = c(0,1), breaks = seq(0,1,0.25), labels =  c("Locked Down","", "", "", "Open")) +
+  theme_minimal() + 
+  scale_color_manual(breaks = NULL, values = c("#ff0000","#a3c586")) + 
+  
+  labs(
+    x = "Who is Responsible for Reproducing the Environment?",
+    y = "Package Access",
+    color = NULL,
+    title = "Reproducing Environments: Strategies and Danger Zones"
+  ) # + 
+  # theme(axis.line = element_line(linetype = 'solid', arrow = grid::arrow(length = grid::unit(1, units = 'mm'))))
+ggplotly(p, tooltip = c('text')) %>% 
+  config(displayModeBar = FALSE) %>% 
+  style(hoverinfo = 'skip', traces = 1:5) %>% 
+  hide_legend()
+
+```
+
+## Quicklinks
+
+Successful Strategies:  
+- [Snapshot and Restore](./reproduce.html#snapshot-and-restore)  
+- [Shared Baseline](./reproduce.html#shared-baseliness)  
+- [Validated](./reproduce.html#validated)  
+
+Danger Zones:  
+- [Ticket System](./reproduce.html#ticket-system)  
+- [Wild West](./reproduce.html#wild-west)  
+- [Blocked](./reproduce.html#blocked)  
 
 ## Snapshot and Restore
 
-renv
+The snapshot and restore strategy fits when package access is open and users are responsible for reproducibility. This strategy is the most relevant for individual data scientists. The strategy has two key characteristics:
+
+1. Users are able to **freely** access and install packages **for a project**
+2. Users  have the full responsibility to **record** the dependencies needed for a project
+
+The strategy is implemented with the following steps:
+
+1. Start a project by creating a project-specific library
+2. Install and use packages from the project-specific library
+3. Record the state of the library alongside of the code 
+4. Restore the library when the environment needs to be recreated
+
+A potential drawback of this strategy is the involvement required from the R
+user. For new users, these steps can create an energy barrier that prevents them
+from being successful. Often organizations will start new users (e.g. Excel
+converts) with a different strategy, and allow power R users the flexibility and
+responsibility of this strategy.
+
+### Snapshot and Restore using `renv`
+
+A specific implementation of the four snapshot and restore steps is available in the [`renv`](https://github.com/rstudio/renv) package:
+
+**Pre-requisite Steps**:
+
+1. (Administrators) Install each desired version of [R from source](./installation.Rmd)
+2. (Users) Install the `renv` package
+
+**Per-project User Steps**:
+
+1. Be sure you are using version control for your code. We also recommend using RStudio Projects. Within the project folder, initialize a project environment:
+
+```
+# From within the project working directory
+renv::init()
+```
+
+2. Install and use packages as normal. See [package installation](./installation.Rmd) for details on `pak`, `remotes`, or `install.packages`. Use `library` or `require` within your project code.
+
+```
+# After initializing the project environment
+install.packages(...)
+```
+
+3. Prior to committing or pushing code changes, record the project's dependencies:
+
+```
+renv::snapshot()
+# commit the resulting lock file, renv.lock, alongside your project code
+```
+
+4. To restore the environment, pull the code and manifest from your version control repository, then run:
+
+```
+# To recreate the environment
+renv::restore()
+```
+
+### Implementing the Snapshot Strategy in Production
+
+In some organizations, you may only want to worry about recording project
+dependencies when a project is ready for production. Generating a manifest of
+dependencies can be the first step in a deployment hand-off between a development
+environment and a production deployment. *This scenario is especially common for
+web applications, APIs, and reports* written in R using
+[shiny](https://shiny.rstudio.com), [plumber](https://rplumber.io), and
+[rmarkdown](https://rmarkdown.rstudio.com).
+
+**If you are using [RStudio Connect](https://rstudio.com/products/connect) then the snapshot strategy is automatically applied when content is deployed**. 
+
+### Common Challenges and Resolutions:
+
+#### Versions of R
+
+To ensure the library is restorable, you'll need to _record_ and _make_ _available_ the same version of R used during development. The `renv` package automatically records the version of R used by a project. We recommend having multiple versions of R available, so that users can pick the version of R and then restore. This approach is also an effective way to [test if a project is ready to upgrade](./upgrades.html) to a new version of R.
+
+#### Non-Current CRAN Packages 
+
+Often, by the time a project is restored, some of the packages in use may have been updated on CRAN. For example:
+
+1. On January 1st, a project manifest is committed that records `ISLR` version 1.0 as a dependency.
+2. On February 1st, the `ISLR` package is upgraded to `1.1`.
+3. On March 1st, a user wishes to restore the environment.
+
+In this case, it is critical that version 1.0 of `ISLR` is used in the restored
+environment. To make this happen, the older version of the package needs to be
+accessed and installed. Luckily, this is possible using a [repository's
+archive](./repositories.html#archive-packages). *Internal repositories used to support the
+snapshot strategy must record archived versions.* [RStudio Package Manager](https://rstudio.com/products/package-manager) is an
+easy way to ensure your internal repository handles this case appropriately.
+
+
+#### Internal Packages 
+
+If your package is publicly available, tools like `renv` will work automatically. If you wish to use the snapshot strategy along with internal packages (packages that are not publicly available on CRAN nor in a public Git repository), it is easiest to store and source those internal packages in a [CRAN-like](./repositories.html) repository. Follow these steps:
+
+1. Release the internal package to the CRAN-like repository
+2. Install and use the package in the project, installing from the repository
+3. Record the project dependencies
+4. Restore the project by accessing the appropriate version of the package from the CRAN-like repository
+
+It is critical that older versions of the internal package are appropriately stored in the repository's archive. The easiest way to create a correct internal repository, distribute internal packages, and support the snapshot strategy is using [RStudio Package Manager](https://rstudio.com/products/package-manager)
+
+#### Multi-Lingual Projects (Python)
+
+If your project uses more than R, you'll need to capture the project's other dependencies as well. A common scenario is a [reticulated project](https://rstudio.github.io/reticulate) that uses Python and R. In this case, one option is to combine `renv` with a Python package management tool like `virtualenv`:
+
+1. Use `renv` as described previously to manage R packages
+2. Use a `virutalenv` to isolate project Python dependencies
+3. Record the state of the `virtualenv` using  `pip freeze > requirements.txt`
+4. On restore, recreate the Python `virtualenv` and then use `renv::restore()`
+
+#### Performance
+
+A common challenge in the snapshot and restore approach is that each project
+relies on an isolated library. Naively, this would mean each project library
+would start empty and users would have to re-install their desired packages. In
+practice, this naive approach is slow - especially on systems where packages
+must be compiled.
+
+To solve this problem, implementations of the snapshot and restore strategy should rely on a
+[package cache](./installation.html) or a [repository that serves
+binaries](./repositories.html#binary-packages) for the operating systems in-use.
+By default, `renv` creates a cache for each user. This means if two projects
+rely on `ggplot2` version 3.1.0, the user will only need to install `ggplot2`
+3.1.0 once. A repository that serves binaries accomplishes the same result, 
+effectively caching installed packages for all users!
+
+Often restoring a project on a different computer or a new system can take time
+because the necessary packages may not be cached. This challenge is
+especially prevalent if the project uses non-current CRAN packages, because
+these packages do not usually have a binary version available in a repository.
+
+#### Docker
+
+Unfortunately, many organizations and platforms assume [using
+Docker](./docker.html) will give them the benefits of reproducibility. The good
+news is that Docker does a great job isolating project dependencies. The bad
+news is that Docker does not record the versions of project dependencies.
+Luckily, Docker can be used with the snapshot and restore strategy. For
+example, say you wanted to use Docker to execute an ETL job:
+
+```{bash eval=FALSE, echo=TRUE, fig.cap="A Reproducible Dockerfile"}
+FROM ubuntu
+...
+RUN git clone https://github.com/me/etl-project.git
+RUN R -e 'renv::restore()' 
+CMD <some process>
+```
+
+### Additional Resources:
+
+- Learn more about [libraries](./libraries.html)
+- Learn more about [repositories](./repositories.html)
+- Learn more about [package installation](./installation.html)
 
 ## Shared Baselines
-Discusses how to use RSPM's "frozen" repos to recreate environments, including instructions for creating point-in-time libraries.
+
+The shared baseline strategy fits when administrators or R champions are responsible for creating an environment where less experienced users can easily share and re-run work. The defining characteristics of the strategy are:
+
+1. There are not strict requirements on what can be installed, the main motivation is ease of sharing. 
+2. Package availability is **tied to R installations** through site-wide libraries, and updates occur on a scheduled basis.
+
+A naive approach to this strategy is for an admin to install packages into a
+system library as users request them. Unfortunately, this approach is not a
+strategy but actually the [Ticket System](./reproduce.html#ticket-system) danger
+zone! Before diving into the implementation steps, we need to understand the problem with this approach.
+
+### The BIG Risk
+
+Imagine the following scenario:^[The scenario is hypothetical and simplified, you should not be concerned about the specific packages and dates used in the example.]
+
+1. January 1st, an admin installs `tibble` into the system library. The package is installed, along with the package's dependencies. Everything is in a consistent state because the packages all originate from CRAN on the same date, and CRAN tests to ensure the "latest" packages all work together.
+
+```{r fig.cap="Partial Dependency Graph for tibble"}
+library(DiagrammeR)
+grViz("
+digraph first {
+  node [shape = oval]
+  rlang; cli; crayon;
+  
+  node [shape = box]
+  tibble
+  
+  tibble->rlang
+  tibble->cli
+  tibble->crayon
+}
+")
+```
+
+2. February 1st, the admin receives a request to install `pkgdown`. In doing so,
+`pkgdown` is installed along with its dependencies, **which include `rlang`,
+`cli`, and `crayon`**. Already there is a problem, any users who relied on the
+older versions of `cli`, `crayon`, and `rlang` could see their code break with
+no warning. But, the problem gets worse! Even though its dependencies were
+updated, `tibble` was not. The result is an inconsistent state, where some
+packages come from February 1st and some from January 1st. This mixed set is
+_not_ tested by CRAN, and can lead to an error for anyone using `tibble`.
+
+```{r fig.cap="A dangerous situation, resulting from a partial upgrade"}
+grViz("
+digraph first {
+  node [shape = oval
+        style = filled
+        fillcolor = grey]
+  rlang; cli; crayon
+  
+  node [shape = box
+        style = filled
+        fillcolor = grey]
+  pkgdown
+  
+  node [shape = box
+        style = filled
+        fillcolor = white]
+  tibble
+  
+  tibble->rlang
+  tibble->cli
+  tibble->crayon
+  pkgdown->rlang
+  pkgdown->cli
+  pkgdown->crayon
+}
+")
+```
+
+<aside>
+White - January Versions
+Grey - February Versions
+</aside>
+
+The benefit of the shared baseline approach is that everyone uses the same
+installed packages. The problem is if an administrator updates packages, the
+update could create an inconsistent state that breaks other users' code. The
+main benefit has turned into a big risk!
+
+> Note: This scenario can also occur for individual users who share a package library
+across projects. The likelihood of conflict just increases if multiple users share a library.
+
+How do we prevent this problem? One option would be for an administrator to
+install all the packages at once. Unfortunately, this option rarely works in practice
+because it is incredibly time intensive and users don't know upfront the entire
+list of packages they'll need.
+
+#### Frozen Repositories
+
+A better option is to rely on a frozen repository. A frozen repository is a way
+for organizations to always get a consistent set of packages, without having to
+pre-install all the packages. As an example, you could rsync CRAN to an internal
+server on January 1st and host it at `https://r-pkgs.example.com/cran/012019`.
+Then, no matter when an admin installs new packages, they will always get a
+consistent set of packages. The next time a version of R is released, the new
+version of R can be associated with a new frozen repository, e.g.
+`https://r-pkgs.example.com/cran/062019`, allowing users to access updated and new
+packages while still remaining consistent. The specific steps for this approach
+are documented below.
+
+```{r fig.cap="Shared Basline Strategy"}
+library(ggplot2)
+library(tibble)
+library(lubridate)
+labels <- tribble(
+  ~x, ~y, ~label, ~color,
+  "04-01-2018", 0.75, "R 3.4.4 \n Repo Frozen \n 042018", "grey",
+  "07-01-2018", 1.75, "R 3.5.1 \n Repo Frozen \n 072018", "darkblue",
+  "10-15-2018", 1.65, "Projects gradually \n  migrate", "darkred"
+)
+text <- tribble(
+  ~x, ~y, ~label, ~color,
+  "05-01-2018", 1.15, "pkgdown 1.0 installed \n rlang 0.2.0 installed", "grey",
+  "09-01-2018", 1.15, "tibble 1.4.2 installed \n rlang 0.2.0 still used", "grey",
+  "08-01-2018", 2.15, "pkgdown 1.1.0 installed \n rlang 0.2.1 installed", "darkblue"
+)
+timeline1 <- tribble(
+  ~x, ~y,
+  '04-01-2018', 1,
+  '10-01-2018', 1,
+)
+timeline2 <- tribble(
+  ~x, ~y,
+  '07-01-2018', 2,
+  '12-01-2018', 2,
+)
+
+timeline1$x <- mdy(timeline1$x)
+timeline2$x <- mdy(timeline2$x)
+labels$x <- mdy(labels$x)
+text$x <- mdy(text$x)
+
+ggplot() + 
+  theme_minimal() + 
+  geom_label(data = labels, aes(x, y, label = label, color = color)) + 
+  geom_text(data = text, aes(x, y, label = label, color = color)) + 
+  geom_path(data = timeline1, aes(x,y), color = "black") + 
+  geom_path(data = timeline2, aes(x,y), color = "darkblue")  + 
+  scale_y_continuous(breaks = NULL, limits = c(0.5,2.5)) +
+  scale_x_date(limits = c(as.Date(mdy("03-01-2018")),as.Date(mdy("12-01-2018")))) + 
+  scale_color_manual(values = c("darkblue", "darkred", "black"), guide = FALSE) +
+  labs(
+    color = NULL,
+    y = NULL,
+    x = "Calendar Time"
+    
+  )
+```
+
+Overtime, managing these repositories can become tedious, [RStudio Package
+Manager](https://rstudio.com/products/package-manager) provides an easy way to
+automatically access snapshots and additionally optimizes disk space and
+supports internal, non-CRAN packages.
+
+### Implementation Steps
+
+This strategy requires a "frozen repository", as described above. Organizations
+can create frozen repositories manually, tie into
+[MRAN](https://mran.microsoft.com/), or use [RStudio Package
+Manager](https://docs.rstudio.com/rspm/admin/repositories.html#repo-versions). 
+
+1. Install a [version of R from source](./R-installation.html). This results in a versioned system library:
+
+```
+/opt/R/3.4.4/lib/R/library
+```
+
+2. Create or edit the `Rprofile.site` file, to set the repo option for this version of R to point to a frozen repository. 
+
+```{bash eval=FALSE, echo=TRUE}
+# /opt/R/3.4.4/etc/Rprofile.site
+local({
+  options(repos = c(CRAN = "https://r-pkgs.example.com/cran/128"))
+})
+```
+
+
+3. Run R as root, and install the desired baseline packages. Overtime, as requests for new packages come in, install them in the same way. Consistency is guaranteed because you are always installing from the same frozen repository.
+
+```
+sudo /opt/R/3.4.4./bin/R -e 'install.packages("ggplot2")'
+```    
+
+4. Users access packages on the server without any need to install, e.g.: `library(ggplot2)`
+
+5. (Optionally) Disable the user option to change the repository setting and discourage package installation.
+
+```{bash eval=FALSE, echo=TRUE}
+# /etc/rstudio/rsession.conf
+allow-r-cran-repos-edit=0
+allow-package-installation=0
+```
+
+6. (Optionally) Allow users to install packages into their personal user libraries. The user library is still tied to the R version, and the repository is still frozen due to the `Rprofile.site` setting. In this case, users won't all have the same packages, but if they share code and then install packages, they'll get the same versions.
+
+### Common Challenges and Resolutions
+
+#### Desktop R Users
+
+The implementation described for the shared baseline strategy assumes users are accessing R on a shared server, using a tool like RStudio Server (Pro). Often, teams of data scientists using R from their desktops also want easy collaboration and the benefits of uniform package versions. This result is possible by adapting the strategy. Desktop users simply need to set their repository option to use a frozen repository. If all users pick the same frozen repository, they'll get the benefits of the strategy. Desktop users can set the repository using the `Rprofile.site` mechanism, or using a wizard available in RStudio (v1.2+) `Tools -> Global Options -> Packages`. 
+
+#### New or Updated Packages
+
+What happens if a package is updated immediately after the shared baseline is
+implemented? Or a new package is added? For example, what would happen if the
+repository is frozen on April 1st, and April 5th a new package is added? In this
+case, users would need to wait until the next release to pull in this
+update. We recommend organizations roll out new versions of R (and new package sets)
+every 4-6 months.
+
+Luckily, this type of time delay will not impact most R users. The need to
+access the latest and greatest packages is rare for the majority of R users,
+especially new R users. We recommend allowing advanced R users who require this
+type of "bleeding edge" access to use the [Snapshot and
+Restore](./reproduce.html#snapshot-and-restore) strategy. If a critical security
+issue arises that requires a package update, re-install the
+version of R in a new directory, e.g. `/opt/R/3.4.4-patch/` and follow the
+entire process, perhaps removing the old R version.
+
+#### Internal Packages
+
+The shared baseline strategy works with internal packages as long as those
+packages are available in a frozen, CRAN-like repository. [RStudio Package
+Manager](https://docs.rstudio.com/rspm/admin/quickstarts.html#quickstart-local)
+makes it easy to include internal packages in repository checkpoints.
+
+#### Docker
+
+Docker can be used alongside the shared baseline strategy to ensure that
+rebuilding a Docker image always returns the same sets of packages. Docker makes
+the process easier, because it negates the need to manage a system library
+shared by multiple users.
+
+```{bash eval=FALSE, echo=TRUE}
+FROM ubuntu
+...
+# To install packages
+RUN R -e 'install.packages(..., repo = "https://r-pkgs.example.com/cran/042018")'
+# Or set the repo option if users will install packages in the container
+RUN echo 'options(repos = c(CRAN = "https://r-pkgs.example.com/cran/042018"))' > .Rprofile
+```
 
 ## Validated
-Discusses how to pre-emptively "freeze" folks against a point in time (using RSPM) with a link to how Docker fits in.
-docker with a fixed point in time
 
+The validated strategy is similar to the [shared
+baseline](./reproduce.html#shared-baselines) strategy. The main difference is the
+validated strategy targets teams wishing to restrict access to a particular set
+of packages and teams wishing to approve or audit changes to the package
+environment. This strategy is appropriate if you require:
+
+- licensing checks
+- tests to ensure accurate package methods  
+- security audits  
+
+Please refer to the section ["package
+selection"](./picking.html) for more ideas on how to arrive at an approved set of
+packages. Once a set is determined, this strategy ensures users accurately use
+those packages.
+
+> Note: This strategy describes how to manage approved sets of packages, see the
+[validation](./validation.html) section for more information on other
+considerations in validated environments
+
+The implementation steps^[The implementation steps for this strategy rely the most heavily on RStudio Package Manager. While you can accomplish this strategy without a paid product, if you are using R in a validated context it is probably worth the licensing fee to do things the easy, correct way!] are divided into two parts:
+
+1. Steps taken by the administrator or R user responsible for creating and updating the approved set
+2. Steps taken by the user wishing to use the approved set
+
+### Admin Steps: Creating the Validated Set
+
+We recommend that an admin organize the validated set of packages into an [internal
+repository](./repositories.html#internal-repositories). Organizing the packages into a repository, as opposed to a library,
+has the major benefit of decoupling the approved packages from a specific
+installed environment. This separation is helpful because it enables the approved packages
+to be used in different places: desktops, containers, and shared
+servers. 
+
+1. Create a [frozen repository](./repositories.html#) containing all of CRAN along with any other packages you might need.^[RStudio Package Manager handles this step automatically]
+
+2. Create a list of desired top-level packages:
+
+```
+xgboost
+shiny
+```
+
+3. Given the list, identify the package's dependencies to get the full set of packages:
+
+```
+rstudio-pm: $ ./bin/rspm add --file-in=list.csv --source=validated --dryrun
+This action will add the following packages:
+
+Name        Version  Path              License                                Needs Compilation Dependency Already Available
+BH          1.69.0-1                   BSL-1.0                                no                true       false
+crayon      1.3.4                      MIT + file LICENSE                     no                true       false
+data.table  1.12.0                     MPL-2.0 | file LICENSE                 yes               true       false
+digest      0.6.18                     GPL (>= 2)                             yes               true       false
+htmltools   0.3.6                      GPL (>= 2)                             yes               true       false
+httpuv      1.4.5.1                    GPL (>= 2) | file LICENSE              yes               true       false
+jsonlite    1.6                        MIT + file LICENSE                     yes               true       false
+later       0.8.0                      GPL (>= 2)                             yes               true       false
+lattice     0.20-38                    GPL (>= 2)                             yes               true       false
+lattice     0.20-38  3.5.3/Recommended GPL (>= 2)                             yes               true       false
+lattice     0.20-38  3.6.0/Recommended GPL (>= 2)                             yes               true       false
+magrittr    1.5                        MIT + file LICENSE                     no                true       false
+Matrix      1.2-15                     GPL (>= 2) | file LICENCE              yes               true       false
+Matrix      1.2-15   3.5.3/Recommended GPL (>= 2) | file LICENCE              yes               true       false
+Matrix      1.2-15   3.6.0/Recommended GPL (>= 2) | file LICENCE              yes               true       false
+mime        0.6                        GPL                                    yes               true       false
+promises    1.0.1                      MIT + file LICENSE                     yes               true       false
+R6          2.4.0                      MIT + file LICENSE                     no                true       false
+Rcpp        1.0.0                      GPL (>= 2)                             yes               true       false
+rlang       0.3.1                      GPL-3                                  yes               true       false
+shiny       1.2.0                      GPL-3 | file LICENSE                   no                false      false
+sourcetools 0.1.7                      MIT + file LICENSE                     yes               true       false
+stringi     1.3.1                      file LICENSE                           yes               true       false
+xgboost     0.81.0.1                   Apache License (== 2.0) | file LICENSE yes               false      false
+xtable      1.8-3                      GPL (>= 2)                             no                true       false
+
+To complete this operation, execute this command without the --dryrun flag. You will need to include the --transaction-id=1506 flag.
+
+```
+
+<aside>
+This example shows the RStudio Package Manager command and output for this step, but the main idea is to identify the dependencies for xgboost and shiny.
+</aside>
+
+4. At this point, apply any filtering or additional testing to confirm the packages meet your licensing requirements, methodology validation, etc. If a package must be removed, ensure that you remove all upstream dependencies as well. An easy way to do this is to remove packages from your list in step 2, repeating step 3 until the troublesome package is no longer required.
+
+5. Place the approved set of packages in the internal repository.
+
+
+### Admin Steps: Updating the Validated Set
+
+To **add a new package** to the approved set, it is critical that you either *update all of the packages* or add the new package *from the original frozen repository* created in step 1. Learn more about the [danger of partial upgrades here](./reproduce.html#the-big-risk).
+
+```
+rstudio-pm: $ ./bin/rspm add --packages=plumber --source=validated --dryrun             
+This action will add the following packages:
+
+Name     Version  Path License                   Needs Compilation Dependency Already Available
+BH       1.69.0-1      BSL-1.0                   no                true       true
+crayon   1.3.4         MIT + file LICENSE        no                true       true
+httpuv   1.4.5.1       GPL (>= 2) | file LICENSE yes               true       true
+jsonlite 1.6           MIT + file LICENSE        yes               true       true
+later    0.8.0         GPL (>= 2)                yes               true       true
+magrittr 1.5           MIT + file LICENSE        no                true       true
+plumber  0.4.6         MIT + file LICENSE        no                false      false
+promises 1.0.1         MIT + file LICENSE        yes               true       true
+R6       2.4.0         MIT + file LICENSE        no                true       true
+Rcpp     1.0.0         GPL (>= 2)                yes               true       true
+rlang    0.3.1         GPL-3                     yes               true       true
+stringi  1.3.1         file LICENSE              yes               true       true
+
+To complete this operation, execute this command without the --dryrun flag. You will need to include the --transaction-id=1506 flag.
+
+```
+
+<aside>
+Example of adding `plumber` to the package set containing `xgboost` and `shiny` using RStudio Package Manager
+</aside>
+
+
+To update all of the packages, repeat steps 1-5 above, starting with a new frozen repository in step 1.
+
+```
+rstudio-pm: $ ./bin/rspm add --packages=plumber --source=validated --dryrun             
+This action will add the following packages:
+
+Name     Version  Path License                   Needs Compilation Dependency Already Available
+BH       1.69.0-1      BSL-1.0                   no                true       true
+crayon   1.3.4         MIT + file LICENSE        no                true       true
+httpuv   1.4.5.1       GPL (>= 2) | file LICENSE yes               true       true
+jsonlite 1.6           MIT + file LICENSE        yes               true       true
+later    0.8.0         GPL (>= 2)                yes               true       true
+magrittr 1.5           MIT + file LICENSE        no                true       true
+plumber  0.4.6         MIT + file LICENSE        no                false      false
+promises 1.0.1         MIT + file LICENSE        yes               true       true
+R6       2.4.0         MIT + file LICENSE        no                true       true
+Rcpp     1.0.0         GPL (>= 2)                yes               true       true
+rlang    0.3.1         GPL-3                     yes               true       true
+stringi  1.3.1         file LICENSE              yes               true       true
+
+To complete this operation, execute this command without the --dryrun flag. You will need to include the --transaction-id=1506 flag.
+```
+
+<aside>
+Example of updating the `xgboost` and `shiny` set from December 18th, 2018 to March 3rd, 2019 using RStudio Package Manager.
+</aside>
+
+### User Steps: Accessing the Validated Set
+
+There are three options for accessing the set of validated packages:
+
+1. If you are using a **Docker container**, add a line to install the available packages from the internal repository:
+
+```{bash eval=FALSE, echo=TRUE}
+FROM ubuntu
+...
+RUN R -e 'options(repos = c(CRAN = "https://r-pkgs.example.com/validated")); install.packages(available.packages()[,"Package"])'
+```
+
+2. If you are creating a shared environment for **multiple users**, then set the repo option in the `Rprofile.site` to point at the internal repository, and optionally install the available packages. For more details, refer to the [shared baseline](./reproduce.html#shared-baselines) strategy above, replacing the generic frozen repository with your validated internal repository.
+
+```{bash eval=FALSE, echo=TRUE}
+# after installing R from source
+# set the repo option in Rprofile.site
+sudo echo 'options(repos = c(CRAN = "https://r-pkgs.example.com/validated"))' > R_HOME/etc/Rprofile.site
+
+# optionally, install the packages
+sudo R_HOME/bin/R -e 'install.packages(available.packages()[,"Package"])'
+```
+
+3. If you are **an individual** working on a specific project, you can use the `renv` package to create an isolated project environment and library associated with the validated package set:
+
+```{r eval=FALSE, echo=TRUE}
+# from within your project directory
+renv::init()
+
+# update the environment to use the validated set from the internal repository
+renv::modify() //TODO: Change this!
+
+# install packages like normal
+install.packages(...)
+```
+
+### User Steps: Accessing Updates to the Validated Set
+
+Likewise, there are three options for accessing an update to the set of validated packages:
+
+1. If you are using a **Docker container**, simply rebuild the image.
+
+2. If you are administering a shared environment for **multiple users**, create a new R installation from source, and set the repo option in your `Rprofile.site`. For more details, refer to the [shared baseline](./reproduce.html#shared-baselines) strategy above, replacing the generic frozen repository with your validated internal repository.
+
+3. If you are working on a **specific project using `renv`**, first run `renv::snapshot()` to save the current state, and then run `update.packages()` from within your project.
+
+
+## Danger Zones
+
+These sections provide more detail on areas of our map where "who" is in control and "what" can be installed are mis-aligned to create painful environments that can not be reliably recreated. In addition to describing the characteristics of each zone, a recommendation is made on how to identify a more appropriate strategy.
+
+
+```{r layout="l-body-outset"}
+ggplotly(p, tooltip = c('text')) %>% 
+  config(displayModeBar = FALSE) %>% 
+  style(hoverinfo = 'skip', traces = 1:5) %>% 
+  hide_legend()
+```
+
+### Wild West
+
+The wild west scenario occurs when users are given free reign to install packages with no strategy for reproducing package environments.
+
+#### Recommendations:
+
+- If you are a single data scientist, or in a team of experienced data scientists, consider moving to the [snapshot and restore](./reproduce.html#snapshot-and-restore) strategy.  
+
+- If you are working with a group of newer users, consider working with IT to setup the [shared baseline](./reproduce.html#shared-baselines) strategy. Be careful not to slip into the [ticket system](./reproduce.html#ticket-system) scenario, which occurs if you ask IT to restrict the system without teaching them how to manage shared baselines. It might make sense to use the shared baseline strategy by default, and allow experienced users to step into the snapshot strategy.  
+
+### Ticket System
+
+The ticket system scenario occurs when administrators are involved in package installation, but they do not have a strategy for ensuring consistent and safe package updates; for example:
+
+1. A user wants a new package installed, so they submit a ticket to have the package added
+2. An admin receives the ticket, and manually installs the new package into the system library
+
+This scenario is problematic because it encourages [partial upgrades](./reproduce.html#the-big-risk), is often slow, and still results in broken environments!
+
+#### Recommendation
+
+- If your organization requires admin involvement for practical reasons, (e.g. you're working on offline server), consider adopting the [shared baseline](./reproduce.html#shared-baselines) strategy.
+
+- If your organization requires admin involvement for strategic reasons (e.g. you have concerns about package licenses), consider adopting the [validation](./reproduce.html#validated.html) strategy.
+
+### Blocked
+
+The blocked scenario occurs when servers are locked down, but there is no
+strategy in place for R package access. This strategy often leads R users to
+"backdoor" approaches to package access, such as manually copying over installed
+packages.
+
+In this scenario, it is important for R users to level-set with IT on why R
+packages are essential to successful data science work. You may need to refer to
+the [validation](./validation.html) section of the site or the section on
+[picking packages](./picking.html), both of which help explain where packages
+come from and address issues around trust.
+
+Come to this discussion prepared to advocate for either the [shared
+baseline](./reproduce.html#shared-baselines) or
+[validation](./reproduce.html#validated) strategies. It may also help your admin
+team to know that there are supported products, like [RStudio Package
+Manager](https://rstudio.com/products/package-manager), designed to help them
+help you!
 
