@@ -191,22 +191,9 @@ Once you are ready to share your work, or simply "freeze" it for later, you'll w
 renv::snapshot()
 ```
 
-This step creates a new entry in your project. For example, if the project is called `churn-model`, your files might look like:
+This step creates a new file in your project titled `renv.lock`. The file contains all the information you need to communicate your project's dependencies *at the moment you call `snapshot`*. The next time you call `snapshot`, the file will be updated.
 
-```
-churn-model
-  - model.R
-  - renv.lock
-  + renv
-    + manifest
-      + 2019-03-01
-        - 2019-03-01T09-30-22GMT
-    + ... other directories
-```
-
-The file `churn-model/renv/2018-03-01/2019-03-01T09-30-22GMT` contains all the information you need to communicate your project's dependencies _at the moment you call `snapshot`_. The next time you call `snapshot`, a new file will be created with a new timestamp. The file `renv.lock` contains similar information, but will be over-written the next time you call `snapshot`.
-
-If you are familiar with version control for your code, we recommend calling `snapshot` anytime you push or checkin changes to your code. Learn more about [recording environments with version control](./libraries.html#record-keeping). **In short, you should commit `renv.lock` alongside your code.**
+If you are familiar with version control for your code, we recommend calling `snapshot` anytime you push or checkin changes to your code. Learn more about [recording environments with version control](./libraries.html#record-keeping). The `renv::history` and `renv::revert` commands make it easy to navigate and restore prior versions of the lock file.
 
 
 ### Step 4: Recreate the Environment
@@ -223,7 +210,6 @@ renv::restore()
 ### Wrap Up
 
 This strategy provides an easy way to start managing R packages for your project. There are many other goals and use cases that might motivate a different strategy or a more complex strategy. Look for your use case!
-
 
 
 # What makes up an environment?
