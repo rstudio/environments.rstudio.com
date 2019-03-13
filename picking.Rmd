@@ -2,24 +2,270 @@
 title: "Package Selection"
 description: |
   How to Pick Packages
+output:
+  distill::distill_article:
+    toc: true
+    toc_depth: 3
 ---
 
-This page is part of the use cases section, and describes how organizations can think about the question "what packages should we use?". The page will cover common metrics R users consider such as the package's lifecycle, test coverage, dependencies, and downloads. This page is similar to the `itdepends` discussion Jim Hester led, and is less use-case oriented.
+# Intro
 
-While the page is different in scope than the rest of the website, it is a very common side question asked during discussions about environment management.
+With `r nrow(available.packages(repo="https://cran.rstudio.com"))`^[Run on `r Sys.Date()`] R packages on CRAN, and more added each day, it can be difficult
+for R users and administrators to determine which packages to use.
+Unfortunately, it is impossible to provide a single list of "approved" packages.
+Many packages are highly specific to a domain problem, a package suitable for
+financial analysis wouldn't make sense for a biostatistician. Additionally, any
+list would quickly become outdated.
 
-Current thoughts:
-https://docs.google.com/document/d/1ofyYHecc6CJPFOZF8FkYd-uZ7dty03KeIGdu5dJplpw/edit?usp=sharing
+<aside>
+If you really just need a place to start, consider the workflows and packages described in:  
+- [R for Data Science](https://r4ds.had.co.nz)  
+- [Data Import, Wrangling, and Visualization](https://tidyverse.org)  
+- [Models](https://github.com/tidymodels/tidymodels)  
+</aside>
 
-Related:
-https://www.pharmar.org/packages/
+Instead, we recommend users learn a set of characteristics they can apply to
+quickly judge a package's quality and stability. The great news about open
+source software is the wide availability of data *about* packages, and the
+option to inspect package source code!
 
-## Life Cycle
+# Package Characteristics
 
-## Test Coverage
+The following heuristics can help you judge whether or not a package is stable
+and useful. As a general rule of thumb, you can use these characteristics as a
+checklist when evaluating a package. Like any heuristic, there are exceptions -
+not all stable and useful packages will have everything.
+
+
+## CRAN Releases
+
+The first question to ask when evaluating a package is: "Is the package on
+CRAN?".  Before CRAN accepts a package, CRAN runs a thorough set of tests to
+ensure the package will work with other packages on CRAN. Getting a package
+through these checks ensures the package is stable, and also indicates the
+package author is serious and motivated. While not every package on CRAN is
+perfect, a package on CRAN indicates a minimal level of effort and stability.
+More information on CRAN tests can be reviewed
+[here](http://r-pkgs.had.co.nz/tests.html#test-cran).
+
+<aside>
+Many packages include a badge to quickly indicate their current CRAN status. For example, this is the CRAN status badge for ggplot2:
+
+[![CRAN_Status_Badge](http://www.r-pkg.org/badges/version/ggplot2)](https://cran.r-project.org/package=ggplot2)
+</aside>
+
+## Tests
+
+In addition to documentation, a critical indicator that a package is ready for primetime is checking to see whether the [package has tests](http://r-pkgs.had.co.nz/tests.html). Normally, package authors include tests in a directory [alongside their package code](https://github.com/tidyverse/ggplot2/tree/master/tests). Tests help authors check their code for accuracy and prevent them from accidentally breaking code. 
+
+Many packages will go a step further and report [test coverage](https://covr.r-lib.org/). This metric indicates how much of the package code is currently tested. Often package authors  will automatically run tests using a continuous integration service and report test status and code coverage through public badges.
+
+<aside>
+The following badges show the current test coverage and status for ggplot2:
+
+[![Travis Build Status](https://travis-ci.org/tidyverse/ggplot2.svg?branch=master)](https://travis-ci.org/tidyverse/ggplot2)
+[![Coverage Status](https://img.shields.io/codecov/c/github/tidyverse/ggplot2/master.svg)](https://codecov.io/github/tidyverse/ggplot2?branch=master)
+</aside>
+
+## Documentation
+
+A critical indicator of a package's health and usefulness is the level of documentation. R packages provide documentation in a number of formats:  
+
+-[Package READMEs](https://github.com/juliasilge/tidytext/blob/master/README.md)  
+-[Package Vignettes](https://tidymodels.github.io/parsnip/articles/articles/Regression.html)  
+-[Function References and Help Files](https://cran.r-project.org/web/packages/plumber/plumber.pdf)  
+-[Websites](https://spark.rstudio.com/)  
+-[Books](http://www.cookbook-r.com/Graphs/)  
+-[Journal Papers](https://www.jstatsoft.org/article/view/v077i01)  
+-[Presentations](https://resources.rstudio.com/rstudio-conf-2019/3d-mapping-plotting-and-printing-with-rayshader)    
+-[Cheatsheets](https://resources.rstudio.com/the-essentials-of-data-science/lubridate-cheat-sheet)    
 
 ## Downloads
 
+The number of times a package is downloadeds can help you determine how frequently a package
+is used. Often packages with many downloads are more stable than packages with
+fewer downloads. However, take care when using this metric - occasionally a
+package with fewer downloads may be a newer alternative to a package that has
+many downloads but is nearing end of life.
+
+RStudio provides download logs for the popular [CRAN
+mirror](./repositories.html#cran-mirrors) https://cran.rstudio.com. The easiest
+way to access these logs is through the [cranlogs](https://cranlogs.r-pkg.org/)  R
+package and API, or by visiting this [shiny
+app](https://hadley.shinyapps.io/cran-downloads/).
+
+```{r}
+library(cranlogs)
+downloads <- cranlogs::cran_downloads("ggplot2", from = "2019-01-01", to = today()-ddays(1))
+ggplot(downloads, aes(date, count)) + 
+  geom_line() + 
+  theme_minimal() + 
+  labs(
+    x = "Date", 
+    y = "Daily Downloads",
+    title = "ggplot2 Downloads"
+  )
+```
+
 ## Dependencies
 
-Link to validation
+When you consider bringing a package into your environment, it is important to
+evaluate the package's dependencies. Evaluating the risk of package dependencies
+is a complex process, a great place to start is reviewing [this
+talk](https://resources.rstudio.com/rstudio-conf-2019/it-depends-a-dialog-about-dependencies)
+and the related [itdepends](https://github.com/jimhester/itdepends) tool. A few
+quick tips:
+
+
+- Package dependencies can be viewed in the package's Description file and come in a [few flavors](http://r-pkgs.had.co.nz/description.html#dependencies): Suggests, Depends, Imports, and LinkingTo.  
+- Package dependencies describe what a package relies on. For example ggplot2 imports rlang, which means ggplot2 requires rlang in order to work. Reverse dependencies indicate the opposite, ggplot is a reverse dependency for rlang.  
+- You should understand how [package inter-dependencies impact reproducibility](./reproduce.html#the-big-risk).    
+- In addition to depending on other R packages, a package can have system requirements. For example, the rJava package requires a Java installation. You can view system dependencies for a package in the Description file, though a more complete listing is available [here](https://sysreqs.r-hub.io/) or in [RStudio Package Manager](https://demo.rstudiopm.com/client/#/repos/4/packages/curl).  
+
+## Authors
+
+R packages will list the package's author(s) in the Description file. It can be
+useful to see the number of authors and their affiliation. For a
+package on GitHub, it is possible to view the [contribution
+activity](https://github.com/tidyverse/ggplot2/graphs/contributors). Some
+packages will include [contribution
+guidelines](https://github.com/tidyverse/ggplot2/blob/master/CONTRIBUTING.md).
+
+For packages developed in a public forum, such as GitHub, it can be useful to
+review the package's open issues and pull requests. Are the package authors
+responsive to questions and feedback? Are issues addressed in a timely manner?
+
+## News, Releases, and Life Cycle
+
+Another indicator of a package's stability is the package's release history. For packages on GitHub, this [release history](https://github.com/tidyverse/ggplot2/releases) is often visible directly. You can also look for the package's [NEWS](https://github.com/tidyverse/ggplot2/blob/master/NEWS) file.
+
+Unfortunately, just looking at the number of releases or the date of the last release does not paint the whole picture. Some packages will have lots of recent releases because they are rapidly changing. Other packages might not have had a release for quite some time - is this because the package has been abandoned? Or is it because the package is really stable? Considering the package’s [state of life](https://www.tidyverse.org/lifecycle/) can help answer these questions.
+
+[![lifecycle](https://img.shields.io/badge/lifecycle-stable-brightgreen.svg)](https://www.tidyverse.org/lifecycle/#stable)
+
+
+```{r eval=TRUE, echo=FALSE}
+library(tibble)
+library(ggplot2)
+library(dplyr)
+library(ggrepel)
+library(lubridate)
+releases <- tribble(
+  ~version, ~date,
+  "0.5", "Dec 31, 2006 5:00 PM",
+"0.5.1", "Dec 31, 2006 5:00 PM",
+"0.5.2", "Jun 16, 2007 6:00 PM",
+"0.5.4", "Jun 16, 2007 6:00 PM",
+"0.5.5", "Aug 27, 2007 6:00 PM",
+"0.5.6", "Oct 16, 2007 6:00 PM",
+"0.5.7", "Aug 27, 2007 6:00 PM",
+"0.6",  "Jan 9, 2008 5:00 PM",
+"0.7", "Oct 2, 2008 6:00 PM",
+"0.8", "Nov 17, 2008 5:00 PM",
+"0.8.1", "Dec 11, 2008 5:00 PM",
+"0.8.3", "Apr 20, 2009 11:21 AM",
+"0.8.4", "Dec 9, 2009 8:32 AM",
+"0.8.5", "Dec 16, 2009 12:37 AM",
+"0.8.6", "Feb 18, 2010 9:52 AM",
+"0.8.7", "Mar 2, 2010 9:57 AM",
+"0.8.8", "Jul 5, 2010 12:25 PM",
+"0.8.9", "Dec 23, 2010 11:17 AM",
+"0.9.0", "Mar 1, 2012 12:01 AM",
+"0.9.1", "May 7, 2012 10:15 PM",
+"0.9.2", "Sep 4, 2012 12:16 AM",
+"0.9.2.1", "Sep 11, 2012 4:19 AM",
+"0.9.3", "Dec 5, 2012 6:11 AM",
+"0.9.3.1", "Mar 2, 2013 8:56 AM",
+"1.0.0", "May 21, 2014 9:36 AM",
+"1.0.1", "Mar 17, 2015 11:49 AM",
+"2.0.0", "Dec 18, 2015 3:45 AM",
+"2.1.0", "Mar 1, 2016 8:47 AM",
+"2.2.0", "Nov 11, 2016 5:24 AM",
+"2.2.1", "Dec 30, 2016 3:45 PM",
+"3.0.0",  "Jul 3, 2018 11:20 AM"
+)
+timeline <- tibble(
+  x = c(ymd_hm("2007-05-01 12:00"), now()),
+  y = c(0.5,0.5)
+)
+
+lifecycle <- tribble(
+  ~x, ~y, ~label,
+  ymd_hm("2009-05-01 12:00"), 0.35, "Experimental",
+  ymd_hm("2012-12-01 12:00"), 0.35, "Maturing",
+  ymd_hm("2015-11-01 12:00"), 0.35, "Stable"
+)
+
+releases %>% 
+  mutate(date = mdy_hm(date)) %>% 
+  ggplot() + 
+  geom_line(data = timeline, aes(x,y), alpha = 0.5) +
+  geom_text_repel(aes(x = date, label = version), y = 0.5, force = 2) + 
+  geom_label(data = lifecycle, aes(x,y,label = label)) + 
+  scale_y_continuous(breaks = NULL, limits = c(0.25,0.75)) + 
+  theme_minimal() + 
+  labs(
+    y = NULL,
+    x = "Timeline",
+    title = "ggplot2 Release Timeline"
+  )
+```
+
+## License Restrictions
+
+Finally, when picking a package, you should consider if your organization has
+any licensing restrictions. Licenses for R packages can be found in their
+Description file, and many R packages include an additional license file.
+Organizations with strict licensing requirements might consider an [internal
+repository](./repositories.html#internal -repositories) to [track and audit
+license usage](https://demo.rstudiopm.com/client/#/stats).
+
+```{r}
+ap <- available.packages()
+licences <-tibble(type = ap[,"License"])
+licences %>% 
+  group_by(type) %>% 
+  count() %>%
+  arrange(desc(n)) %>% 
+  head(10) %>% 
+  ggplot() + 
+  geom_bar(aes(reorder(type, n), n),stat = "identity") +
+  coord_flip() + 
+  theme_minimal() + 
+  labs(
+    title = "Top 10 CRAN License Types",
+    x = 'License Type',
+    y = '# of Packages'
+  )
+
+```
+
+# Related Work and Advice
+
+A group of pharmaceutical companies has formed a working group aimed at tackling
+the question of [package validation](./validation.html). Take a look at their
+[preliminary work](https://www.pharmar.org/packages/).
+
+The [ROpenSci](https://ropensci.org) project has created a repository of
+packages that undergo significant peer review. Additionally, they also sponsor a
+tool for identifying useful [package
+metrics](https://ropensci.org/blog/2017/06/27/packagemetrics/).
+
+Julia Silge has written an excellent series of blogposts expanding on the topic
+of [package selection](https://juliasilge.com/blog/package-guidance/).
+
+Finally, CRAN itself maintains a series of [Task
+Views](https://cran.r-project.org/web/views/), and many websites provide options
+for searching CRAN, such as [METACRAN](https://www.r-pkg.org/).
+
+# Organizing Selected Packages
+
+If you work in an organization, you may want an easy way to harness tribal
+knowledge about packages that meet your team's requirements - or packages that
+have proven useful time and time again. An easy way to share useful sets of
+packages is through an [internal repository](./repositories.html#internal
+-repositories) which can be created using [RStudio Package
+Manager](https://rstudio.com/products/package-manager). Internal repositories
+also provide an easy way to [track package
+downloads](https://demo.rstudiopm.com/client/#/stats), making it possible to see
+what packages are actually used by your team!
