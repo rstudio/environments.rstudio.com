@@ -1266,6 +1266,13 @@
   <script src="site_libs/webcomponents-2.0.0/webcomponents.js"></script>
   <script src="site_libs/distill-2.2.21/template.v2.js"></script>
   <!--radix_placeholder_site_in_header-->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=UA-20375833-24"></script>
+  <script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+  gtag('config', 'UA-20375833-24');
+  </script>
   <!--/radix_placeholder_site_in_header-->
 
 
@@ -1348,6 +1355,7 @@ Other Components
 <li><a href="#structure-of-a-cran-like-repository">Structure of a CRAN-like Repository</a><ul>
 <li><a href="#package-metadata">Package Metadata</a></li>
 <li><a href="#archive-packages">Archive Packages</a></li>
+<li><a href="#binary-packages">Binary Packages</a></li>
 </ul></li>
 <li><a href="#characteristics-specific-to-cran">Characteristics Specific to CRAN</a><ul>
 <li><a href="#cran-mirrors">CRAN Mirrors</a></li>
@@ -1363,8 +1371,8 @@ Other Components
 </nav>
 <hr class="d-toc-separator"/>
 <div class="layout-chunk" data-layout="l-body">
-<div id="htmlwidget-a3967842b0263c7179ac" style="width:624px;height:384px;" class="grViz html-widget"></div>
-<script type="application/json" data-for="htmlwidget-a3967842b0263c7179ac">{"x":{"diagram":"\ndigraph repos {\n  graph [layout = dot\n         rankdir = LR]\n  node[shape = box]\n  \"Project Cache\"; \"Project 1 Library\"; \"Project 2 Library\"\n  \n  node[fillcolor = grey, style = filled]\n  Repository\n  \n  \"Repository\"-> \"Project Cache\"\n  \"Project Cache\" -> \"Project 1 Library\"\n  \"Project Cache\" -> \"Project 2 Library\"\n}      \n","config":{"engine":"dot","options":null}},"evals":[],"jsHooks":[]}</script>
+<div id="htmlwidget-2a3faffd43786cf7bad1" style="width:624px;height:384px;" class="grViz html-widget"></div>
+<script type="application/json" data-for="htmlwidget-2a3faffd43786cf7bad1">{"x":{"diagram":"\ndigraph repos {\n  graph [layout = dot\n         rankdir = LR]\n  node[shape = box]\n  \"Project Cache\"; \"Project 1 Library\"; \"Project 2 Library\"\n  \n  node[fillcolor = grey, style = filled]\n  Repository\n  \n  \"Repository\"-> \"Project Cache\"\n  \"Project Cache\" -> \"Project 1 Library\"\n  \"Project Cache\" -> \"Project 2 Library\"\n}      \n","config":{"engine":"dot","options":null}},"evals":[],"jsHooks":[]}</script>
 </div>
 <p>Every new R user quickly discovers that packages are how work gets done in R. To understand how to manage R packages, it is important to start by understanding where R packages come from. The majority of R users install packages from the Comprehenisve R Archive Network (CRAN). CRAN is a network of servers that distribute R along with R packages.</p>
 <p>CRAN is not the only place where users can access packages. In addition to CRAN, there are a number of other CRAN-like repositories, such as <a href="./repositories.html#r-forge">R-Forge</a> and <a href="./repositories.html#bioconductor">BioConductor</a>. These CRAN-like repositories have a similar structure to CRAN, and normally work with <code>install.packages</code>. Finally, some users access packages from locations such as GitHub. Unlike CRAN-like repositories, these locations require a different installation client.</p>
@@ -1404,7 +1412,8 @@ Other Components
 <h3 id="package-metadata">Package Metadata</h3>
 <p>At the heart of a CRAN-like repository is a metadata file named PACKAGES. The metadata file enumerates what packages are available in the repository, as well as information about each package such as the packages name, version, and dependencies. The metadata file is available in three formats, not all three are required.</p>
 <h3 id="archive-packages">Archive Packages</h3>
-<p>CRAN, and some CRAN-like repositories, have an Archive directory inside of <code>/src/contrib</code>. This directory contains older versions of source packages, or packages that have <a href="https://cran.r-project.org/web/packages/policies.html">been archived</a>. On CRAN, there is additional metadata in an archive.rds file with information on the prior versions. These copies of prior package versions are critical to many <a href="./reproduce.html">reproducibility strategies</a>. ### Binary Packages</p>
+<p>CRAN, and some CRAN-like repositories, have an Archive directory inside of <code>/src/contrib</code>. This directory contains older versions of source packages, or packages that have <a href="https://cran.r-project.org/web/packages/policies.html">been archived</a>. On CRAN, there is additional metadata in an archive.rds file with information on the prior versions. These copies of prior package versions are critical to many <a href="./reproduce.html">reproducibility strategies</a>.</p>
+<h3 id="binary-packages">Binary Packages</h3>
 <p>The <code>/bin</code> directory contains binary versions of R packages along with appropriate metadata. The binaries are organized by distribution. A binary package is an R package that has been installed onto a specific operating system. The installation process can include compiling code as well as package documentation and metadata. Binaries can be reused on similar operating systems, and are <strong>important because they allow users who want access to a package to install it much faster</strong>. For example, if you use R on a Windows desktop, and want access to ggplot2, you have two options. You could use <code>install.packages('ggplot2', type = 'source')</code>, in which case R would request the latest ggplot2 source bundle, e.g. <code>/src/contrib/ggplot2_1.0.tar.gz</code>. After downloading the bundle, R would unpack the source code and compile it. This process can take significant time. In contrast, the second and default option, <code>install.packages('ggplot2')</code>, instructs R to first try and download a binary, e.g. <code>/bin/windows/contrib/ggplot2_1.0.zip</code>. If the binary is available, R can download and use the code as-is, with no installation necessary. You can think of CRAN binaries as being a global cache, the work of compiling is done once (per operating system), and all users benefit!</p>
 <p>More detailed information on <a href="./installation.html">package installation</a> is available as well as information on the <a href="http://r-pkgs.had.co.nz/package.html#package">different states</a> of an R package.</p>
 <p>CRAN provides binaries for Windows and Mac. In addition to being distribution-specific, binaries are also specific to the version of R that created them. A repository serving binary packages indexes them by both attributes. Typically if a binary is not available for the version of R in-use, R will provide the user with an option to install the latest version from source, or install an older, binary version of the package that was built with the appropriate version of R. Additional details are available in the <a href="./installation.html">package installation</a> section.</p>

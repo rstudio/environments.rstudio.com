@@ -56,7 +56,7 @@ Many packages include a badge to quickly indicate their current CRAN status. For
 
 ## Tests
 
-In addition to documentation, a critical indicator that a package is ready for primetime is checking to see whether the [package has tests](http://r-pkgs.had.co.nz/tests.html). Normally, package authors include tests in a directory [alongside their package code](https://github.com/tidyverse/ggplot2/tree/master/tests). Tests help authors check their code for accuracy and prevent them from accidentally breaking code. 
+In addition to documentation, a critical indicator that a package is ready for prime time is checking to see whether the [package has tests](http://r-pkgs.had.co.nz/tests.html). Normally, package authors include tests in a directory [alongside their package code](https://github.com/tidyverse/ggplot2/tree/master/tests). Tests help authors check their code for accuracy and prevent them from accidentally breaking code. 
 
 Many packages will go a step further and report [test coverage](https://covr.r-lib.org/). This metric indicates how much of the package code is currently tested. Often package authors  will automatically run tests using a continuous integration service and report test status and code coverage through public badges.
 
@@ -82,7 +82,7 @@ A critical indicator of a package's health and usefulness is the level of docume
 
 ## Downloads
 
-The number of times a package is downloadeds can help you determine how frequently a package
+The number of times a package is downloaded can help you determine how frequently a package
 is used. Often packages with many downloads are more stable than packages with
 fewer downloads. However, take care when using this metric - occasionally a
 package with fewer downloads may be a newer alternative to a package that has
@@ -96,6 +96,7 @@ app](https://hadley.shinyapps.io/cran-downloads/).
 
 ```{r}
 library(cranlogs)
+library(lubridate)
 downloads <- cranlogs::cran_downloads("ggplot2", from = "2019-01-01", to = today()-ddays(1))
 ggplot(downloads, aes(date, count)) + 
   geom_line() + 
@@ -251,7 +252,7 @@ packages that undergo significant peer review. Additionally, they also sponsor a
 tool for identifying useful [package
 metrics](https://ropensci.org/blog/2017/06/27/packagemetrics/).
 
-Julia Silge has written an excellent series of blogposts expanding on the topic
+Julia Silge has written an excellent series of blog posts expanding on the topic
 of [package selection](https://juliasilge.com/blog/package-guidance/).
 
 Finally, CRAN itself maintains a series of [Task

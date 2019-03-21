@@ -106,6 +106,7 @@ packages that have [been archived](https://cran.r-project.org/web/packages/polic
 is additional metadata in an archive.rds file with information on the prior
 versions. These copies of prior package versions are critical to many
 [reproducibility strategies](./reproduce.html).
+
 ### Binary Packages
 
 The `/bin` directory contains binary versions of R packages along with

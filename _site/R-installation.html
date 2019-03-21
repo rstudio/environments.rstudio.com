@@ -19,14 +19,14 @@
  <!--/radix_placeholder_import_source-->
 
   <!--radix_placeholder_meta_tags-->
-  <title>Environments: Docker</title>
+  <title>Environments: R Installations</title>
   
   <meta property="description" itemprop="description" content="Installing and Managing R"/>
   
   
   
   <!--  https://developers.facebook.com/docs/sharing/webmasters#markup -->
-  <meta property="og:title" content="Environments: Docker"/>
+  <meta property="og:title" content="Environments: R Installations"/>
   <meta property="og:type" content="article"/>
   <meta property="og:description" content="Installing and Managing R"/>
   <meta property="og:locale" content="en_US"/>
@@ -34,14 +34,14 @@
   
   <!--  https://dev.twitter.com/cards/types/summary -->
   <meta property="twitter:card" content="summary"/>
-  <meta property="twitter:title" content="Environments: Docker"/>
+  <meta property="twitter:title" content="Environments: R Installations"/>
   <meta property="twitter:description" content="Installing and Managing R"/>
   
   <!--/radix_placeholder_meta_tags-->
   <!--radix_placeholder_rmarkdown_metadata-->
   
   <script type="text/json" id="radix-rmarkdown-metadata">
-  {"type":"list","attributes":{"names":{"type":"character","attributes":{},"value":["title","description"]}},"value":[{"type":"character","attributes":{},"value":["Docker"]},{"type":"character","attributes":{},"value":["Installing and Managing R"]}]}
+  {"type":"list","attributes":{"names":{"type":"character","attributes":{},"value":["title","description"]}},"value":[{"type":"character","attributes":{},"value":["R Installations"]},{"type":"character","attributes":{},"value":["Installing and Managing R"]}]}
   </script>
   <!--/radix_placeholder_rmarkdown_metadata-->
   <!--radix_placeholder_navigation_in_header-->
@@ -1262,6 +1262,13 @@
   <script src="site_libs/webcomponents-2.0.0/webcomponents.js"></script>
   <script src="site_libs/distill-2.2.21/template.v2.js"></script>
   <!--radix_placeholder_site_in_header-->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=UA-20375833-24"></script>
+  <script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+  gtag('config', 'UA-20375833-24');
+  </script>
   <!--/radix_placeholder_site_in_header-->
 
 
@@ -1272,7 +1279,7 @@
 <!--radix_placeholder_front_matter-->
 
 <script id="distill-front-matter" type="text/json">
-{"title":"Docker","description":"Installing and Managing R","authors":[]}
+{"title":"R Installations","description":"Installing and Managing R","authors":[]}
 </script>
 
 <!--/radix_placeholder_front_matter-->
@@ -1332,32 +1339,32 @@ Other Components
 <!--/radix_placeholder_site_before_body-->
 
 <div class="d-title">
-<h1>Docker</h1>
+<h1>R Installations</h1>
 <p>Installing and Managing R</p>
 </div>
 
 
 <div class="d-article">
-<p>The goal of this page is to discuss best practices for managing R installations.</p>
-<h1 id="building-r-from-source">Building R from Source</h1>
+<p>Managing R environments won’t do you much good unless you have a game plan for managing R itself! This section provides recommendations for managing R installations on both desktops, shared servers, and Docker.</p>
+<h2 id="r-on-a-server">R on a Server</h2>
+<h3 id="why-rstudio-server">Why RStudio Server?</h3>
+<h3 id="building-r-from-source">Building R from Source</h3>
+<h3 id="modifying-rs-behavior">Modifying R’s Behavior</h3>
 <ul>
-<li>instructions and motivation</li>
-<li>current instructions: <a href="https://support.rstudio.com/hc/en-us/articles/218004217-Building-R-from-source" class="uri">https://support.rstudio.com/hc/en-us/articles/218004217-Building-R-from-source</a></li>
+<li>Renviron.site<br />
+</li>
+<li>Rprofile.site<br />
+</li>
+<li>System Library<br />
+</li>
+<li>User Libraries</li>
 </ul>
-<h1 id="r-installations-packages">R Installations &amp; Packages</h1>
-<ul>
-<li>discuss system libraries</li>
-<li>discuss user libraries</li>
-<li>current resource: <a href="http://shiny.rstudio.com/articles/upgrade-R.html" class="uri">http://shiny.rstudio.com/articles/upgrade-R.html</a></li>
-</ul>
-<h1 id="shared-servers">Shared Servers</h1>
-<ul>
-<li>lay out the need to install multiple versions of R from source</li>
-</ul>
-<h1 id="docker">Docker</h1>
-<ul>
-<li>Answer the question: If I’m using Docker, where do I get R?</li>
-</ul>
+<h2 id="r-in-docker">R in Docker</h2>
+<p>Building from source vs Inheriting a Layer Link to Docker Article</p>
+<h2 id="r-on-the-desktop">R on the Desktop</h2>
+<p>??? I don’t really know how this works</p>
+<p><a href="https://support.rstudio.com/hc/en-us/articles/218004217-Building-R-from-source" class="uri">https://support.rstudio.com/hc/en-us/articles/218004217-Building-R-from-source</a></p>
+<p><a href="http://shiny.rstudio.com/articles/upgrade-R.html" class="uri">http://shiny.rstudio.com/articles/upgrade-R.html</a></p>
 <!--radix_placeholder_article_footer-->
 <!--/radix_placeholder_article_footer-->
 </div>

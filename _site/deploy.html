@@ -21,27 +21,27 @@
   <!--radix_placeholder_meta_tags-->
   <title>Environments: Production Deployment</title>
   
-  <meta property="description" itemprop="description" content="Easily Work Together"/>
+  <meta property="description" itemprop="description" content="Safely Deploy R to Production"/>
   
   
   
   <!--  https://developers.facebook.com/docs/sharing/webmasters#markup -->
   <meta property="og:title" content="Environments: Production Deployment"/>
   <meta property="og:type" content="article"/>
-  <meta property="og:description" content="Easily Work Together"/>
+  <meta property="og:description" content="Safely Deploy R to Production"/>
   <meta property="og:locale" content="en_US"/>
   <meta property="og:site_name" content="Environments"/>
   
   <!--  https://dev.twitter.com/cards/types/summary -->
   <meta property="twitter:card" content="summary"/>
   <meta property="twitter:title" content="Environments: Production Deployment"/>
-  <meta property="twitter:description" content="Easily Work Together"/>
+  <meta property="twitter:description" content="Safely Deploy R to Production"/>
   
   <!--/radix_placeholder_meta_tags-->
   <!--radix_placeholder_rmarkdown_metadata-->
   
   <script type="text/json" id="radix-rmarkdown-metadata">
-  {"type":"list","attributes":{"names":{"type":"character","attributes":{},"value":["title","description"]}},"value":[{"type":"character","attributes":{},"value":["Production Deployment"]},{"type":"character","attributes":{},"value":["Easily Work Together"]}]}
+  {"type":"list","attributes":{"names":{"type":"character","attributes":{},"value":["title","description","output"]}},"value":[{"type":"character","attributes":{},"value":["Production Deployment"]},{"type":"character","attributes":{},"value":["Safely Deploy R to Production\n"]},{"type":"list","attributes":{"names":{"type":"character","attributes":{},"value":["distill::distill_article"]}},"value":[{"type":"list","attributes":{"names":{"type":"character","attributes":{},"value":["toc","toc_depth"]}},"value":[{"type":"logical","attributes":{},"value":[true]},{"type":"integer","attributes":{},"value":[3]}]}]}]}
   </script>
   <!--/radix_placeholder_rmarkdown_metadata-->
   <!--radix_placeholder_navigation_in_header-->
@@ -1257,11 +1257,22 @@
   </script>
   
   <!--/radix_placeholder_distill-->
+  <script src="site_libs/htmlwidgets-1.2.1/htmlwidgets.js"></script>
+  <script src="site_libs/viz-0.3/viz.js"></script>
+  <link href="site_libs/DiagrammeR-styles-0.2/styles.css" rel="stylesheet" />
+  <script src="site_libs/grViz-binding-1.0.0/grViz.js"></script>
   <script src="site_libs/jquery-1.11.3/jquery.min.js"></script>
   <script src="site_libs/bowser-1.9.3/bowser.min.js"></script>
   <script src="site_libs/webcomponents-2.0.0/webcomponents.js"></script>
   <script src="site_libs/distill-2.2.21/template.v2.js"></script>
   <!--radix_placeholder_site_in_header-->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=UA-20375833-24"></script>
+  <script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+  gtag('config', 'UA-20375833-24');
+  </script>
   <!--/radix_placeholder_site_in_header-->
 
 
@@ -1272,7 +1283,7 @@
 <!--radix_placeholder_front_matter-->
 
 <script id="distill-front-matter" type="text/json">
-{"title":"Production Deployment","description":"Easily Work Together","authors":[]}
+{"title":"Production Deployment","description":"Safely Deploy R to Production","authors":[]}
 </script>
 
 <!--/radix_placeholder_front_matter-->
@@ -1333,17 +1344,165 @@ Other Components
 
 <div class="d-title">
 <h1>Production Deployment</h1>
-<p>Easily Work Together</p>
+<p>Safely Deploy R to Production</p>
 </div>
 
 
 <div class="d-article">
-<p>This page is part of the use cases section, and describes how project dependencies can be accounted for (and isolated) during production deployments.</p>
-<p>Each strategy should be arranged as: 1-2-3 steps; longer explanation, troubleshooting.</p>
-<h2 id="isolate-and-snapshot">Isolate and Snapshot</h2>
+<h3 class="d-toc-header">Table of Contents</h3>
+<nav class="d-toc" id="TOC">
 <ul>
-<li>Mention how RSC does this automatically</li>
+<li><a href="#intro">Intro</a></li>
+<li><a href="#example-implementations">Example Implementations</a><ul>
+<li><a href="#example-rstudio-connect">Example: RStudio Connect</a></li>
+<li><a href="#example-renv-and-docker">Example: <code>renv</code> and Docker</a></li>
+</ul></li>
+<li><a href="#details">Details</a><ul>
+<li><a href="#acceptable-differences-between-dev-and-prod">Acceptable Differences Between Dev and Prod</a><ul>
+<li><a href="#r-patch-version">R Patch Version</a></li>
+<li><a href="#r-package-source">R Package Source</a></li>
+<li><a href="#do-i-need-to-treat-dev-like-prod">Do I need to treat Dev like Prod?</a></li>
+</ul></li>
+<li><a href="#testing-and-staging-environments">Testing and Staging Environments</a><ul>
+<li><a href="#example-rstudio-connect-with-git-jenkins-and-chef">Example: RStudio Connect with Git, Jenkins, and Chef</a></li>
+</ul></li>
+<li><a href="#environment-upgrades">Environment Upgrades</a></li>
+<li><a href="#shiny-in-production">Shiny in Production</a></li>
+</ul></li>
 </ul>
+</nav>
+<hr class="d-toc-separator"/>
+<h1 id="intro">Intro</h1>
+<p>Data products built in R, such as dashboards, web applications, reports, and APIs, are increasingly deployed to production. While specific definitions of production can vary, everyone agrees that production content should be stable. This section provides instructions for creating stable environments for production code that uses R.</p>
+<p>Production systems come in different shapes and sizes. Some organizations store code in Git and use continuous integration tools like Jenkins to deploy content. Your organizations might use containers and an orchestration tool like Kubernetes. Or, you may use infrastructure-as-code tooling like Chef or Puppet to deploy products onto physical, virtual, or cloud servers. Your notion of production might also include staging, UAT, or QA environments.</p>
+<p>Regardless of the specific implementation, there are three basic steps required to deploy R environments to production:</p>
+<ol type="1">
+<li>In the development environment, the data product’s dependencies should be <strong>recorded</strong>, specifically the version of R and the versions of required R packages.</li>
+<li>In the target (production) environment, the data product’s dependencies should be <strong>restored</strong> using the same versions.</li>
+<li>Once restored, the data product’s environment should be <strong>isolated</strong> from other environments running in production.</li>
+</ol>
+<aside>
+A simple checklist should include RRI:<br />
+- [ ] record<br />
+- [ ] restore<br />
+- [ ] isolate
+</aside>
+<p>Sound familiar? These steps are the same steps used in the <a href="./reproduce.html#snapshot-and-restore-using-renv">“snapshot and restore” strategy</a> for reproducing environments. Take a look at the common challenges and questions, as the same concerns apply for production deployments.</p>
+<h1 id="example-implementations">Example Implementations</h1>
+<p>The following two sections provide example steps for implementing this process. These examples are not exhaustive, other processes can work, but they should meet the key requirements of record, restore, and isolate.</p>
+<h2 id="example-rstudio-connect">Example: RStudio Connect</h2>
+<div class="layout-chunk" data-layout="l-body">
+<div id="htmlwidget-22a2e5d380b755046c7a" style="width:624px;height:384px;" class="grViz html-widget"></div>
+<script type="application/json" data-for="htmlwidget-22a2e5d380b755046c7a">{"x":{"diagram":"\ndigraph repos {\n  graph [layout = dot\n         rankdir = LR]\n  node[shape = box]\n  \"Dev\"; \"Connect\";\n  \n  node[fillcolor = grey, style = filled, shape = oval]\n  \"Manifest\"; R; \"Package Environment\"\n  \n  node[shape = egg, fillcolor = white]\n  Record; Restore; Isolate\n  \n  \n   Dev -> \"Manifest\"\n   Manifest -> Record\n   \"Manifest\" -> Connect\n   Connect -> R\n   Connect -> Restore\n   R -> \"Package Environment\"\n   Isolate -> \"Package Environment\"\n}      \n","config":{"engine":"dot","options":null}},"evals":[],"jsHooks":[]}</script>
+</div>
+<p><a href="https://rstudio.com/products/connect">RStudio Connect</a> is a production ready publishing platform for data products, that <em>automatically implements these steps</em> when users publish content. If you’re using RStudio Connect, you don’t need to manually manage this process. Here is what happens when a data product is deployed:</p>
+<ol type="1">
+<li><p>The version of R in use, the current <a href="./repositories.html">repository</a>, and the list of R packages and their versions are recorded in a manifest file. Users typically don’t see this file, but if you’d like to explore it, run this R code in your project’s working directory on the development environment: <code>rsconnect::writeManifest()</code>. <code>packrat</code> is used under the hood, though future versions will use <code>renv</code>.</p></li>
+<li><p>The manifest file, application code, and supporting files, are sent to the production RStudio Connect server.</p></li>
+<li><p>The RStudio Connect server restores the environment from the manifest, by matching the requested version of R to the available <a href="./r-installation.html">version<strong>s</strong> of R installed</a>, and then installing the required packages from the listed <a href="./repository.html">repository</a>.</p></li>
+<li><p>The restored environment is isolated. Connect maintains per-content package libraries, allowing content A to depend on <code>ISLR</code> 1.0 and content B to depend on <code>ISLR</code> 2.0. Installed R packages are, however, intelligently cached. If content A and content C both rely on <code>ISLR</code> 1.0, the package will only be installed once!</p></li>
+</ol>
+<h2 id="example-renv-and-docker">Example: <code>renv</code> and Docker</h2>
+<p>In this example, a Docker container is used to isolate the data product, and <code>renv</code> is used to restore the appropriate package environment.</p>
+<div class="layout-chunk" data-layout="l-body">
+<div id="htmlwidget-50e3d5be314a664be52b" style="width:624px;height:384px;" class="grViz html-widget"></div>
+<script type="application/json" data-for="htmlwidget-50e3d5be314a664be52b">{"x":{"diagram":"\ndigraph repos {\n  graph [layout = dot\n         rankdir = LR]\n  node[shape = box]\n  Dev; Prod\n  \n  node[fillcolor = grey, style = filled, shape = oval]\n  Lockfile; Image; \"renv::restore\"\n  \n  node[shape = egg, fillcolor = white]\n  Record; Restore; Isolate\n  \n  \n   Dev -> Lockfile\n   Lockfile -> Record\n   Lockfile -> Prod\n   Prod -> Image\n   Image -> Isolate\n   Image -> \"renv::restore\"\n   Restore -> \"renv::restore\"\n}      \n","config":{"engine":"dot","options":null}},"evals":[],"jsHooks":[]}</script>
+</div>
+<ol type="1">
+<li><p>In the development environment, create a <code>renv.lock</code> file for the project by running <code>renv::snapshot()</code>. (If <code>renv</code> has not been used up to this point, call <code>renv::init()</code> instead). The lock file records the version of the R packages in use. Commit this lock file alongside the code.</p></li>
+<li><p>Create a Dockerfile, starting with the appropriate version of R:</p></li>
+</ol>
+<pre class="bash"><code>
+# start with the appropriate version of R
+FROM rstudio/r-base:3.4-bionic
+
+# install git
+RUN apt-get install -y git
+
+# clone the code base
+RUN git clone https://ourgit.example.com/user/project.git
+
+# install renv
+RUN R -e &#39;install.packages(&quot;renv&quot;, repos = &quot;https://r-pkgs.example.com&quot;)&#39;
+
+# restore the package environment
+RUN R -e &#39;setwd(&quot;./project&quot;); renv::restore()&#39;
+
+# run the data product
+CMD ...</code></pre>
+<p>In this example, the version of R is controlled by the base image, using an image provided by RStudio that includes R. Other alternatives also work, such as building R from source. You can determine the R version from the lock file:</p>
+<pre class="bash"><code>
+cat renv.lock | grep -A1 &quot;\[R\]&quot; | sed -En &quot;s/Version=(.*)$/\1/p&quot;</code></pre>
+<ol start="3" type="1">
+<li>Build and deploy the docker image.</li>
+</ol>
+<h1 id="details">Details</h1>
+<h2 id="acceptable-differences-between-dev-and-prod">Acceptable Differences Between Dev and Prod</h2>
+<p>Most organizations recognize that production environments should be similar to development environments. Often there are affordances for components that must differ between environments. For example, <a href="https://db.rstudio.com/best-practices/portable-code/">differences in data connections</a> are common. For R and R packages, there are two things that could acceptably differ between environments: the R patch version and the R package source.</p>
+<h3 id="r-patch-version">R Patch Version</h3>
+<p>R’s version scheme has there components, the major version, the minor version, and a patch. For example, R version 3.5.2 has: - Major version: 3<br />
+- Minor version: 5<br />
+- Patch version: 2</p>
+<p>Major versions are release rarely. Minor versions are released once a year in the spring. Patch versions are released on a regular, as-needed basis. <em>R packages are compatible across patch versions, but not major or minor versions</em>!. As an example, a package built on version 3.5.1 will work on 3.5.2, but is not guaranteed to work on 3.6.0.</p>
+<p>For the reason above, we recommend that development and production systems have the same available major.minor version, but the patch version could vary. For example, content created in the development environment using R version 3.5.1 could be deployed to a production environment using 3.5.2.</p>
+<p><strong>R packages do not follow these same rules, and package versions should match exactly!</strong></p>
+<h3 id="r-package-source">R Package Source</h3>
+<p>It is possible for development and production environments to have different operating systems. For example, development could be performed on a Windows desktop, while production lives on a Linux server.</p>
+<blockquote>
+<p>While possible, this setup is not recommended. Instead, many organizations prefer to standardize on a single operating system, usually Linux. <a href="https://rstudio.com/products/rstudio">RStudio Server (Pro)</a> makes it easy for R users to develop in an environment that more closely resembles production.</p>
+</blockquote>
+<p>In the case where operating systems vary, the source of an R package may vary as well. Using the scenario above, R packages on Windows are typically installed from <a href="./repositories.html#binary-packages">pre-compiled CRAN binaries</a>. When the same packages are restored on a Linux system, they are normally installed from source. This difference will not impact behavior, but it explains why information about the package (name, version, repository) is transferred as opposed to transferring the installed package library.</p>
+<h3 id="do-i-need-to-treat-dev-like-prod">Do I need to treat Dev like Prod?</h3>
+<p>The record, restore, isolate method is designed to transfer a project’s dependencies from a development environment to a production environment. It is not necessary for the development environment to manage projects in the same fashion. For example, during development, an R user might share packages across projects by using a global library. During deployment, the specific packages used by the project are recorded.</p>
+<p>In the context of <a href="./reproduce.html">reproducibility strategies</a>, it is possible for the development environment to use a <a href="./reproduce.html#validated">validated</a> or <a href="./reproduce.html#shared-baselines">shared baseline</a> strategy, while production deployments for data propducts use the <a href="./reproduce.html#snapshot-and-restore-using-renv">snapshot</a> strategy.</p>
+<div class="layout-chunk" data-layout="l-body">
+<div id="htmlwidget-00b8820f45c22322cca6" style="width:624px;height:384px;" class="grViz html-widget"></div>
+<script type="application/json" data-for="htmlwidget-00b8820f45c22322cca6">{"x":{"diagram":"\ndigraph repos {\n  graph [layout = dot]\n  \n  node[shape = box]\n  \"Dev\"; \"Prod\";\n  \n  node[fillcolor = grey, style = filled, shape = oval]\n  \"Shared Library\"; \"Project 1 Library\"; \"Project 2 Library\"\n  \n  node[shape = egg, fillcolor = white]\n  \"Project 1\"; \"Project 2\"; \"Project  1\"; \"Project  2\"\n  \n  \n   Dev -> \"Shared Library\"\n   \"Shared Library\" -> \"Project 1\"\n   \"Shared Library\" -> \"Project 2\"\n   Prod -> \"Project 1 Library\"\n   Prod -> \"Project 2 Library\"\n   \"Project 1 Library\" -> \"Project  1\"\n   \"Project 2 Library\" -> \"Project  2\"\n}      \n","config":{"engine":"dot","options":null}},"evals":[],"jsHooks":[]}</script>
+</div>
+<aside>
+It is ok for Dev and Prod to have separate management strategies. They can also have varied environments. Record and Restore handles these differences in portability.
+</aside>
+<h2 id="testing-and-staging-environments">Testing and Staging Environments</h2>
+<p>The focus so far has been deploying R environments to production systems. With proper record keeping and environment isolation, there is a high chance that deployed content will work as expected. However, for systems that require minimal downtime, it is still imperative to test content in a pre-production system before officially deploying to production. The concept is simple:</p>
+<ol type="1">
+<li>Create and maintain a clone of the production system</li>
+<li>Follow the steps described above to deploy to the data product to the production clone.</li>
+<li>If everything works as expected, re-run the steps to deploy the data product into production.</li>
+</ol>
+<div class="layout-chunk" data-layout="l-body">
+<div id="htmlwidget-1e6af29dd4f7fa496698" style="width:624px;height:384px;" class="grViz html-widget"></div>
+<script type="application/json" data-for="htmlwidget-1e6af29dd4f7fa496698">{"x":{"diagram":"\ndigraph repos {\n  graph [layout = dot\n        rankdir = LR]\n  \n  \n  node[shape = box]\n  \"Dev\"\n  \n  node[fillcolor = grey, style = filled]\n  \"Staging\"; \"Prod\"\n  \n  Dev -> Staging\n  Staging -> Prod\n}      \n","config":{"engine":"dot","options":null}},"evals":[],"jsHooks":[]}</script>
+</div>
+<aside>
+Staging and Production should be identical clones!
+</aside>
+<p>While conceptually simple, in practice there are two challenges: Ensuring the staging environment is a true clone of production, and repeating the same steps on both the clone and production system. To solve these problems, most organizations use either containers or infrastructure-as-code tooling (or both!). Luckily the idea is straight forward: instead of manually running this process, automate as much as possible by writing explicit code that accomplishes steps 1-3.</p>
+<p>The specific details would require an entire website all their own, but the good news is that most R users do not need to worry about re-inventing this process. Typically organizations will have a “DevOps” team or strategy in place. The main task is explaining how those strategies should be adapted for data products using R. The adaptation is simply including our <em>record, restore, and isolate</em> steps.</p>
+<h3 id="example-rstudio-connect-with-git-jenkins-and-chef">Example: RStudio Connect with Git, Jenkins, and Chef</h3>
+<p>In this example, a DevOps team maintains staging and production servers using Chef. They also maintain an enterprise Git application and use Jenkins for continuous integration. The current process relies on Git branches. Branches of a repository are automatically deployed to staging, whereas the master branch is deployed to production. To integrate R based data products:</p>
+<ol type="1">
+<li><p>The DevOps team should create Chef recipes responsible for installing multiple versions of R onto the staging and production servers.</p></li>
+<li><p>The DevOps team should create a Chef recipe to install and configure RStudio Connect</p></li>
+<li><p>The DevOps team should configure Jenkins to deploy a repository’s branches to the staging environment. Jenkins should also be configured to deploy the master branch to production. In both cases, the Jenkins pipeline will consist of bash shells that clone the repository, create a tar file, and then call RStudio Connect API endpoints to deploy. Example <a href="https://github.com/rstudio/connect-api-deploy-shiny/tree/master/deploy">shell scripts are available</a>.</p></li>
+<li><p>When the R users is ready to deploy content, they should start by running <code>rsconnect::writeManifest</code> inside of the development environment. The resulting manifest file should be included alongside the application code in a Git commit to a staging branch.</p></li>
+<li><p>The prior step will trigger Jenkins to deploy the code to the staging RStudio Connect environment, using the automatic process <a href="./deploy.html#example-rstudio-connect">described above</a>. The R user should confirm the content looks correct.</p></li>
+<li><p>The user or admin can merge the branch, triggering a deployment to the production server.</p></li>
+</ol>
+<div class="layout-chunk" data-layout="l-page">
+<div id="htmlwidget-4fd2489a7585f5c5690f" style="width:624px;height:384px;" class="grViz html-widget"></div>
+<script type="application/json" data-for="htmlwidget-4fd2489a7585f5c5690f">{"x":{"diagram":"\ndigraph repos {\n  graph [layout = dot\n        rankdir = LR]\n  \n  \n  node[shape = box]\n  \"Dev\"; \"Git Branch\"; \"Jenkins\"; \"Connect Staging\"; \"Git Master\"; \"Connect Prod\"; \"Jenkins \"\n  \n  node[fillcolor = grey, style = filled]\n  \"Dependency Manifest\"; \"Code\"\n  \n  node[fillcolor = grey, style = filled, shape = oval]\n  Approval\n  \n  Dev -> \"Dependency Manifest\"\n  Dev -> \"Code\"\n  \"Code\" -> \"Git Branch\"\n  \"Dependency Manifest\" -> \"Git Branch\"\n  \"Git Branch\" -> \"Jenkins\"\n  \"Jenkins\" -> \"Connect Staging\"\n  \"Connect Staging\" -> Approval\n  Approval -> \"Git Master\"\n  \"Git Master\" -> \"Jenkins \"\n  \"Jenkins \" -> \"Connect Prod\" \n}      \n","config":{"engine":"dot","options":null}},"evals":[],"jsHooks":[]}</script>
+</div>
+<p>More details are available <a href="https://solutions.rstudio.com/deploy/deploy">here</a></p>
+<h2 id="environment-upgrades">Environment Upgrades</h2>
+<p>In production, one does not simply upgrade packages or system dependencies! These tips can enable successful maintenance of your production system overtime:</p>
+<ul>
+<li><em>R Packages</em>: You should <strong>not</strong> be worried about upgrading R packages. Recall, the whole goal is to recreate the necessary development dependencies in an isolated environment. To upgrade R packages, start by <a href="./upgrades.html">upgrading them in development</a>, testing that the content works, and following the process to redeploy.<br />
+</li>
+<li><em>R Versions</em>: New R versions should be <strong>added instead of upgrading R</strong>. Production systems must have multiple versions of R. As content is updated and redeployed, old versions of R will become less used and can eventually be removed. In order to accomplish this goal, <strong>R should be installed from source</strong>, not from a system repository using <code>apt</code> or <code>yum</code>. See <a href="./R-installation.html">R Installations</a> for details.</li>
+<li><em>System Dependencies</em>: System dependencies such as shared objects, compilers, or even the operating system are updated less frequently. Normally, these components are stable or strictly backwards compatible within an operating system release. These components should be updated in a staging environment. Often, major updates will require rebuilding R and redeploying content. For limited downtime, we recommend creating a clone of production, applying the update, and redeploying content. Once complete, swap the DNS records for this clone with production. Alternatively, this is an area where <a href="./docker.html">Docker containers</a> are useful, because they tend to isolate the entire system environment per data product. This means system dependencies can be updated individually for each data product, instead of all at once.</li>
+</ul>
+<h2 id="shiny-in-production">Shiny in Production</h2>
+<p>This content focuses on the steps needed to manage R dependencies in production. There are important considerations for deploying code to production, such as testing, performance optimization, and data security. These questions are especially relevant for shiny applications, which are the most popular R data product used in production. Guidelines for approaching these critical steps is available <a href="https://kellobri.github.io/shiny-prod-book/">here</a>.</p>
 <!--radix_placeholder_article_footer-->
 <!--/radix_placeholder_article_footer-->
 </div>
