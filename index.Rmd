@@ -257,7 +257,7 @@ others. When you communicate the requirements of your project, it is important t
 
 - **System Dependencies** R, Python, and their packages can depend on underlying software that needs to be installed on the system. For example, the `xml2` R package depends on the `libxml` system package. Learn more about how [system dependencies are documented and managed](./installation.html#system-dependencies).
 
-- **R Packages** Managing and recording R packages makes up the bulk of the website, specifically learn about [repositories](./repositories.html), [installating packages](./installation.html), and [managing libraries](./libraries).
+- **R Packages** Managing and recording R packages makes up the bulk of the website, specifically learn about [repositories](./repositories.html), [installing packages](./installation.html), and [managing libraries](./libraries).
 
 ```{r echo=FALSE}
 grViz("
