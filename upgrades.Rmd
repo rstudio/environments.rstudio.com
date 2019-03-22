@@ -1,7 +1,7 @@
 ---
 title: "Upgrading Packages"
 description: |
-  How to Safely Upgrade Packages
+  How to Safely Upgrade Packages [In Progress]
 ---
 
 This page is in the use case section, and describes a common problem, "how do I safely test if upgrading a package will break my code?"

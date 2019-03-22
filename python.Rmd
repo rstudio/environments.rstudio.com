@@ -1,7 +1,7 @@
 ---
 title: "Python"
 description: |
- Environments with R and Python
+ Environments with R and Python [In Progress]
 ---
 
 The goal of this page is to introduce readers to how projects that rely on R and Python can account for Python dependencies. The main goal is to introduce `renv` and push folks towards tools like `virtualenv` and `conda` PLUS `reticulate`.

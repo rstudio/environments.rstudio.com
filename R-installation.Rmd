@@ -1,7 +1,7 @@
 ---
 title: "R Installations"
 description: |
-  Installing and Managing R
+  Installing and Managing R [In Progress]
 ---
 
 Managing R environments won't do you much good unless you have a game plan for managing R itself! This section provides recommendations for managing R installations on both desktops, shared servers, and Docker.
