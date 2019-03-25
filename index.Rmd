@@ -10,6 +10,8 @@ knitr::opts_chunk$set(echo = TRUE)
 library(DiagrammeR)
 ```
 
+This site is a work in progress.
+
 # Intro
 
 Great data science work should be reproducible. Being able to repeat experiments is the foundation of all science. Reproducing work is also critical for buisness applications: scheduled reporting, team collaboration, project validation. In order to reproduce work done in R, you need to communicate 3 things: your code, your reasoning, and the environment where your code runs. There are many excellent tools and strategies for managing code - Git - and communicating methods - R Markdown. Unfortunately, environments are often neglected.  
