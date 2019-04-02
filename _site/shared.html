@@ -19,29 +19,29 @@
  <!--/radix_placeholder_import_source-->
 
   <!--radix_placeholder_meta_tags-->
-  <title>Environments: Python</title>
+  <title>Environments: Shared Baselines</title>
   
-  <meta property="description" itemprop="description" content="Environments with R and Python [In Progress]"/>
+  <meta property="description" itemprop="description" content="Share a Common Baseline"/>
   
   
   
   <!--  https://developers.facebook.com/docs/sharing/webmasters#markup -->
-  <meta property="og:title" content="Environments: Python"/>
+  <meta property="og:title" content="Environments: Shared Baselines"/>
   <meta property="og:type" content="article"/>
-  <meta property="og:description" content="Environments with R and Python [In Progress]"/>
+  <meta property="og:description" content="Share a Common Baseline"/>
   <meta property="og:locale" content="en_US"/>
   <meta property="og:site_name" content="Environments"/>
   
   <!--  https://dev.twitter.com/cards/types/summary -->
   <meta property="twitter:card" content="summary"/>
-  <meta property="twitter:title" content="Environments: Python"/>
-  <meta property="twitter:description" content="Environments with R and Python [In Progress]"/>
+  <meta property="twitter:title" content="Environments: Shared Baselines"/>
+  <meta property="twitter:description" content="Share a Common Baseline"/>
   
   <!--/radix_placeholder_meta_tags-->
   <!--radix_placeholder_rmarkdown_metadata-->
   
   <script type="text/json" id="radix-rmarkdown-metadata">
-  {"type":"list","attributes":{"names":{"type":"character","attributes":{},"value":["title","description"]}},"value":[{"type":"character","attributes":{},"value":["Python"]},{"type":"character","attributes":{},"value":["Environments with R and Python [In Progress]"]}]}
+  {"type":"list","attributes":{"names":{"type":"character","attributes":{},"value":["title","description","output"]}},"value":[{"type":"character","attributes":{},"value":["Shared Baselines"]},{"type":"character","attributes":{},"value":["Share a Common Baseline\n"]},{"type":"list","attributes":{"names":{"type":"character","attributes":{},"value":["distill::distill_article"]}},"value":[{"type":"list","attributes":{"names":{"type":"character","attributes":{},"value":["toc","toc_depth"]}},"value":[{"type":"logical","attributes":{},"value":[true]},{"type":"integer","attributes":{},"value":[3]}]}]}]}
   </script>
   <!--/radix_placeholder_rmarkdown_metadata-->
   <!--radix_placeholder_navigation_in_header-->
@@ -1257,6 +1257,10 @@
   </script>
   
   <!--/radix_placeholder_distill-->
+  <script src="site_libs/htmlwidgets-1.2.1/htmlwidgets.js"></script>
+  <script src="site_libs/viz-0.3/viz.js"></script>
+  <link href="site_libs/DiagrammeR-styles-0.2/styles.css" rel="stylesheet" />
+  <script src="site_libs/grViz-binding-1.0.0/grViz.js"></script>
   <script src="site_libs/jquery-1.11.3/jquery.min.js"></script>
   <script src="site_libs/bowser-1.9.3/bowser.min.js"></script>
   <script src="site_libs/webcomponents-2.0.0/webcomponents.js"></script>
@@ -1279,7 +1283,7 @@
 <!--radix_placeholder_front_matter-->
 
 <script id="distill-front-matter" type="text/json">
-{"title":"Python","description":"Environments with R and Python [In Progress]","authors":[]}
+{"title":"Shared Baselines","description":"Share a Common Baseline","authors":[]}
 </script>
 
 <!--/radix_placeholder_front_matter-->
@@ -1340,17 +1344,132 @@ Tools
 <!--/radix_placeholder_site_before_body-->
 
 <div class="d-title">
-<h1>Python</h1>
-<p>Environments with R and Python [In Progress]</p>
+<h1>Shared Baselines</h1>
+<p>Share a Common Baseline</p>
 </div>
 
 
 <div class="d-article">
-<p>The goal of this page is to introduce readers to how projects that rely on R and Python can account for Python dependencies. The main goal is to introduce <code>renv</code> and push folks towards tools like <code>virtualenv</code> and <code>conda</code> PLUS <code>reticulate</code>.</p>
-<h1 id="python-and-r">Python and R</h1>
-<h2 id="the-role-of-reticulate">The Role of Reticulate</h2>
-<h2 id="managing-python-components">Managing Python Components</h2>
-<h2 id="renv-record-keeping">renv Record Keeping</h2>
+<h3 class="d-toc-header">Table of Contents</h3>
+<nav class="d-toc" id="TOC">
+<ul>
+<li><a href="#the-big-risk">The BIG Risk</a></li>
+<li><a href="#implementation-steps">Implementation Steps</a></li>
+<li><a href="#common-challenges-and-resolutions">Common Challenges and Resolutions</a></li>
+</ul>
+</nav>
+<hr class="d-toc-separator"/>
+<p>The shared baseline strategy fits when administrators or R champions are responsible for creating an environment where less experienced users can easily share and re-run work. The defining characteristics of the strategy are:</p>
+<ol type="1">
+<li>There are not strict requirements on what can be installed, the main motivation is ease of sharing.</li>
+<li>Package availability is <strong>tied to R installations</strong> through site-wide libraries, and updates occur on a scheduled basis.</li>
+</ol>
+<p>A naive approach to this strategy is for an admin to install packages into a system library as users request them. Unfortunately, this approach is not a strategy but actually the <a href="./reproduce.html#ticket-system">Ticket System</a> danger zone! Before diving into the implementation steps, we need to understand the problem with this approach.</p>
+<h3 id="the-big-risk">The BIG Risk</h3>
+<p>Imagine the following scenario:<a href="#fn1" class="footnote-ref" id="fnref1"><sup>1</sup></a></p>
+<ol type="1">
+<li>January 1st, an admin installs <code>tibble</code> into the system library. The package is installed, along with the package’s dependencies. Everything is in a consistent state because the packages all originate from CRAN on the same date, and CRAN tests to ensure the “latest” packages all work together.</li>
+</ol>
+<div class="layout-chunk" data-layout="l-body">
+<div class="figure"><span id="fig:unnamed-chunk-1"></span>
+<div id="htmlwidget-7ce21b2a28526063ba46" style="width:624px;height:384px;" class="grViz html-widget"></div>
+<script type="application/json" data-for="htmlwidget-7ce21b2a28526063ba46">{"x":{"diagram":"\ndigraph first {\n  node [shape = oval]\n  rlang; cli; crayon;\n  \n  node [shape = box]\n  tibble\n  \n  tibble->rlang\n  tibble->cli\n  tibble->crayon\n}\n","config":{"engine":"dot","options":null}},"evals":[],"jsHooks":[]}</script>
+<p class="caption">
+Figure 1: Partial Dependency Graph for tibble
+</p>
+</div>
+</div>
+<ol start="2" type="1">
+<li>February 1st, the admin receives a request to install <code>pkgdown</code>. In doing so, <code>pkgdown</code> is installed along with its dependencies, <strong>which include <code>rlang</code>, <code>cli</code>, and <code>crayon</code></strong>. Already there is a problem, any users who relied on the older versions of <code>cli</code>, <code>crayon</code>, and <code>rlang</code> could see their code break with no warning. But, the problem gets worse! Even though its dependencies were updated, <code>tibble</code> was not. The result is an inconsistent state, where some packages come from February 1st and some from January 1st. This mixed set is <em>not</em> tested by CRAN, and can lead to an error for anyone using <code>tibble</code>.</li>
+</ol>
+<div class="layout-chunk" data-layout="l-body">
+<div class="figure"><span id="fig:unnamed-chunk-2"></span>
+<div id="htmlwidget-97421b6b6b2865737e38" style="width:624px;height:384px;" class="grViz html-widget"></div>
+<script type="application/json" data-for="htmlwidget-97421b6b6b2865737e38">{"x":{"diagram":"\ndigraph first {\n  node [shape = oval\n        style = filled\n        fillcolor = grey]\n  rlang; cli; crayon\n  \n  node [shape = box\n        style = filled\n        fillcolor = grey]\n  pkgdown\n  \n  node [shape = box\n        style = filled\n        fillcolor = white]\n  tibble\n  \n  tibble->rlang\n  tibble->cli\n  tibble->crayon\n  pkgdown->rlang\n  pkgdown->cli\n  pkgdown->crayon\n}\n","config":{"engine":"dot","options":null}},"evals":[],"jsHooks":[]}</script>
+<p class="caption">
+Figure 2: A dangerous situation, resulting from a partial upgrade
+</p>
+</div>
+</div>
+<aside>
+White - January Versions Grey - February Versions
+</aside>
+<p>The benefit of the shared baseline approach is that everyone uses the same installed packages. The problem is if an administrator updates packages, the update could create an inconsistent state that breaks other users’ code. The main benefit has turned into a big risk!</p>
+<blockquote>
+<p>Note: This scenario can also occur for individual users who share a package library across projects. The likelihood of conflict just increases if multiple users share a library.</p>
+</blockquote>
+<p>How do we prevent this problem? One option would be for an administrator to install all the packages at once. Unfortunately, this option rarely works in practice because it is incredibly time intensive and users don’t know upfront the entire list of packages they’ll need.</p>
+<h4 id="frozen-repositories">Frozen Repositories</h4>
+<p>A better option is to rely on a frozen repository. A frozen repository is a way for organizations to always get a consistent set of packages, without having to pre-install all the packages. As an example, you could rsync CRAN to an internal server on January 1st and host it at <code>https://r-pkgs.example.com/cran/012019</code>. Then, no matter when an admin installs new packages, they will always get a consistent set of packages. The next time a version of R is released, the new version of R can be associated with a new frozen repository, e.g. <code>https://r-pkgs.example.com/cran/062019</code>, allowing users to access updated and new packages while still remaining consistent. The specific steps for this approach are documented below.</p>
+<div class="layout-chunk" data-layout="l-body">
+<div class="figure"><span id="fig:unnamed-chunk-3"></span>
+<img src="shared_files/figure-html5/unnamed-chunk-3-1.png" alt="Shared Basline Strategy" width="624" />
+<p class="caption">
+Figure 3: Shared Basline Strategy
+</p>
+</div>
+</div>
+<p>Overtime, managing these repositories can become tedious, <a href="https://rstudio.com/products/package-manager">RStudio Package Manager</a> provides an easy way to automatically access snapshots and additionally optimizes disk space and supports internal, non-CRAN packages.</p>
+<h3 id="implementation-steps">Implementation Steps</h3>
+<p>This strategy requires a “frozen repository”, as described above. Organizations can create frozen repositories manually, tie into <a href="https://mran.microsoft.com/">MRAN</a>, or use <a href="https://docs.rstudio.com/rspm/admin/repositories.html#repo-versions">RStudio Package Manager</a>.</p>
+<ol type="1">
+<li>Install a <a href="./R-installation.html">version of R from source</a>. This results in a versioned system library:</li>
+</ol>
+<pre><code>
+/opt/R/3.4.4/lib/R/library</code></pre>
+<ol start="2" type="1">
+<li>Create or edit the <code>Rprofile.site</code> file, to set the repo option for this version of R to point to a frozen repository.</li>
+</ol>
+<div class="layout-chunk" data-layout="l-body">
+<pre class="bash"><code>
+# /opt/R/3.4.4/etc/Rprofile.site
+local({
+  options(repos = c(CRAN = &quot;https://r-pkgs.example.com/cran/128&quot;))
+})</code></pre>
+</div>
+<ol start="3" type="1">
+<li>Run R as root, and install the desired baseline packages. Overtime, as requests for new packages come in, install them in the same way. Consistency is guaranteed because you are always installing from the same frozen repository.</li>
+</ol>
+<pre><code>
+sudo /opt/R/3.4.4./bin/R -e &#39;install.packages(&quot;ggplot2&quot;)&#39;</code></pre>
+<ol start="4" type="1">
+<li><p>Users access packages on the server without any need to install, e.g.: <code>library(ggplot2)</code></p></li>
+<li><p>(Optionally) Disable the user option to change the repository setting and discourage package installation.</p></li>
+</ol>
+<div class="layout-chunk" data-layout="l-body">
+<pre class="bash"><code>
+# /etc/rstudio/rsession.conf
+allow-r-cran-repos-edit=0
+allow-package-installation=0</code></pre>
+</div>
+<ol start="6" type="1">
+<li>(Optionally) Allow users to install packages into their personal user libraries. The user library is still tied to the R version, and the repository is still frozen due to the <code>Rprofile.site</code> setting. In this case, users won’t all have the same packages, but if they share code and then install packages, they’ll get the same versions.</li>
+</ol>
+<h3 id="common-challenges-and-resolutions">Common Challenges and Resolutions</h3>
+<h4 id="desktop-r-users">Desktop R Users</h4>
+<p>The implementation described for the shared baseline strategy assumes users are accessing R on a shared server, using a tool like RStudio Server (Pro). Often, teams of data scientists using R from their desktops also want easy collaboration and the benefits of uniform package versions. This result is possible by adapting the strategy. Desktop users simply need to set their repository option to use a frozen repository. If all users pick the same frozen repository, they’ll get the benefits of the strategy. Desktop users can set the repository using the <code>Rprofile.site</code> mechanism, or using a wizard available in RStudio (v1.2+) <code>Tools -&gt; Global Options -&gt; Packages</code>.</p>
+<h4 id="new-or-updated-packages">New or Updated Packages</h4>
+<p>What happens if a package is updated immediately after the shared baseline is implemented? Or a new package is added? For example, what would happen if the repository is frozen on April 1st, and April 5th a new package is added? In this case, users would need to wait until the next release to pull in this update. We recommend organizations roll out new versions of R (and new package sets) every 4-6 months.</p>
+<p>Luckily, this type of time delay will not impact most R users. The need to access the latest and greatest packages is rare for the majority of R users, especially new R users. We recommend allowing advanced R users who require this type of “bleeding edge” access to use the <a href="./snapshot.html">Snapshot and Restore</a> strategy. If a critical security issue arises that requires a package update, re-install the version of R in a new directory, e.g. <code>/opt/R/3.4.4-patch/</code> and follow the entire process, perhaps removing the old R version.</p>
+<h4 id="internal-packages">Internal Packages</h4>
+<p>The shared baseline strategy works with internal packages as long as those packages are available in a frozen, CRAN-like repository. <a href="https://docs.rstudio.com/rspm/admin/quickstarts.html#quickstart-local">RStudio Package Manager</a> makes it easy to include internal packages in repository checkpoints.</p>
+<h4 id="docker">Docker</h4>
+<p>Docker can be used alongside the shared baseline strategy to ensure that rebuilding a Docker image always returns the same sets of packages. Docker makes the process easier, because it negates the need to manage a system library shared by multiple users.</p>
+<div class="layout-chunk" data-layout="l-body">
+<pre class="bash"><code>
+FROM ubuntu
+...
+# To install packages
+RUN R -e &#39;install.packages(..., repo = &quot;https://r-pkgs.example.com/cran/042018&quot;)&#39;
+# Or set the repo option if users will install packages in the container
+RUN echo &#39;options(repos = c(CRAN = &quot;https://r-pkgs.example.com/cran/042018&quot;))&#39; &gt; .Rprofile</code></pre>
+</div>
+<section class="footnotes">
+<hr />
+<ol>
+<li id="fn1"><p>The scenario is hypothetical and simplified, you should not be concerned about the specific packages and dates used in the example.<a href="#fnref1" class="footnote-back">↩</a></p></li>
+</ol>
+</section>
 <!--radix_placeholder_article_footer-->
 <!--/radix_placeholder_article_footer-->
 </div>

@@ -8,21 +8,25 @@ navbar:
   right:
     - text: "Use Cases"
       menu:
-      - text: "Upgrading Packages Safely"
+      - text: "Safely Upgrade Packages"
         href: upgrades.html
-      - text: "Reproduce Environments"
-        href: reproduce.html
-      - text: "How to Pick a Package"
-        href: picking.html
-      - text: "Validated Environments"
+      - text: "Validate your Environment"
         href: validation.html
-      - text: "Production Deployments"
+      - text: "Deploy to Production"
         href: deploy.html
-      - text: "Team Collaboration"
+      - text: "Collaborate within a Team"
         href: collaborate.html
     - text: "Strategies"
-      href: reproduce.html
-    - text: "R Packages"
+      menu:
+      - text: "Strategy Map"
+        href: reproduce.html
+      - text: "Snapshot and Restore"
+        href: snapshot.html
+      - text: "Shared Baseline"
+        href: shared.html
+      - text: "Validated"
+        href: validated.html
+    - text: "Tools"
       menu:
       - text: "Installing - pak / remotes"
         href: installation.html
@@ -30,9 +34,7 @@ navbar:
         href: repositories.html
       - text: "Libraries - renv"
         href: libraries.html
-    - text: "Other Components"
-      menu:
-      - text: "R Installations"
+      - text: "R Versions"
         href: R-installation.html
       - text: "Docker"
         href: Docker.html

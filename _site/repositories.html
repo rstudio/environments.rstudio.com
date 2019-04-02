@@ -1301,18 +1301,28 @@ Use Cases
 <span class="down-arrow">&#x25BE;</span>
 </button>
 <div class="nav-dropdown-content">
-<a href="upgrades.html">Upgrading Packages Safely</a>
-<a href="reproduce.html">Reproduce Environments</a>
-<a href="picking.html">How to Pick a Package</a>
-<a href="validation.html">Validated Environments</a>
-<a href="deploy.html">Production Deployments</a>
-<a href="collaborate.html">Team Collaboration</a>
+<a href="upgrades.html">Safely Upgrade Packages</a>
+<a href="validation.html">Validate your Environment</a>
+<a href="deploy.html">Deploy to Production</a>
+<a href="collaborate.html">Collaborate within a Team</a>
 </div>
 </div>
-<a href="reproduce.html">Strategies</a>
 <div class="nav-dropdown">
 <button class="nav-dropbtn">
-R Packages
+Strategies
+ 
+<span class="down-arrow">&#x25BE;</span>
+</button>
+<div class="nav-dropdown-content">
+<a href="reproduce.html">Strategy Map</a>
+<a href="snapshot.html">Snapshot and Restore</a>
+<a href="shared.html">Shared Baseline</a>
+<a href="validated.html">Validated</a>
+</div>
+</div>
+<div class="nav-dropdown">
+<button class="nav-dropbtn">
+Tools
  
 <span class="down-arrow">&#x25BE;</span>
 </button>
@@ -1320,16 +1330,7 @@ R Packages
 <a href="installation.html">Installing - pak / remotes</a>
 <a href="repositories.html">Repositories - RStudio Package Manager</a>
 <a href="libraries.html">Libraries - renv</a>
-</div>
-</div>
-<div class="nav-dropdown">
-<button class="nav-dropbtn">
-Other Components
- 
-<span class="down-arrow">&#x25BE;</span>
-</button>
-<div class="nav-dropdown-content">
-<a href="R-installation.html">R Installations</a>
+<a href="R-installation.html">R Versions</a>
 <a href="Docker.html">Docker</a>
 <a href="Python.html">Python</a>
 </div>
@@ -1371,8 +1372,8 @@ Other Components
 </nav>
 <hr class="d-toc-separator"/>
 <div class="layout-chunk" data-layout="l-body">
-<div id="htmlwidget-5dfd9b2b5bbca7687606" style="width:624px;height:384px;" class="grViz html-widget"></div>
-<script type="application/json" data-for="htmlwidget-5dfd9b2b5bbca7687606">{"x":{"diagram":"\ndigraph repos {\n  graph [layout = dot\n         rankdir = LR]\n  node[shape = box]\n  \"Project Cache\"; \"Project 1 Library\"; \"Project 2 Library\"\n  \n  node[fillcolor = grey, style = filled]\n  Repository\n  \n  \"Repository\"-> \"Project Cache\"\n  \"Project Cache\" -> \"Project 1 Library\"\n  \"Project Cache\" -> \"Project 2 Library\"\n}      \n","config":{"engine":"dot","options":null}},"evals":[],"jsHooks":[]}</script>
+<div id="htmlwidget-db6d55ec71e8f54ef39d" style="width:624px;height:384px;" class="grViz html-widget"></div>
+<script type="application/json" data-for="htmlwidget-db6d55ec71e8f54ef39d">{"x":{"diagram":"\ndigraph repos {\n  graph [layout = dot\n         rankdir = LR]\n  node[shape = box]\n  \"Project Cache\"; \"Project 1 Library\"; \"Project 2 Library\"\n  \n  node[fillcolor = grey, style = filled]\n  Repository\n  \n  \"Repository\"-> \"Project Cache\"\n  \"Project Cache\" -> \"Project 1 Library\"\n  \"Project Cache\" -> \"Project 2 Library\"\n}      \n","config":{"engine":"dot","options":null}},"evals":[],"jsHooks":[]}</script>
 </div>
 <p>Every new R user quickly discovers that packages are how work gets done in R. To understand how to manage R packages, it is important to start by understanding where R packages come from. The majority of R users install packages from the Comprehenisve R Archive Network (CRAN). CRAN is a network of servers that distribute R along with R packages.</p>
 <p>CRAN is not the only place where users can access packages. In addition to CRAN, there are a number of other CRAN-like repositories, such as <a href="./repositories.html#r-forge">R-Forge</a> and <a href="./repositories.html#bioconductor">BioConductor</a>. These CRAN-like repositories have a similar structure to CRAN, and normally work with <code>install.packages</code>. Finally, some users access packages from locations such as GitHub. Unlike CRAN-like repositories, these locations require a different installation client.</p>

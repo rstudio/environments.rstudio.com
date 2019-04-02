@@ -19,29 +19,29 @@
  <!--/radix_placeholder_import_source-->
 
   <!--radix_placeholder_meta_tags-->
-  <title>Environments: Python</title>
+  <title>Environments: Snapshot and Restore</title>
   
-  <meta property="description" itemprop="description" content="Environments with R and Python [In Progress]"/>
+  <meta property="description" itemprop="description" content="Snapshot Project Dependencies and Restore Them"/>
   
   
   
   <!--  https://developers.facebook.com/docs/sharing/webmasters#markup -->
-  <meta property="og:title" content="Environments: Python"/>
+  <meta property="og:title" content="Environments: Snapshot and Restore"/>
   <meta property="og:type" content="article"/>
-  <meta property="og:description" content="Environments with R and Python [In Progress]"/>
+  <meta property="og:description" content="Snapshot Project Dependencies and Restore Them"/>
   <meta property="og:locale" content="en_US"/>
   <meta property="og:site_name" content="Environments"/>
   
   <!--  https://dev.twitter.com/cards/types/summary -->
   <meta property="twitter:card" content="summary"/>
-  <meta property="twitter:title" content="Environments: Python"/>
-  <meta property="twitter:description" content="Environments with R and Python [In Progress]"/>
+  <meta property="twitter:title" content="Environments: Snapshot and Restore"/>
+  <meta property="twitter:description" content="Snapshot Project Dependencies and Restore Them"/>
   
   <!--/radix_placeholder_meta_tags-->
   <!--radix_placeholder_rmarkdown_metadata-->
   
   <script type="text/json" id="radix-rmarkdown-metadata">
-  {"type":"list","attributes":{"names":{"type":"character","attributes":{},"value":["title","description"]}},"value":[{"type":"character","attributes":{},"value":["Python"]},{"type":"character","attributes":{},"value":["Environments with R and Python [In Progress]"]}]}
+  {"type":"list","attributes":{"names":{"type":"character","attributes":{},"value":["title","description","output"]}},"value":[{"type":"character","attributes":{},"value":["Snapshot and Restore"]},{"type":"character","attributes":{},"value":["Snapshot Project Dependencies and Restore Them\n"]},{"type":"list","attributes":{"names":{"type":"character","attributes":{},"value":["distill::distill_article"]}},"value":[{"type":"list","attributes":{"names":{"type":"character","attributes":{},"value":["toc","toc_depth"]}},"value":[{"type":"logical","attributes":{},"value":[true]},{"type":"integer","attributes":{},"value":[3]}]}]}]}
   </script>
   <!--/radix_placeholder_rmarkdown_metadata-->
   <!--radix_placeholder_navigation_in_header-->
@@ -1257,6 +1257,10 @@
   </script>
   
   <!--/radix_placeholder_distill-->
+  <script src="site_libs/htmlwidgets-1.2.1/htmlwidgets.js"></script>
+  <script src="site_libs/viz-0.3/viz.js"></script>
+  <link href="site_libs/DiagrammeR-styles-0.2/styles.css" rel="stylesheet" />
+  <script src="site_libs/grViz-binding-1.0.0/grViz.js"></script>
   <script src="site_libs/jquery-1.11.3/jquery.min.js"></script>
   <script src="site_libs/bowser-1.9.3/bowser.min.js"></script>
   <script src="site_libs/webcomponents-2.0.0/webcomponents.js"></script>
@@ -1279,7 +1283,7 @@
 <!--radix_placeholder_front_matter-->
 
 <script id="distill-front-matter" type="text/json">
-{"title":"Python","description":"Environments with R and Python [In Progress]","authors":[]}
+{"title":"Snapshot and Restore","description":"Snapshot Project Dependencies and Restore Them","authors":[]}
 </script>
 
 <!--/radix_placeholder_front_matter-->
@@ -1340,17 +1344,145 @@ Tools
 <!--/radix_placeholder_site_before_body-->
 
 <div class="d-title">
-<h1>Python</h1>
-<p>Environments with R and Python [In Progress]</p>
+<h1>Snapshot and Restore</h1>
+<p>Snapshot Project Dependencies and Restore Them</p>
 </div>
 
 
 <div class="d-article">
-<p>The goal of this page is to introduce readers to how projects that rely on R and Python can account for Python dependencies. The main goal is to introduce <code>renv</code> and push folks towards tools like <code>virtualenv</code> and <code>conda</code> PLUS <code>reticulate</code>.</p>
-<h1 id="python-and-r">Python and R</h1>
-<h2 id="the-role-of-reticulate">The Role of Reticulate</h2>
-<h2 id="managing-python-components">Managing Python Components</h2>
-<h2 id="renv-record-keeping">renv Record Keeping</h2>
+<h3 class="d-toc-header">Table of Contents</h3>
+<nav class="d-toc" id="TOC">
+<ul>
+<li><a href="#pre-requisite-steps">Pre-requisite Steps:</a></li>
+<li><a href="#step-1-initalize-a-project">Step 1: Initalize a Project</a></li>
+<li><a href="#step-2-install-and-use-packages">Step 2: Install and Use Packages</a></li>
+<li><a href="#step-3-snapshot-the-environment">Step 3: Snapshot the Environment</a></li>
+<li><a href="#step-4-recreate-the-environment">Step 4: Recreate the Environment</a></li>
+<li><a href="#implementing-the-snapshot-strategy-in-production">Implementing the Snapshot Strategy in Production</a></li>
+<li><a href="#common-challenges-and-resolutions">Common Challenges and Resolutions:</a></li>
+<li><a href="#additional-resources">Additional Resources:</a></li>
+</ul>
+</nav>
+<hr class="d-toc-separator"/>
+<p>The snapshot and restore strategy fits when package access is open and users are responsible for reproducibility. This strategy is the most relevant for individual data scientists. The strategy has two key characteristics:</p>
+<ol type="1">
+<li>Users are able to <strong>freely</strong> access and install packages <strong>for a project</strong></li>
+<li>Users have the full responsibility to <strong>record</strong> the dependencies needed for a project</li>
+</ol>
+<p>The strategy is implemented with the following steps:</p>
+<ol type="1">
+<li>Start a project by creating a project-specific library</li>
+<li>Install and use packages from the project-specific library</li>
+<li>Record the state of the library alongside of the code</li>
+<li>Restore the library when the environment needs to be recreated</li>
+</ol>
+<p>A potential drawback of this strategy is the involvement required from the R user. For new users, these steps can create an energy barrier that prevents them from being successful. Often organizations will start new users (e.g. Excel converts) with a different strategy, and allow power R users the flexibility and responsibility of this strategy.</p>
+<div class="layout-chunk" data-layout="l-body">
+<div class="figure"><span id="fig:unnamed-chunk-1"></span>
+<div id="htmlwidget-98d45627e2145e8af4b4" style="width:624px;height:384px;" class="grViz html-widget"></div>
+<script type="application/json" data-for="htmlwidget-98d45627e2145e8af4b4">{"x":{"diagram":"\ndigraph renv {\n  graph [layout = dot\n         rankdir = LR]\n  node [shape = box]\n  \"1. Create a Project\"; \"Write Code\"; \"2. Install Packages\"; \"3. Snapshot\"; \"4. Restore\"\n  \n  \"1. Create a Project\"->\"Write Code\"\n  \"Write Code\"->\"2. Install Packages\" \n  \"2. Install Packages\" -> \"Write Code\"\n  \"Write Code\"->\"3. Snapshot\"\n  \"3. Snapshot\"->\"4. Restore\"\n  \n}      \n","config":{"engine":"dot","options":null}},"evals":[],"jsHooks":[]}</script>
+<p class="caption">
+Figure 1: Simple Workflow for Reproducible Environments
+</p>
+</div>
+</div>
+<aside>
+<ol type="1">
+<li><code>renv::create()</code></li>
+<li><code>pak::pkg_install(...)</code></li>
+<li><code>renv::snapshot()</code></li>
+<li><code>renv::restore()</code></li>
+</ol>
+</aside>
+<h3 id="pre-requisite-steps">Pre-requisite Steps:</h3>
+<ol type="1">
+<li>(Administrators) Install each desired version of <a href="./installation.Rmd">R from source</a>.</li>
+<li>(Users) Install the <code>renv</code> package: <code>remotes::install_github('rstudio/renv')</code></li>
+</ol>
+<h3 id="step-1-initalize-a-project">Step 1: Initalize a Project</h3>
+<p>A <em>key</em> to package management is to isolate projects from one another. This allows you to upgrade or add packages for one project without breaking other work. Whether you are in an existing project or starting a new project, use:</p>
+<div class="layout-chunk" data-layout="l-body">
+
+</div>
+<p>Behind the scenes, <code>renv</code> works by creating a <a href="./libraries.html">new library</a>. A library stores installed packages.</p>
+<h3 id="step-2-install-and-use-packages">Step 2: Install and Use Packages</h3>
+<p>With the project configured, you can now install and use packages. There are three ways to <a href="./installation.html">install packages</a>:</p>
+<ol type="1">
+<li>Use <a href="https://github.com/r-lib/pak"><code>pak::pak_install</code></a> if you’re installing interactively.</li>
+<li>Use <a href="https://github.com/r-lib/remotes"><code>remotes::install_*</code></a> if you’re scripting the install (e.g. in a Docker container).</li>
+<li>Use <code>install.packages</code> as a fall back option.</li>
+</ol>
+<div class="layout-chunk" data-layout="l-body">
+
+</div>
+<p>Use packages just how you normally would!</p>
+<div class="layout-chunk" data-layout="l-body">
+
+</div>
+<h3 id="step-3-snapshot-the-environment">Step 3: Snapshot the Environment</h3>
+<p>Once you are ready to share your work, or you are finished with a project, you’ll want to make a record of the current environment.</p>
+<div class="layout-chunk" data-layout="l-body">
+
+</div>
+<p>This step creates a new file in your project titled <code>renv.lock</code>. The file contains all the information you need to communicate your project’s dependencies <em>at the moment you call <code>snapshot</code></em>. The next time you call <code>snapshot</code>, the file will be updated.</p>
+<p>If you are familiar with version control for your code, we recommend calling <code>snapshot</code> anytime you push or check-in changes to your code. The <code>renv::history</code> and <code>renv::revert</code> commands make it easy to navigate and restore prior versions of the lock file.</p>
+<h3 id="step-4-recreate-the-environment">Step 4: Recreate the Environment</h3>
+<p>This step is where the work above pays off! If you need to share your work with others, or need to roll back changes to get back to a working library, cash in by using restore:</p>
+<div class="layout-chunk" data-layout="l-body">
+
+</div>
+<p><code>renv</code> will recreate the package environment for you, and you’ll be back to working on R code instead of troubleshooting problems!</p>
+<h3 id="implementing-the-snapshot-strategy-in-production">Implementing the Snapshot Strategy in Production</h3>
+<p>In some organizations, you may only want to worry about recording project dependencies when a project is ready for production. Generating a manifest of dependencies can be the first step in a deployment hand-off between a development environment and a production deployment. Learn more about <a href="./deploy.html">snapshotting for production</a>.</p>
+<p><strong>If you are using <a href="https://rstudio.com/products/connect">RStudio Connect</a> then the snapshot strategy is automatically applied when content is deployed</strong>.</p>
+<h3 id="common-challenges-and-resolutions">Common Challenges and Resolutions:</h3>
+<h4 id="versions-of-r">Versions of R</h4>
+<p>To ensure the library is restorable, you’ll need to <em>record</em> and <em>make</em> <em>available</em> the same version of R used during development. The <code>renv</code> package automatically records the version of R used by a project. We recommend having multiple versions of R available, so that users can pick the version of R and then restore. This approach is also an effective way to <a href="./upgrades.html">test if a project is ready to upgrade</a> to a new version of R.</p>
+<h4 id="non-current-cran-packages">Non-Current CRAN Packages</h4>
+<p>Often, by the time a project is restored, some of the packages in use may have been updated on CRAN. For example:</p>
+<ol type="1">
+<li>On January 1st, a project manifest is committed that records <code>ISLR</code> version 1.0 as a dependency.</li>
+<li>On February 1st, the <code>ISLR</code> package is upgraded to <code>1.1</code>.</li>
+<li>On March 1st, a user wishes to restore the environment.</li>
+</ol>
+<p>In this case, it is critical that version 1.0 of <code>ISLR</code> is used in the restored environment. To make this happen, the older version of the package needs to be accessed and installed. Luckily, this is possible using a <a href="./repositories.html#archive-packages">repository’s archive</a>. <em>Internal repositories used to support the snapshot strategy must record archived versions.</em> <a href="https://rstudio.com/products/package-manager">RStudio Package Manager</a> is an easy way to ensure your internal repository handles this case appropriately.</p>
+<h4 id="internal-packages">Internal Packages</h4>
+<p>If your package is publicly available, tools like <code>renv</code> will work automatically. If you wish to use the snapshot strategy along with internal packages (packages that are not publicly available on CRAN nor in a public Git repository), it is easiest to store and source those internal packages in a <a href="./repositories.html">CRAN-like</a> repository. Follow these steps:</p>
+<ol type="1">
+<li>Release the internal package to the CRAN-like repository</li>
+<li>Install and use the package in the project, installing from the repository</li>
+<li>Record the project dependencies</li>
+<li>Restore the project by accessing the appropriate version of the package from the CRAN-like repository</li>
+</ol>
+<p>It is critical that older versions of the internal package are appropriately stored in the repository’s archive. The easiest way to create a correct internal repository, distribute internal packages, and support the snapshot strategy is using <a href="https://rstudio.com/products/package-manager">RStudio Package Manager</a></p>
+<h4 id="multi-lingual-projects-python">Multi-Lingual Projects (Python)</h4>
+<p>If your project uses more than R, you’ll need to capture the project’s other dependencies as well. A common scenario is a <a href="https://rstudio.github.io/reticulate">reticulated project</a> that uses Python and R. In this case, one option is to combine <code>renv</code> with a Python package management tool like <code>virtualenv</code>:</p>
+<ol type="1">
+<li>Use <code>renv</code> as described previously to manage R packages</li>
+<li>Use a <code>virutalenv</code> to isolate project Python dependencies</li>
+<li>Record the state of the <code>virtualenv</code> using <code>pip freeze &gt; requirements.txt</code></li>
+<li>On restore, recreate the Python <code>virtualenv</code> and then use <code>renv::restore()</code></li>
+</ol>
+<h4 id="performance">Performance</h4>
+<p>A common challenge in the snapshot and restore approach is that each project relies on an isolated library. Naively, this would mean each project library would start empty and users would have to re-install their desired packages. In practice, this naive approach is slow - especially on systems where packages must be compiled.</p>
+<p>To solve this problem, implementations of the snapshot and restore strategy should rely on a <a href="./installation.html">package cache</a> or a <a href="./repositories.html#binary-packages">repository that serves binaries</a> for the operating systems in-use. By default, <code>renv</code> creates a cache for each user. This means if two projects rely on <code>ggplot2</code> version 3.1.0, the user will only need to install <code>ggplot2</code> 3.1.0 once. A repository that serves binaries accomplishes the same result, effectively caching installed packages for all users!</p>
+<p>Often restoring a project on a different computer or a new system can take time because the necessary packages may not be cached. This challenge is especially prevalent if the project uses non-current CRAN packages, because these packages do not usually have a binary version available in a repository.</p>
+<h4 id="docker">Docker</h4>
+<p>Unfortunately, many organizations and platforms assume <a href="./docker.html">using Docker</a> will give them the benefits of reproducibility. The good news is that Docker does a great job isolating project dependencies. The bad news is that Docker does not record the versions of project dependencies. Luckily, Docker can be used with the snapshot and restore strategy. For example, say you wanted to use Docker to execute an ETL job:</p>
+<div class="layout-chunk" data-layout="l-body">
+<pre class="bash"><code>
+FROM ubuntu
+...
+RUN git clone https://github.com/me/etl-project.git
+RUN R -e &#39;renv::restore()&#39; 
+CMD &lt;some process&gt;</code></pre>
+</div>
+<h3 id="additional-resources">Additional Resources:</h3>
+<ul>
+<li>Learn more about <a href="./libraries.html">libraries</a></li>
+<li>Learn more about <a href="./repositories.html">repositories</a></li>
+<li>Learn more about <a href="./installation.html">package installation</a></li>
+</ul>
 <!--radix_placeholder_article_footer-->
 <!--/radix_placeholder_article_footer-->
 </div>

@@ -19,29 +19,29 @@
  <!--/radix_placeholder_import_source-->
 
   <!--radix_placeholder_meta_tags-->
-  <title>Environments: Python</title>
+  <title>Environments: Validated</title>
   
-  <meta property="description" itemprop="description" content="Environments with R and Python [In Progress]"/>
+  <meta property="description" itemprop="description" content="Control Approved Packages"/>
   
   
   
   <!--  https://developers.facebook.com/docs/sharing/webmasters#markup -->
-  <meta property="og:title" content="Environments: Python"/>
+  <meta property="og:title" content="Environments: Validated"/>
   <meta property="og:type" content="article"/>
-  <meta property="og:description" content="Environments with R and Python [In Progress]"/>
+  <meta property="og:description" content="Control Approved Packages"/>
   <meta property="og:locale" content="en_US"/>
   <meta property="og:site_name" content="Environments"/>
   
   <!--  https://dev.twitter.com/cards/types/summary -->
   <meta property="twitter:card" content="summary"/>
-  <meta property="twitter:title" content="Environments: Python"/>
-  <meta property="twitter:description" content="Environments with R and Python [In Progress]"/>
+  <meta property="twitter:title" content="Environments: Validated"/>
+  <meta property="twitter:description" content="Control Approved Packages"/>
   
   <!--/radix_placeholder_meta_tags-->
   <!--radix_placeholder_rmarkdown_metadata-->
   
   <script type="text/json" id="radix-rmarkdown-metadata">
-  {"type":"list","attributes":{"names":{"type":"character","attributes":{},"value":["title","description"]}},"value":[{"type":"character","attributes":{},"value":["Python"]},{"type":"character","attributes":{},"value":["Environments with R and Python [In Progress]"]}]}
+  {"type":"list","attributes":{"names":{"type":"character","attributes":{},"value":["title","description","output"]}},"value":[{"type":"character","attributes":{},"value":["Validated"]},{"type":"character","attributes":{},"value":["Control Approved Packages\n"]},{"type":"list","attributes":{"names":{"type":"character","attributes":{},"value":["distill::distill_article"]}},"value":[{"type":"list","attributes":{"names":{"type":"character","attributes":{},"value":["toc","toc_depth"]}},"value":[{"type":"logical","attributes":{},"value":[true]},{"type":"integer","attributes":{},"value":[3]}]}]}]}
   </script>
   <!--/radix_placeholder_rmarkdown_metadata-->
   <!--radix_placeholder_navigation_in_header-->
@@ -1279,7 +1279,7 @@
 <!--radix_placeholder_front_matter-->
 
 <script id="distill-front-matter" type="text/json">
-{"title":"Python","description":"Environments with R and Python [In Progress]","authors":[]}
+{"title":"Validated","description":"Control Approved Packages","authors":[]}
 </script>
 
 <!--/radix_placeholder_front_matter-->
@@ -1340,17 +1340,189 @@ Tools
 <!--/radix_placeholder_site_before_body-->
 
 <div class="d-title">
-<h1>Python</h1>
-<p>Environments with R and Python [In Progress]</p>
+<h1>Validated</h1>
+<p>Control Approved Packages</p>
 </div>
 
 
 <div class="d-article">
-<p>The goal of this page is to introduce readers to how projects that rely on R and Python can account for Python dependencies. The main goal is to introduce <code>renv</code> and push folks towards tools like <code>virtualenv</code> and <code>conda</code> PLUS <code>reticulate</code>.</p>
-<h1 id="python-and-r">Python and R</h1>
-<h2 id="the-role-of-reticulate">The Role of Reticulate</h2>
-<h2 id="managing-python-components">Managing Python Components</h2>
-<h2 id="renv-record-keeping">renv Record Keeping</h2>
+<h3 class="d-toc-header">Table of Contents</h3>
+<nav class="d-toc" id="TOC">
+<ul>
+<li><a href="#admin-steps-creating-the-validated-set">Admin Steps: Creating the Validated Set</a></li>
+<li><a href="#admin-steps-updating-the-validated-set">Admin Steps: Updating the Validated Set</a></li>
+<li><a href="#user-steps-accessing-the-validated-set">User Steps: Accessing the Validated Set</a></li>
+<li><a href="#user-steps-accessing-updates-to-the-validated-set">User Steps: Accessing Updates to the Validated Set</a></li>
+</ul>
+</nav>
+<hr class="d-toc-separator"/>
+<p>The validated strategy is similar to the <a href="./shared.html">shared baseline</a> strategy. The main difference is the validated strategy targets teams wishing to restrict access to a particular set of packages and teams wishing to approve or audit changes to the package environment. This strategy is appropriate if you require:</p>
+<ul>
+<li>licensing checks</li>
+<li>tests to ensure accurate package methods<br />
+</li>
+<li>security audits</li>
+</ul>
+<p>Please refer to the section <a href="./picking.html">“package selection”</a> for more ideas on how to arrive at an approved set of packages. Once a set is determined, this strategy ensures users accurately use those packages.</p>
+<blockquote>
+<p>Note: This strategy describes how to manage approved sets of packages, see the <a href="./validation.html">validation</a> section for more information on other considerations in validated environments</p>
+</blockquote>
+<p>The implementation steps<a href="#fn1" class="footnote-ref" id="fnref1"><sup>1</sup></a> are divided into two parts:</p>
+<ol type="1">
+<li>Steps taken by the administrator or R user responsible for creating and updating the approved set</li>
+<li>Steps taken by the user wishing to use the approved set</li>
+</ol>
+<h3 id="admin-steps-creating-the-validated-set">Admin Steps: Creating the Validated Set</h3>
+<p>We recommend that an admin organize the validated set of packages into an <a href="./repositories.html#internal-repositories">internal repository</a>. Organizing the packages into a repository, as opposed to a library, has the major benefit of decoupling the approved packages from a specific installed environment. This separation is helpful because it enables the approved packages to be used in different places: desktops, containers, and shared servers.</p>
+<ol type="1">
+<li><p>Create a <a href="./repositories.html#">frozen repository</a> containing all of CRAN along with any other packages you might need.<a href="#fn2" class="footnote-ref" id="fnref2"><sup>2</sup></a></p></li>
+<li><p>Create a list of desired top-level packages:</p></li>
+</ol>
+<pre><code>
+xgboost
+shiny</code></pre>
+<ol start="3" type="1">
+<li>Given the list, identify the package’s dependencies to get the full set of packages:</li>
+</ol>
+<pre><code>
+rstudio-pm: $ ./bin/rspm add --file-in=list.csv --source=validated --dryrun
+This action will add the following packages:
+
+Name        Version  Path              License                                Needs Compilation Dependency Already Available
+BH          1.69.0-1                   BSL-1.0                                no                true       false
+crayon      1.3.4                      MIT + file LICENSE                     no                true       false
+data.table  1.12.0                     MPL-2.0 | file LICENSE                 yes               true       false
+digest      0.6.18                     GPL (&gt;= 2)                             yes               true       false
+htmltools   0.3.6                      GPL (&gt;= 2)                             yes               true       false
+httpuv      1.4.5.1                    GPL (&gt;= 2) | file LICENSE              yes               true       false
+jsonlite    1.6                        MIT + file LICENSE                     yes               true       false
+later       0.8.0                      GPL (&gt;= 2)                             yes               true       false
+lattice     0.20-38                    GPL (&gt;= 2)                             yes               true       false
+lattice     0.20-38  3.5.3/Recommended GPL (&gt;= 2)                             yes               true       false
+lattice     0.20-38  3.6.0/Recommended GPL (&gt;= 2)                             yes               true       false
+magrittr    1.5                        MIT + file LICENSE                     no                true       false
+Matrix      1.2-15                     GPL (&gt;= 2) | file LICENCE              yes               true       false
+Matrix      1.2-15   3.5.3/Recommended GPL (&gt;= 2) | file LICENCE              yes               true       false
+Matrix      1.2-15   3.6.0/Recommended GPL (&gt;= 2) | file LICENCE              yes               true       false
+mime        0.6                        GPL                                    yes               true       false
+promises    1.0.1                      MIT + file LICENSE                     yes               true       false
+R6          2.4.0                      MIT + file LICENSE                     no                true       false
+Rcpp        1.0.0                      GPL (&gt;= 2)                             yes               true       false
+rlang       0.3.1                      GPL-3                                  yes               true       false
+shiny       1.2.0                      GPL-3 | file LICENSE                   no                false      false
+sourcetools 0.1.7                      MIT + file LICENSE                     yes               true       false
+stringi     1.3.1                      file LICENSE                           yes               true       false
+xgboost     0.81.0.1                   Apache License (== 2.0) | file LICENSE yes               false      false
+xtable      1.8-3                      GPL (&gt;= 2)                             no                true       false
+
+To complete this operation, execute this command without the --dryrun flag. You will need to include the --transaction-id=1506 flag.
+</code></pre>
+<aside>
+This example shows the RStudio Package Manager command and output for this step, but the main idea is to identify the dependencies for xgboost and shiny.
+</aside>
+<ol start="4" type="1">
+<li><p>At this point, apply any filtering or additional testing to confirm the packages meet your licensing requirements, methodology validation, etc. If a package must be removed, ensure that you remove all upstream dependencies as well. An easy way to do this is to remove packages from your list in step 2, repeating step 3 until the troublesome package is no longer required.</p></li>
+<li><p>Place the approved set of packages in the internal repository.</p></li>
+</ol>
+<h3 id="admin-steps-updating-the-validated-set">Admin Steps: Updating the Validated Set</h3>
+<p>To <strong>add a new package</strong> to the approved set, it is critical that you either <em>update all of the packages</em> or add the new package <em>from the original frozen repository</em> created in step 1. Learn more about the <a href="./shared.html#the-big-risk">danger of partial upgrades here</a>.</p>
+<pre><code>
+rstudio-pm: $ ./bin/rspm add --packages=plumber --source=validated --dryrun             
+This action will add the following packages:
+
+Name     Version  Path License                   Needs Compilation Dependency Already Available
+BH       1.69.0-1      BSL-1.0                   no                true       true
+crayon   1.3.4         MIT + file LICENSE        no                true       true
+httpuv   1.4.5.1       GPL (&gt;= 2) | file LICENSE yes               true       true
+jsonlite 1.6           MIT + file LICENSE        yes               true       true
+later    0.8.0         GPL (&gt;= 2)                yes               true       true
+magrittr 1.5           MIT + file LICENSE        no                true       true
+plumber  0.4.6         MIT + file LICENSE        no                false      false
+promises 1.0.1         MIT + file LICENSE        yes               true       true
+R6       2.4.0         MIT + file LICENSE        no                true       true
+Rcpp     1.0.0         GPL (&gt;= 2)                yes               true       true
+rlang    0.3.1         GPL-3                     yes               true       true
+stringi  1.3.1         file LICENSE              yes               true       true
+
+To complete this operation, execute this command without the --dryrun flag. You will need to include the --transaction-id=1506 flag.
+</code></pre>
+<aside>
+Example of adding <code>plumber</code> to the package set containing <code>xgboost</code> and <code>shiny</code> using RStudio Package Manager
+</aside>
+<p>To update all of the packages, repeat steps 1-5 above, starting with a new frozen repository in step 1.</p>
+<pre><code>
+rstudio-pm: $ ./bin/rspm add --packages=plumber --source=validated --dryrun             
+This action will add the following packages:
+
+Name     Version  Path License                   Needs Compilation Dependency Already Available
+BH       1.69.0-1      BSL-1.0                   no                true       true
+crayon   1.3.4         MIT + file LICENSE        no                true       true
+httpuv   1.4.5.1       GPL (&gt;= 2) | file LICENSE yes               true       true
+jsonlite 1.6           MIT + file LICENSE        yes               true       true
+later    0.8.0         GPL (&gt;= 2)                yes               true       true
+magrittr 1.5           MIT + file LICENSE        no                true       true
+plumber  0.4.6         MIT + file LICENSE        no                false      false
+promises 1.0.1         MIT + file LICENSE        yes               true       true
+R6       2.4.0         MIT + file LICENSE        no                true       true
+Rcpp     1.0.0         GPL (&gt;= 2)                yes               true       true
+rlang    0.3.1         GPL-3                     yes               true       true
+stringi  1.3.1         file LICENSE              yes               true       true
+
+To complete this operation, execute this command without the --dryrun flag. You will need to include the --transaction-id=1506 flag.</code></pre>
+<aside>
+Example of updating the <code>xgboost</code> and <code>shiny</code> set from December 18th, 2018 to March 3rd, 2019 using RStudio Package Manager.
+</aside>
+<h3 id="user-steps-accessing-the-validated-set">User Steps: Accessing the Validated Set</h3>
+<p>There are three options for accessing the set of validated packages:</p>
+<ol type="1">
+<li>If you are using a <strong>Docker container</strong>, add a line to install the available packages from the internal repository:</li>
+</ol>
+<div class="layout-chunk" data-layout="l-body">
+<pre class="bash"><code>
+FROM ubuntu
+...
+RUN R -e &#39;options(repos = c(CRAN = &quot;https://r-pkgs.example.com/validated&quot;)); install.packages(available.packages()[,&quot;Package&quot;])&#39;</code></pre>
+</div>
+<ol start="2" type="1">
+<li>If you are creating a shared environment for <strong>multiple users</strong>, then set the repo option in the <code>Rprofile.site</code> to point at the internal repository, and optionally install the available packages. For more details, refer to the <a href="./shared.html">shared baseline</a> strategy, replacing the generic frozen repository with your validated internal repository.</li>
+</ol>
+<div class="layout-chunk" data-layout="l-body">
+<pre class="bash"><code>
+# after installing R from source
+# set the repo option in Rprofile.site
+sudo echo &#39;options(repos = c(CRAN = &quot;https://r-pkgs.example.com/validated&quot;))&#39; &gt; R_HOME/etc/Rprofile.site
+
+# optionally, install the packages
+sudo R_HOME/bin/R -e &#39;install.packages(available.packages()[,&quot;Package&quot;])&#39;</code></pre>
+</div>
+<ol start="3" type="1">
+<li>If you are <strong>an individual</strong> working on a specific project, you can use the <code>renv</code> package to create an isolated project environment and library associated with the validated package set:</li>
+</ol>
+<div class="layout-chunk" data-layout="l-body">
+<pre class="r"><code>
+# from within your project directory
+renv::init()
+
+# update the environment to use the validated set from the internal repository
+renv::modify() //TODO: Change this!
+
+# install packages like normal
+install.packages(...)</code></pre>
+</div>
+<h3 id="user-steps-accessing-updates-to-the-validated-set">User Steps: Accessing Updates to the Validated Set</h3>
+<p>Likewise, there are three options for accessing an update to the set of validated packages:</p>
+<ol type="1">
+<li><p>If you are using a <strong>Docker container</strong>, simply rebuild the image.</p></li>
+<li><p>If you are administering a shared environment for <strong>multiple users</strong>, create a new R installation from source, and set the repo option in your <code>Rprofile.site</code>. For more details, refer to the <a href="./shared.html">shared baseline</a> strategy, replacing the generic frozen repository with your validated internal repository.</p></li>
+<li><p>If you are working on a <strong>specific project using <code>renv</code></strong>, first run <code>renv::snapshot()</code> to save the current state, and then run <code>update.packages()</code> from within your project.</p></li>
+</ol>
+<section class="footnotes">
+<hr />
+<ol>
+<li id="fn1"><p>The implementation steps for this strategy rely the most heavily on RStudio Package Manager. While you can accomplish this strategy without a paid product, if you are using R in a validated context it is probably worth the licensing fee to do things the easy, correct way!<a href="#fnref1" class="footnote-back">↩</a></p></li>
+<li id="fn2"><p>RStudio Package Manager handles this step automatically<a href="#fnref2" class="footnote-back">↩</a></p></li>
+</ol>
+</section>
 <!--radix_placeholder_article_footer-->
 <!--/radix_placeholder_article_footer-->
 </div>

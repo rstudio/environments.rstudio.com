@@ -1,0 +1,205 @@
+---
+title: "Validated"
+description: |
+  Control Approved Packages
+output:
+  distill::distill_article:
+    toc: true
+    toc_depth: 3
+---
+
+The validated strategy is similar to the [shared
+baseline](./shared.html) strategy. The main difference is the
+validated strategy targets teams wishing to restrict access to a particular set
+of packages and teams wishing to approve or audit changes to the package
+environment. This strategy is appropriate if you require:
+
+- licensing checks
+- tests to ensure accurate package methods  
+- security audits  
+
+Please refer to the section ["package
+selection"](./picking.html) for more ideas on how to arrive at an approved set of
+packages. Once a set is determined, this strategy ensures users accurately use
+those packages.
+
+> Note: This strategy describes how to manage approved sets of packages, see the
+[validation](./validation.html) section for more information on other
+considerations in validated environments
+
+The implementation steps^[The implementation steps for this strategy rely the most heavily on RStudio Package Manager. While you can accomplish this strategy without a paid product, if you are using R in a validated context it is probably worth the licensing fee to do things the easy, correct way!] are divided into two parts:
+
+1. Steps taken by the administrator or R user responsible for creating and updating the approved set
+2. Steps taken by the user wishing to use the approved set
+
+### Admin Steps: Creating the Validated Set
+
+We recommend that an admin organize the validated set of packages into an [internal
+repository](./repositories.html#internal-repositories). Organizing the packages into a repository, as opposed to a library,
+has the major benefit of decoupling the approved packages from a specific
+installed environment. This separation is helpful because it enables the approved packages
+to be used in different places: desktops, containers, and shared
+servers. 
+
+1. Create a [frozen repository](./repositories.html#) containing all of CRAN along with any other packages you might need.^[RStudio Package Manager handles this step automatically]
+
+2. Create a list of desired top-level packages:
+
+```
+xgboost
+shiny
+```
+
+3. Given the list, identify the package's dependencies to get the full set of packages:
+
+```
+rstudio-pm: $ ./bin/rspm add --file-in=list.csv --source=validated --dryrun
+This action will add the following packages:
+
+Name        Version  Path              License                                Needs Compilation Dependency Already Available
+BH          1.69.0-1                   BSL-1.0                                no                true       false
+crayon      1.3.4                      MIT + file LICENSE                     no                true       false
+data.table  1.12.0                     MPL-2.0 | file LICENSE                 yes               true       false
+digest      0.6.18                     GPL (>= 2)                             yes               true       false
+htmltools   0.3.6                      GPL (>= 2)                             yes               true       false
+httpuv      1.4.5.1                    GPL (>= 2) | file LICENSE              yes               true       false
+jsonlite    1.6                        MIT + file LICENSE                     yes               true       false
+later       0.8.0                      GPL (>= 2)                             yes               true       false
+lattice     0.20-38                    GPL (>= 2)                             yes               true       false
+lattice     0.20-38  3.5.3/Recommended GPL (>= 2)                             yes               true       false
+lattice     0.20-38  3.6.0/Recommended GPL (>= 2)                             yes               true       false
+magrittr    1.5                        MIT + file LICENSE                     no                true       false
+Matrix      1.2-15                     GPL (>= 2) | file LICENCE              yes               true       false
+Matrix      1.2-15   3.5.3/Recommended GPL (>= 2) | file LICENCE              yes               true       false
+Matrix      1.2-15   3.6.0/Recommended GPL (>= 2) | file LICENCE              yes               true       false
+mime        0.6                        GPL                                    yes               true       false
+promises    1.0.1                      MIT + file LICENSE                     yes               true       false
+R6          2.4.0                      MIT + file LICENSE                     no                true       false
+Rcpp        1.0.0                      GPL (>= 2)                             yes               true       false
+rlang       0.3.1                      GPL-3                                  yes               true       false
+shiny       1.2.0                      GPL-3 | file LICENSE                   no                false      false
+sourcetools 0.1.7                      MIT + file LICENSE                     yes               true       false
+stringi     1.3.1                      file LICENSE                           yes               true       false
+xgboost     0.81.0.1                   Apache License (== 2.0) | file LICENSE yes               false      false
+xtable      1.8-3                      GPL (>= 2)                             no                true       false
+
+To complete this operation, execute this command without the --dryrun flag. You will need to include the --transaction-id=1506 flag.
+
+```
+
+<aside>
+This example shows the RStudio Package Manager command and output for this step, but the main idea is to identify the dependencies for xgboost and shiny.
+</aside>
+
+4. At this point, apply any filtering or additional testing to confirm the packages meet your licensing requirements, methodology validation, etc. If a package must be removed, ensure that you remove all upstream dependencies as well. An easy way to do this is to remove packages from your list in step 2, repeating step 3 until the troublesome package is no longer required.
+
+5. Place the approved set of packages in the internal repository.
+
+
+### Admin Steps: Updating the Validated Set
+
+To **add a new package** to the approved set, it is critical that you either
+*update all of the packages* or add the new package *from the original frozen
+repository* created in step 1. Learn more about the [danger of partial upgrades
+here](./shared.html#the-big-risk).
+
+```
+rstudio-pm: $ ./bin/rspm add --packages=plumber --source=validated --dryrun             
+This action will add the following packages:
+
+Name     Version  Path License                   Needs Compilation Dependency Already Available
+BH       1.69.0-1      BSL-1.0                   no                true       true
+crayon   1.3.4         MIT + file LICENSE        no                true       true
+httpuv   1.4.5.1       GPL (>= 2) | file LICENSE yes               true       true
+jsonlite 1.6           MIT + file LICENSE        yes               true       true
+later    0.8.0         GPL (>= 2)                yes               true       true
+magrittr 1.5           MIT + file LICENSE        no                true       true
+plumber  0.4.6         MIT + file LICENSE        no                false      false
+promises 1.0.1         MIT + file LICENSE        yes               true       true
+R6       2.4.0         MIT + file LICENSE        no                true       true
+Rcpp     1.0.0         GPL (>= 2)                yes               true       true
+rlang    0.3.1         GPL-3                     yes               true       true
+stringi  1.3.1         file LICENSE              yes               true       true
+
+To complete this operation, execute this command without the --dryrun flag. You will need to include the --transaction-id=1506 flag.
+
+```
+
+<aside>
+Example of adding `plumber` to the package set containing `xgboost` and `shiny` using RStudio Package Manager
+</aside>
+
+
+To update all of the packages, repeat steps 1-5 above, starting with a new frozen repository in step 1.
+
+```
+rstudio-pm: $ ./bin/rspm add --packages=plumber --source=validated --dryrun             
+This action will add the following packages:
+
+Name     Version  Path License                   Needs Compilation Dependency Already Available
+BH       1.69.0-1      BSL-1.0                   no                true       true
+crayon   1.3.4         MIT + file LICENSE        no                true       true
+httpuv   1.4.5.1       GPL (>= 2) | file LICENSE yes               true       true
+jsonlite 1.6           MIT + file LICENSE        yes               true       true
+later    0.8.0         GPL (>= 2)                yes               true       true
+magrittr 1.5           MIT + file LICENSE        no                true       true
+plumber  0.4.6         MIT + file LICENSE        no                false      false
+promises 1.0.1         MIT + file LICENSE        yes               true       true
+R6       2.4.0         MIT + file LICENSE        no                true       true
+Rcpp     1.0.0         GPL (>= 2)                yes               true       true
+rlang    0.3.1         GPL-3                     yes               true       true
+stringi  1.3.1         file LICENSE              yes               true       true
+
+To complete this operation, execute this command without the --dryrun flag. You will need to include the --transaction-id=1506 flag.
+```
+
+<aside>
+Example of updating the `xgboost` and `shiny` set from December 18th, 2018 to March 3rd, 2019 using RStudio Package Manager.
+</aside>
+
+### User Steps: Accessing the Validated Set
+
+There are three options for accessing the set of validated packages:
+
+1. If you are using a **Docker container**, add a line to install the available packages from the internal repository:
+
+```{bash eval=FALSE, echo=TRUE}
+FROM ubuntu
+...
+RUN R -e 'options(repos = c(CRAN = "https://r-pkgs.example.com/validated")); install.packages(available.packages()[,"Package"])'
+```
+
+2. If you are creating a shared environment for **multiple users**, then set the repo option in the `Rprofile.site` to point at the internal repository, and optionally install the available packages. For more details, refer to the [shared baseline](./shared.html) strategy, replacing the generic frozen repository with your validated internal repository.
+
+```{bash eval=FALSE, echo=TRUE}
+# after installing R from source
+# set the repo option in Rprofile.site
+sudo echo 'options(repos = c(CRAN = "https://r-pkgs.example.com/validated"))' > R_HOME/etc/Rprofile.site
+
+# optionally, install the packages
+sudo R_HOME/bin/R -e 'install.packages(available.packages()[,"Package"])'
+```
+
+3. If you are **an individual** working on a specific project, you can use the `renv` package to create an isolated project environment and library associated with the validated package set:
+
+```{r eval=FALSE, echo=TRUE}
+# from within your project directory
+renv::init()
+
+# update the environment to use the validated set from the internal repository
+renv::modify() //TODO: Change this!
+
+# install packages like normal
+install.packages(...)
+```
+
+### User Steps: Accessing Updates to the Validated Set
+
+Likewise, there are three options for accessing an update to the set of validated packages:
+
+1. If you are using a **Docker container**, simply rebuild the image.
+
+2. If you are administering a shared environment for **multiple users**, create a new R installation from source, and set the repo option in your `Rprofile.site`. For more details, refer to the [shared baseline](./shared.html) strategy, replacing the generic frozen repository with your validated internal repository.
+
+3. If you are working on a **specific project using `renv`**, first run `renv::snapshot()` to save the current state, and then run `update.packages()` from within your project.
+

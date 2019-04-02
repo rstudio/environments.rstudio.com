@@ -27,7 +27,7 @@ A simple checklist should include RRI:
 - [ ] isolate  
 </aside>
 
-Sound familiar? These steps are the same steps used in the ["snapshot and restore" strategy](./reproduce.html#snapshot-and-restore-using-renv) for reproducing environments. Take a look at the common challenges and questions, as the same concerns apply for production deployments.
+Sound familiar? These steps are the same steps used in the ["snapshot and restore" strategy](./snapshot.html) for reproducing environments. Take a look at the common challenges and questions, as the same concerns apply for production deployments.
 
 # Example Implementations 
 
@@ -169,7 +169,7 @@ In the case where operating systems vary, the source of an R package may vary as
 
 The record, restore, isolate method is designed to transfer a project's dependencies from a development environment to a production environment. It is not necessary for the development environment to manage projects in the same fashion. For example, during development, an R user might share packages across projects by using a global library. During deployment, the specific packages used by the project are recorded. 
 
-In the context of [reproducibility strategies](./reproduce.html), it is possible for the development environment to use a [validated](./reproduce.html#validated) or [shared baseline](./reproduce.html#shared-baselines) strategy, while production deployments for data propducts use the [snapshot](./reproduce.html#snapshot-and-restore-using-renv) strategy.
+In the context of [reproducibility strategies](./reproduce.html), it is possible for the development environment to use a [validated](./validated.html) or [shared baseline](./shared.html) strategy, while production deployments for data propducts use the [snapshot](./snapshot.html) strategy.
 
 ```{r echo=FALSE}
 library(DiagrammeR) 

@@ -1297,18 +1297,28 @@ Use Cases
 <span class="down-arrow">&#x25BE;</span>
 </button>
 <div class="nav-dropdown-content">
-<a href="upgrades.html">Upgrading Packages Safely</a>
-<a href="reproduce.html">Reproduce Environments</a>
-<a href="picking.html">How to Pick a Package</a>
-<a href="validation.html">Validated Environments</a>
-<a href="deploy.html">Production Deployments</a>
-<a href="collaborate.html">Team Collaboration</a>
+<a href="upgrades.html">Safely Upgrade Packages</a>
+<a href="validation.html">Validate your Environment</a>
+<a href="deploy.html">Deploy to Production</a>
+<a href="collaborate.html">Collaborate within a Team</a>
 </div>
 </div>
-<a href="reproduce.html">Strategies</a>
 <div class="nav-dropdown">
 <button class="nav-dropbtn">
-R Packages
+Strategies
+ 
+<span class="down-arrow">&#x25BE;</span>
+</button>
+<div class="nav-dropdown-content">
+<a href="reproduce.html">Strategy Map</a>
+<a href="snapshot.html">Snapshot and Restore</a>
+<a href="shared.html">Shared Baseline</a>
+<a href="validated.html">Validated</a>
+</div>
+</div>
+<div class="nav-dropdown">
+<button class="nav-dropbtn">
+Tools
  
 <span class="down-arrow">&#x25BE;</span>
 </button>
@@ -1316,16 +1326,7 @@ R Packages
 <a href="installation.html">Installing - pak / remotes</a>
 <a href="repositories.html">Repositories - RStudio Package Manager</a>
 <a href="libraries.html">Libraries - renv</a>
-</div>
-</div>
-<div class="nav-dropdown">
-<button class="nav-dropbtn">
-Other Components
- 
-<span class="down-arrow">&#x25BE;</span>
-</button>
-<div class="nav-dropdown-content">
-<a href="R-installation.html">R Installations</a>
+<a href="R-installation.html">R Versions</a>
 <a href="Docker.html">Docker</a>
 <a href="Python.html">Python</a>
 </div>
@@ -1345,22 +1346,92 @@ Other Components
 
 
 <div class="d-article">
-<p>This page falls into the use case section and answers the question “how do I use R for validated work?”. The page should be designed as checklist of things to think about if you are doing validated work, with links to other pages and external resources.</p>
-<p>Validation consists of 2 elements:</p>
+<p>Validating a environmnent consists of 2 elements:</p>
 <ol type="1">
 <li>Confidently recreating the same environment</li>
-<li>Trusting what is in the recreatable environment</li>
+<li>Trusting what is in the environment</li>
 </ol>
-<p>This section will cover things like:</p>
+<p>The first concern, reproducing environments, is covered at length by the different <a href="./reproducible.html">strategies</a> for environment management. The <a href="./validated.html">validated</a> strategy is particularly useful for creating sets of approved packages, though other strategies can be used depending on the context.</p>
+<p>The second concern forces us to answer the question: “Can we trust our environment?”. To trust an environment, we must have confidence that the packages are accurate in their stated purpose. Unfortunately, with <code>r nrow(available.packages(repo=&quot;https://cran.rstudio.com&quot;))</code><a href="#fn1" class="footnote-ref" id="fnref1"><sup>1</sup></a> R packages on CRAN, and more added each day, it is impossible to provide a single list of trusted packages. Every organization, or industry, will need to apply their own judgement in determining whether or not to approve a package. This page presents a set of metrics to help organizations make these determinations.</p>
+<h1 id="quick-links">Quick Links</h1>
+<p>Not what you were expecting? Before continuing, here are some quick links to other resources specific to validation in the clinical pharma space:</p>
 <ul>
-<li>How recording the versions in use is important for validation</li>
-<li>Information on “vetting” a pacakage</li>
-<li>Given a set of packages, how to confirm that they run in R (unit tests, additional tests)</li>
-<li>References to the R in Pharma working group on validation</li>
-<li>Background on how R itself is developed / validated</li>
+<li><a href="https://www.r-project.org/doc/R-FDA.pdf">Base R Validation Document for FDA</a><br />
+</li>
+<li><a href="https://www.rstudio.com/wp-content/uploads/2014/06/RStudio-Commercial-IDE-Validation.pdf">RStudio IDE Validation</a><br />
+</li>
+<li><a href="https://www.pharmar.org/">R in Pharma Validation Hub</a></li>
 </ul>
-<p><a href="https://www.pharmar.org/packages/" class="uri">https://www.pharmar.org/packages/</a></p>
-<p>We’ll also include links to the RStudio validation docs and R validation docs.</p>
+<h1 id="package-characteristics">Package Characteristics</h1>
+<p>The following heuristics can help you judge whether or not a package is stable and useful. As a general rule of thumb, you can use these characteristics as a checklist when evaluating a package. Like any heuristic, there are exceptions - not all stable and useful packages will have everything.</p>
+<h2 id="cran-releases">CRAN Releases</h2>
+<p>The first question to ask when evaluating a package is: “Is the package on CRAN?”. Before CRAN accepts a package, CRAN runs a thorough set of tests to ensure the package will work with other packages on CRAN. Getting a package through these checks ensures the package is stable, and also indicates the package author is serious and motivated. While not every package on CRAN is perfect, a package on CRAN indicates a minimal level of effort and stability. More information on CRAN tests can be reviewed <a href="http://r-pkgs.had.co.nz/tests.html#test-cran">here</a>.</p>
+<aside>
+<p>Many packages include a badge to quickly indicate their current CRAN status. For example, this is the CRAN status badge for ggplot2:</p>
+<a href="https://cran.r-project.org/package=ggplot2"><img src="http://www.r-pkg.org/badges/version/ggplot2" alt="CRAN_Status_Badge" /></a>
+</aside>
+<h2 id="tests">Tests</h2>
+<p>In addition to documentation, a critical indicator that a package is ready for prime time is checking to see whether the <a href="http://r-pkgs.had.co.nz/tests.html">package has tests</a>. Normally, package authors include tests in a directory <a href="https://github.com/tidyverse/ggplot2/tree/master/tests">alongside their package code</a>. Tests help authors check their code for accuracy and prevent them from accidentally breaking code.</p>
+<p>Many packages will go a step further and report <a href="https://covr.r-lib.org/">test coverage</a>. This metric indicates how much of the package code is currently tested. Often package authors will automatically run tests using a continuous integration service and report test status and code coverage through public badges.</p>
+<aside>
+<p>The following badges show the current test coverage and status for ggplot2:</p>
+<a href="https://travis-ci.org/tidyverse/ggplot2"><img src="https://travis-ci.org/tidyverse/ggplot2.svg?branch=master" alt="Travis Build Status" /></a> <a href="https://codecov.io/github/tidyverse/ggplot2?branch=master"><img src="https://img.shields.io/codecov/c/github/tidyverse/ggplot2/master.svg" alt="Coverage Status" /></a>
+</aside>
+<h2 id="documentation">Documentation</h2>
+<p>A critical indicator of a package’s health and usefulness is the level of documentation. R packages provide documentation in a number of formats:</p>
+<p>-<a href="https://github.com/juliasilge/tidytext/blob/master/README.md">Package READMEs</a><br />
+-<a href="https://tidymodels.github.io/parsnip/articles/articles/Regression.html">Package Vignettes</a><br />
+-<a href="https://cran.r-project.org/web/packages/plumber/plumber.pdf">Function References and Help Files</a><br />
+-<a href="https://spark.rstudio.com/">Websites</a><br />
+-<a href="http://www.cookbook-r.com/Graphs/">Books</a><br />
+-<a href="https://www.jstatsoft.org/article/view/v077i01">Journal Papers</a><br />
+-<a href="https://resources.rstudio.com/rstudio-conf-2019/3d-mapping-plotting-and-printing-with-rayshader">Presentations</a><br />
+-<a href="https://resources.rstudio.com/the-essentials-of-data-science/lubridate-cheat-sheet">Cheatsheets</a></p>
+<h2 id="downloads">Downloads</h2>
+<p>The number of times a package is downloaded can help you determine how frequently a package is used. Often packages with many downloads are more stable than packages with fewer downloads. However, take care when using this metric - occasionally a package with fewer downloads may be a newer alternative to a package that has many downloads but is nearing end of life.</p>
+<p>RStudio provides download logs for the popular <a href="./repositories.html#cran-mirrors">CRAN mirror</a> <a href="https://cran.rstudio.com" class="uri">https://cran.rstudio.com</a>. The easiest way to access these logs is through the <a href="https://cranlogs.r-pkg.org/">cranlogs</a> R package and API, or by visiting this <a href="https://hadley.shinyapps.io/cran-downloads/">shiny app</a>.</p>
+<div class="layout-chunk" data-layout="l-body">
+<p><img src="validation_files/figure-html5/unnamed-chunk-1-1.png" width="624" /></p>
+</div>
+<h2 id="dependencies">Dependencies</h2>
+<p>When you consider bringing a package into your environment, it is important to evaluate the package’s dependencies. Evaluating the risk of package dependencies is a complex process, a great place to start is reviewing <a href="https://resources.rstudio.com/rstudio-conf-2019/it-depends-a-dialog-about-dependencies">this talk</a> and the related <a href="https://github.com/jimhester/itdepends">itdepends</a> tool. A few quick tips:</p>
+<ul>
+<li>Package dependencies can be viewed in the package’s Description file and come in a <a href="http://r-pkgs.had.co.nz/description.html#dependencies">few flavors</a>: Suggests, Depends, Imports, and LinkingTo.<br />
+</li>
+<li>Package dependencies describe what a package relies on. For example ggplot2 imports rlang, which means ggplot2 requires rlang in order to work. Reverse dependencies indicate the opposite, ggplot is a reverse dependency for rlang.<br />
+</li>
+<li>You should understand how <a href="./reproduce.html#the-big-risk">package inter-dependencies impact reproducibility</a>.<br />
+</li>
+<li>In addition to depending on other R packages, a package can have system requirements. For example, the rJava package requires a Java installation. You can view system dependencies for a package in the Description file, though a more complete listing is available <a href="https://sysreqs.r-hub.io/">here</a> or in <a href="https://demo.rstudiopm.com/client/#/repos/4/packages/curl">RStudio Package Manager</a>.</li>
+</ul>
+<h2 id="authors">Authors</h2>
+<p>R packages will list the package’s author(s) in the Description file. It can be useful to see the number of authors and their affiliation. For a package on GitHub, it is possible to view the <a href="https://github.com/tidyverse/ggplot2/graphs/contributors">contribution activity</a>. Some packages will include <a href="https://github.com/tidyverse/ggplot2/blob/master/CONTRIBUTING.md">contribution guidelines</a>.</p>
+<p>For packages developed in a public forum, such as GitHub, it can be useful to review the package’s open issues and pull requests. Are the package authors responsive to questions and feedback? Are issues addressed in a timely manner?</p>
+<h2 id="news-releases-and-life-cycle">News, Releases, and Life Cycle</h2>
+<p>Another indicator of a package’s stability is the package’s release history. For packages on GitHub, this <a href="https://github.com/tidyverse/ggplot2/releases">release history</a> is often visible directly. You can also look for the package’s <a href="https://github.com/tidyverse/ggplot2/blob/master/NEWS">NEWS</a> file.</p>
+<p>Unfortunately, just looking at the number of releases or the date of the last release does not paint the whole picture. Some packages will have lots of recent releases because they are rapidly changing. Other packages might not have had a release for quite some time - is this because the package has been abandoned? Or is it because the package is really stable? Considering the package’s <a href="https://www.tidyverse.org/lifecycle/">state of life</a> can help answer these questions.</p>
+<p><a href="https://www.tidyverse.org/lifecycle/#stable"><img src="https://img.shields.io/badge/lifecycle-stable-brightgreen.svg" alt="lifecycle" /></a></p>
+<div class="layout-chunk" data-layout="l-body">
+<p><img src="validation_files/figure-html5/unnamed-chunk-2-1.png" width="624" /></p>
+</div>
+<h2 id="license-restrictions">License Restrictions</h2>
+<p>Finally, when picking a package, you should consider if your organization has any licensing restrictions. Licenses for R packages can be found in their Description file, and many R packages include an additional license file. Organizations with strict licensing requirements might consider an <a href="./repositories.html#internal%20-repositories">internal repository</a> to <a href="https://demo.rstudiopm.com/client/#/stats">track and audit license usage</a>.</p>
+<div class="layout-chunk" data-layout="l-body">
+<p><img src="validation_files/figure-html5/unnamed-chunk-3-1.png" width="624" /></p>
+</div>
+<h1 id="related-work-and-advice">Related Work and Advice</h1>
+<p>A group of pharmaceutical companies has formed a working group aimed at tackling the question of package validation. Take a look at their <a href="https://www.pharmar.org/packages/">preliminary work</a>.</p>
+<p>The <a href="https://ropensci.org">ROpenSci</a> project has created a repository of packages that undergo significant peer review. Additionally, they also sponsor a tool for identifying useful <a href="https://ropensci.org/blog/2017/06/27/packagemetrics/">package metrics</a>.</p>
+<p>Julia Silge has written an excellent series of blog posts expanding on the topic of <a href="https://juliasilge.com/blog/package-guidance/">package selection</a>.</p>
+<p>Finally, CRAN itself maintains a series of <a href="https://cran.r-project.org/web/views/">Task Views</a>, and many websites provide options for searching CRAN, such as <a href="https://www.r-pkg.org/">METACRAN</a>.</p>
+<h1 id="organizing-selected-packages">Organizing Selected Packages</h1>
+<p>If you work in an organization, you may want an easy way to harness tribal knowledge about packages that meet your team’s requirements - or packages that have proven useful time and time again. An easy way to share useful sets of packages is through an <a href="./repositories.html#internal%20-repositories">internal repository</a> which can be created using <a href="https://rstudio.com/products/package-manager">RStudio Package Manager</a>. Internal repositories also provide an easy way to <a href="https://demo.rstudiopm.com/client/#/stats">track package downloads</a>, making it possible to see what packages are actually used by your team!</p>
+<section class="footnotes">
+<hr />
+<ol>
+<li id="fn1"><p>Run on <code>r Sys.Date()</code><a href="#fnref1" class="footnote-back">↩</a></p></li>
+</ol>
+</section>
 <!--radix_placeholder_article_footer-->
 <!--/radix_placeholder_article_footer-->
 </div>
