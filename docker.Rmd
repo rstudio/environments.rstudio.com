@@ -2,6 +2,10 @@
 title: "Docker"
 description: |
   Environment Management with Docker [In Progress]
+output:
+  distill::distill_article:
+    toc: true
+    toc_depth: 3
 ---
 
 Unfortunately, many assume Docker^[Throughout we'll refer to "Docker" as the main container technology, but the concepts apply to other container implementations such as Singularity] containers are synonymous with reproducible. This assumption is often incorrect - Docker's main strength is isolation, not recreation. This section describes how containers can be used as one part of a strategy for reproducible data science work.
@@ -182,7 +186,7 @@ RUN R -e 'install.packages(..., repo = "https://rpkgs.company.com/frozen/repo/12
 ```
 
 <aside>
-Learn more [here](./shared.html)
+Learn more [here](./reproduce.html#shared-baselines)
 </aside>
 
 ```bash
@@ -192,7 +196,7 @@ RUN R -e 'renv::restore()'
 ```
 
 <aside>
-Learn more [here](./snapshot.html)
+Learn more [here](./reproduce.html#snapshot-and-restore-using-renv)
 </aside>
 
 **Using these types of commands ensures the package environment is maintained explicitly and upgraded intentionally, instead of having R packages upgraded as a side effect of an image rebuild (which can be hard to predict, due to the caching involved in image builds).**
@@ -294,3 +298,5 @@ The [Rocker project](https://www.rocker-project.org/), R plus Docker, is a commu
 ### RStudio Images - In Progress, Subject to Change!
 
 RStudio provides a series of images designed to act as base layers for those using [RStudio Launcher](https://solutions.rstudio.com/launcher/overview/). These images contain minimal dependencies, but include standardized R installations compatible with package binaries. The label indicates the OS and R version, e.g `rstudio/r-base:3.4-xenial` is an image with R version 3.4 built on Ubuntu's xenial release.
+
+

@@ -1350,29 +1350,12 @@ Tools
 
 
 <div class="d-article">
-<<<<<<< Updated upstream
-<h1 id="intro">Intro</h1>
-<p>Great data science work should be reproducible. Being able to repeat experiments is the foundation of all science. Reproducing work is also critical for buisness applications: scheduled reporting, team collaboration, project validation. In order to reproduce work done in R, you need to communicate 3 things: your code, your reasoning, and the environment where your code runs. There are many excellent tools and strategies for managing code - Git - and communicating methods - R Markdown. Unfortunately, environments are often neglected.</p>
-<p>This website breaks down common use cases and strategies for solving them. It also explains the components that make up a data science environment. It is important to remember that no single tool will solve every environment challenge. Instead, you or your team should discuss how different tools working together can meet your requirements.</p>
-<div class="layout-chunk" data-layout="l-body-outset">
-<div class="figure"><span id="fig:unnamed-chunk-1"></span>
-<div id="htmlwidget-24df151b2b803f88439c" style="width:624px;height:384px;" class="grViz html-widget"></div>
-<script type="application/json" data-for="htmlwidget-24df151b2b803f88439c">{"x":{"diagram":"\ndigraph boxes_and_circles {\n  node [shape = box]\n  CRAN; GitHub; Internal; \"Local Repository\"\n  \n  node [shape = egg]\n  \"Project 1\"; \"Project 2\"; API; \"Shiny App\"; \"ETL Job\"; \"Shared Project\"; \"Docker Container\"\n  \n  node [shape = oval]\n  Desktop; \"Dev Server\"; Production\n  \n  subgraph legend {\n  node [fillcolor = grey, style = filled, shape = box]\n  \"Package Source / Binary\"\n  node [fillcolor = grey, style = filled, shape = egg]\n  \"Library\"\n  node [fillcolor = grey, style = filled, shape = oval]\n  \"Installed Cache\"\n  \n  \"Package Source / Binary\" -> \"Installed Cache\"\n  \"Installed Cache\" -> \"Library\"\n  }\n\nCRAN->\"Local Repository\"\nGitHub->\"Local Repository\"\nInternal->\"Local Repository\"\n\"Local Repository\" -> Desktop\n\"Local Repository\" -> \"Docker Container\"\n\"Local Repository\" -> \"Dev Server\"\n\"Local Repository\" -> Production\nDesktop -> \"Project 1\"\nDesktop -> \"Project 2\"\nProduction -> API\nProduction -> \"Shiny App\"\nProduction -> \"ETL Job\"\n\"Dev Server\" ->  \"Shared Project\"\n}\n","config":{"engine":"dot","options":null}},"evals":[],"jsHooks":[]}</script>
-<p class="caption">
-Figure 1: R Packages Flow Through An Organization
-</p>
-</div>
-</div>
-<h3 id="signs-you-need-a-better-strategy">3 Signs You Need A Better Strategy</h3>
-<p>While everyone should have a plan for reproducible environments, here are a few anti-patterns to suggest environment management has gone wrong:</p>
-=======
 <blockquote>
 <p>This site, like your environment, is useful even while it is in progress.</p>
 </blockquote>
 <p>Great data science work should be reproducible. Being able to repeat experiments is the foundation of all science. Reproducing work is also critical for buisness applications: scheduled reporting, team collaboration, project validation.</p>
 <p>The purpose of this site is to help you understand the key <a href="./index.html#use-cases"><strong>use cases</strong></a> for reproducible environments, the <a href="./index.html#strategies"><strong>strategies</strong></a> you can use to create them, and the <a href="./index.html#tools"><strong>tools</strong></a> you’ll need to master.</p>
 <p>While everyone should have a plan for reproducible environments, here are a few signs to suggest environment management has gone wrong:</p>
->>>>>>> Stashed changes
 <ul>
 <li>Code that used to run no longer runs, even though the code has not changed.</li>
 <li>You are afraid to upgrade or install a new package, because it might break your code or someone else’s.</li>
@@ -1394,24 +1377,7 @@ Figure 1: R Packages Flow Through An Organization
 <div class="figure"><span id="fig:spectrum"></span>
 <img src="index_files/figure-html5/spectrum-1.png" alt="Strategies for reproducibility fall on a spectrum. One side is not better than the other. Pick based on your goals." width="768" />
 <p class="caption">
-<<<<<<< Updated upstream
-Figure 2: Strategies for reproducibility fall on a spectrum. One side is not better than the other. Pick based on your goals.
-</p>
-</div>
-</div>
-<h3 id="where-to-go-next">Where to go next?</h3>
-<p>Check out <a href="./index.html#getting-started">Getting Started</a> for a strategy that fits most users, or review the <a href="./reproduce.html">full set of strategies</a>. Alternatively, look for your use case: <a href="./upgrades.html">upgrading</a>, <a href="./picking">picking packages</a>, <a href="./validation.html">validation</a>, <a href="./collaborate.html">collaboration</a>, <a href="./deploy.html">production deployments</a>. Interested in exploring the architecture first? Read about the <a href="./index.html#what-makes-up-an-environment">components of an environment</a>.</p>
-<h1 id="getting-started">Getting Started</h1>
-<p>Not everyone needs the same environment management strategy. This section covers an approach that will greatly increase the chances your work can be reproduced. Teams of R users, R users working within an organization, or new R users, may find a <a href="./reproduce.html">different strategy</a> more appropriate.</p>
-<div class="layout-chunk" data-layout="l-body">
-<div class="figure"><span id="fig:unnamed-chunk-2"></span>
-<div id="htmlwidget-1c30991834d77e629c4c" style="width:624px;height:384px;" class="grViz html-widget"></div>
-<script type="application/json" data-for="htmlwidget-1c30991834d77e629c4c">{"x":{"diagram":"\ndigraph renv {\n  graph [layout = dot\n         rankdir = LR]\n  node [shape = box]\n  \"1. Create a Project\"; \"Write Code\"; \"2. Install Packages\"; \"3. Snapshot\"; \"4. Restore\"\n  \n  \"1. Create a Project\"->\"Write Code\"\n  \"Write Code\"->\"2. Install Packages\" \n  \"2. Install Packages\" -> \"Write Code\"\n  \"Write Code\"->\"3. Snapshot\"\n  \"3. Snapshot\"->\"4. Restore\"\n  \n}      \n","config":{"engine":"dot","options":null}},"evals":[],"jsHooks":[]}</script>
-<p class="caption">
-Figure 3: Simple Workflow for Reproducible Environments
-=======
 Figure 1: Strategies for reproducibility fall on a spectrum. One side is not better than the other. Pick based on your goals.
->>>>>>> Stashed changes
 </p>
 </div>
 </div>
@@ -1421,57 +1387,13 @@ Figure 1: Strategies for reproducibility fall on a spectrum. One side is not bet
 <li><p>The <a href="./shared.html">Shared Baseline</a> strategy helps administrators co-ordinate the work of many data scientists, by providing common sets of packages to use across projects. The key to this strategy is determining a consistent set of packages that work together.</p></li>
 <li><p>The <a href="./validated.html">Validated</a> strategy is used when packages must be controlled and meet specific organization standards.</p></li>
 </ol>
-<p>The [strategy map] will help you pick between the different strategies.</p>
+<p>The <a href="./reproduce.html">strategy map</a> will help you pick between the different strategies.</p>
 <h2 id="tools">Tools</h2>
 <p>Data science environments are built from a common set of tools.</p>
 <div class="layout-chunk" data-layout="l-body">
-<<<<<<< Updated upstream
-<pre class="r"><code>
-# You can use install.packages
-install.packages(&#39;ggplot2&#39;)
-
-# But we recommend using pak in interactive settings
-pak::pkg_install(&#39;ggplot2&#39;)
-
-# Or use remotes if you&#39;re working on an automated script or 
-# in a lightweight environment like Docker
-remotes::install_cran(&#39;ggplot2&#39;)</code></pre>
-</div>
-<p>Reference packages just how you normally would!</p>
-<div class="layout-chunk" data-layout="l-body">
-<pre class="r"><code>
-library(ggplot2)</code></pre>
-</div>
-<p>Don’t have access to install packages yourself? <a href="./repositories">Check out repositories</a> to learn more about where packages come from.</p>
-<h3 id="step-3-record-and-communicate-your-environment">Step 3: Record and Communicate your Environment</h3>
-<p>Once you are ready to share your work, or simply “freeze” it for later, you’ll want to make a record of the current environment.</p>
-<div class="layout-chunk" data-layout="l-body">
-<pre class="r"><code>
-renv::snapshot()</code></pre>
-</div>
-<p>This step creates a new file in your project titled <code>renv.lock</code>. The file contains all the information you need to communicate your project’s dependencies <em>at the moment you call <code>snapshot</code></em>. The next time you call <code>snapshot</code>, the file will be updated.</p>
-<p>If you are familiar with version control for your code, we recommend calling <code>snapshot</code> anytime you push or checkin changes to your code. Learn more about <a href="./libraries.html#record-keeping">recording environments with version control</a>. The <code>renv::history</code> and <code>renv::revert</code> commands make it easy to navigate and restore prior versions of the lock file.</p>
-<h3 id="step-4-recreate-the-environment">Step 4: Recreate the Environment</h3>
-<p>This step is where the work above pays off! If you need to share your work with others, or need to return to your work after time on other projects, cash in!</p>
-<div class="layout-chunk" data-layout="l-body">
-<pre class="r"><code>
-# open the project, and use
-renv::restore()</code></pre>
-</div>
-<p><code>renv</code> will recreate the package environment for you, and you’ll be back to working on R code instead of troubleshooting problems!</p>
-<h3 id="wrap-up">Wrap Up</h3>
-<p>This strategy provides an easy way to start managing R packages for your project. There are many other goals and use cases that might motivate a different strategy or a more complex strategy. Look for your use case!</p>
-<h1 id="what-makes-up-an-environment">What makes up an environment?</h1>
-<p>Environments can look different in different organizations, but they are composed of common elements.</p>
-<div class="layout-chunk" data-layout="l-body">
-<div class="figure"><span id="fig:unnamed-chunk-8"></span>
-<div id="htmlwidget-2156176f2e72fb35ff75" style="width:624px;height:384px;" class="grViz html-widget"></div>
-<script type="application/json" data-for="htmlwidget-2156176f2e72fb35ff75">{"x":{"diagram":"digraph env {\n\n graph [layout = dot\n        rankdir = BT]\n node [shape = box]\n \"Operating System\"\n \n node [shape = oval]\n \"R Installation\"; \"System Libraries\"; \"Python Installation\"; \"virtualenv\"; \"Project Library\"\n \n node [shape = egg]\n User\n \n \"Operating System\" -> \"Python Installation\"\n \"Operating System\" -> \"System Libraries\"\n \"Operating System\" -> \"R Installation\"\n \"R Installation\" -> \"Project Library\"\n \"System Libraries\" -> \"Project Library\"\n \"System Libraries\" -> \"virtualenv\"\n virtualenv -> User\n \"Project Library\" -> User\n \"Python Installation\" -> virtualenv\n}\n","config":{"engine":"dot","options":null}},"evals":[],"jsHooks":[]}</script>
-=======
 <div class="figure"><span id="fig:unnamed-chunk-1"></span>
-<div id="htmlwidget-1e44a9553d5a673a5dce" style="width:624px;height:384px;" class="grViz html-widget"></div>
-<script type="application/json" data-for="htmlwidget-1e44a9553d5a673a5dce">{"x":{"diagram":"digraph env {\n\n graph [layout = dot\n        rankdir = BT]\n node [shape = box]\n \"Operating System\"\n \n node [shape = oval]\n \"R Installation\"; \"System Libraries\"; \"Python Installation\"; \"virtualenv\"; \"Project Library\"\n \n node [shape = egg]\n User\n \n \"Operating System\" -> \"Python Installation\"\n \"Operating System\" -> \"System Libraries\"\n \"Operating System\" -> \"R Installation\"\n \"R Installation\" -> \"Project Library\"\n \"System Libraries\" -> \"Project Library\"\n \"System Libraries\" -> \"virtualenv\"\n virtualenv -> User\n \"Project Library\" -> User\n \"Python Installation\" -> virtualenv\n}\n","config":{"engine":"dot","options":null}},"evals":[],"jsHooks":[]}</script>
->>>>>>> Stashed changes
+<div id="htmlwidget-6a2e494cb0d7d39fa87b" style="width:624px;height:384px;" class="grViz html-widget"></div>
+<script type="application/json" data-for="htmlwidget-6a2e494cb0d7d39fa87b">{"x":{"diagram":"digraph env {\n\n graph [layout = dot\n        rankdir = BT]\n node [shape = box]\n \"Operating System\"\n \n node [shape = oval]\n \"R Installation\"; \"System Libraries\"; \"Python Installation\"; \"virtualenv\"; \"Project Library\"\n \n node [shape = egg]\n User\n \n \"Operating System\" -> \"Python Installation\"\n \"Operating System\" -> \"System Libraries\"\n \"Operating System\" -> \"R Installation\"\n \"R Installation\" -> \"Project Library\"\n \"System Libraries\" -> \"Project Library\"\n \"System Libraries\" -> \"virtualenv\"\n virtualenv -> User\n \"Project Library\" -> User\n \"Python Installation\" -> virtualenv\n}\n","config":{"engine":"dot","options":null}},"evals":[],"jsHooks":[]}</script>
 <p class="caption">
 Figure 2: Components of an Environment
 </p>
@@ -1483,18 +1405,7 @@ Figure 2: Components of an Environment
 <li><p><strong>R Installation</strong> Packages like <code>renv</code> will normally document the version of R used by the project. On shared servers, it is common to install multiple versions of R. Organizations using Docker will typically include R in a base image. Learn more <a href="./R-installation.html">best practices for R installations</a>.</p></li>
 <li><p><strong>Other Languages</strong> Often data science projects are multi-lingual. Combining R and Python is the most common use case, and tools like <code>renv</code> have affordances for recording <a href="./python.html">Python</a> dependencies.</p></li>
 <li><p><strong>System Dependencies</strong> R, Python, and their packages can depend on underlying software that needs to be installed on the system. For example, the <code>xml2</code> R package depends on the <code>libxml</code> system package. Learn more about how <a href="./installation.html#system-dependencies">system dependencies are documented and managed</a>.</p></li>
-<<<<<<< Updated upstream
-<li><p><strong>R Packages</strong> Managing and recording R packages makes up the bulk of the website, specifically learn about <a href="./repositories.html">repositories</a>, <a href="./installation.html">installing packages</a>, and <a href="./libraries">managing libraries</a>.</p></li>
-</ul>
-<div class="layout-chunk" data-layout="l-body">
-<div id="htmlwidget-7138ca5d58a7eca931a1" style="width:624px;height:384px;" class="grViz html-widget"></div>
-<script type="application/json" data-for="htmlwidget-7138ca5d58a7eca931a1">{"x":{"diagram":"\ndigraph repos {\n  graph [layout = dot\n         rankdir = LR]\n  node[shape = box]\n  Repository; \"Project Cache\"; \"Project 1 Library\"; \"Project 2 Library\"\n  \n  \"Repository\"-> \"Project Cache\"\n  \"Project Cache\" -> \"Project 1 Library\"\n  \"Project Cache\" -> \"Project 2 Library\"\n}      \n","config":{"engine":"dot","options":null}},"evals":[],"jsHooks":[]}</script>
-</div>
-<ul>
-<li><strong>Other Languages</strong> Often data science projects are multi-lingual. Combining R and Python is the most common use case, and tools like <code>renv</code> have affordances for recording <a href="./python.html">Python</a> dependencies.</li>
-=======
 <li><p><strong>Operating System</strong> Operating system configurations can be documented with tools like Docker or through Infrastructure-as-code solutions like Chef and Puppet. Often this step is managed outside of the data science team. Learn more about <a href="./docker.html">best practices for Docker</a>.</p></li>
->>>>>>> Stashed changes
 </ul>
 <section class="footnotes">
 <hr />

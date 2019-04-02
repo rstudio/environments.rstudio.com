@@ -27,6 +27,7 @@ While everyone should have a plan for reproducible environments, here are a few 
 - You are afraid to upgrade or install a new package, because it might break your code or someone else's.
 - Typing `install.packages` in your environment doesn't do anything, or doesn't do the *right* thing.
 
+
 If you're an individual data scientist, there are two things you should do
 **before you continue any further** with environment management: [learn about
 RStudio Projects](https://r4ds.had.co.nz/workflow-projects.html#rstudio-projects) and
@@ -97,7 +98,7 @@ There are three main strategies covered in this site.
 
 3. The [Validated](./validated.html) strategy is used when packages must be controlled and meet specific organization standards.
 
-The [strategy map] will help you pick between the different strategies.
+The [strategy map](./reproduce.html) will help you pick between the different strategies.
 
 
 ## Tools

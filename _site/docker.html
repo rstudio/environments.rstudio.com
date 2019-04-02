@@ -41,7 +41,7 @@
   <!--radix_placeholder_rmarkdown_metadata-->
   
   <script type="text/json" id="radix-rmarkdown-metadata">
-  {"type":"list","attributes":{"names":{"type":"character","attributes":{},"value":["title","description"]}},"value":[{"type":"character","attributes":{},"value":["Docker"]},{"type":"character","attributes":{},"value":["Environment Management with Docker [In Progress]"]}]}
+  {"type":"list","attributes":{"names":{"type":"character","attributes":{},"value":["title","description","output"]}},"value":[{"type":"character","attributes":{},"value":["Docker"]},{"type":"character","attributes":{},"value":["Environment Management with Docker [In Progress]\n"]},{"type":"list","attributes":{"names":{"type":"character","attributes":{},"value":["distill::distill_article"]}},"value":[{"type":"list","attributes":{"names":{"type":"character","attributes":{},"value":["toc","toc_depth"]}},"value":[{"type":"logical","attributes":{},"value":[true]},{"type":"integer","attributes":{},"value":[3]}]}]}]}
   </script>
   <!--/radix_placeholder_rmarkdown_metadata-->
   <!--radix_placeholder_navigation_in_header-->
@@ -1257,6 +1257,10 @@
   </script>
   
   <!--/radix_placeholder_distill-->
+  <script src="site_libs/htmlwidgets-1.2.1/htmlwidgets.js"></script>
+  <script src="site_libs/viz-0.3/viz.js"></script>
+  <link href="site_libs/DiagrammeR-styles-0.2/styles.css" rel="stylesheet" />
+  <script src="site_libs/grViz-binding-1.0.0/grViz.js"></script>
   <script src="site_libs/jquery-1.11.3/jquery.min.js"></script>
   <script src="site_libs/bowser-1.9.3/bowser.min.js"></script>
   <script src="site_libs/webcomponents-2.0.0/webcomponents.js"></script>
@@ -1346,17 +1350,28 @@ Tools
 
 
 <div class="d-article">
-<p>This page covers how Docker can be used as a component of an environment and best practices for using Docker to complement a package management strategy.</p>
-<h2 id="where-does-docker-fit-in">Where does Docker fit in?</h2>
-<h2 id="best-practices">Best Practices</h2>
+<h3 class="d-toc-header">Table of Contents</h3>
+<nav class="d-toc" id="TOC">
 <ul>
-<li>Whats in a base image?</li>
-<li>Installing packages from a fixed point</li>
-<li>Using Docker with renv</li>
-<li>Why caching Linux package binaries (in a repo) is critical for Docker</li>
+<li><a href="#docker-101-for-data-scientists">Docker 101 for Data Scientists</a></li>
+<li><a href="#docker-reproducible-environments">Docker &amp; Reproducible Environments</a><ul>
+<li><a href="#the-pro-isolation">The Pro: Isolation</a></li>
+<li><a href="#the-trap-reproducibility">The Trap? Reproducibility</a></li>
+</ul></li>
+<li><a href="#what-goes-in-a-container">What goes in a container?</a><ul>
+<li><a href="#base-operating-system">Base Operating System</a></li>
+<li><a href="#system-dependencies">System Dependencies</a></li>
+<li><a href="#r">R</a></li>
+<li><a href="#r-packages">R Packages</a></li>
+<li><a href="#code">Code</a></li>
+<li><a href="#data">Data</a></li>
+</ul></li>
+<li><a href="#dockerhub">DockerHub</a><ul>
+<li><a href="#rocker-project">Rocker Project</a></li>
+<li><a href="#r-hub">R-Hub</a></li>
+<li><a href="#rstudio-images---in-progress-subject-to-change">RStudio Images - In Progress, Subject to Change!</a></li>
+</ul></li>
 </ul>
-<<<<<<< Updated upstream
-=======
 </nav>
 <hr class="d-toc-separator"/>
 <p>Unfortunately, many assume Docker<a href="#fn1" class="footnote-ref" id="fnref1"><sup>1</sup></a> containers are synonymous with reproducible. This assumption is often incorrect - Docker’s main strength is isolation, not recreation. This section describes how containers can be used as one part of a strategy for reproducible data science work.</p>
@@ -1369,8 +1384,8 @@ Tools
 <li><strong>Container</strong> - At a specific moment, you can <em>start</em> a container from the image, which amounts to running a process in the built environment. This is drinking a pint from the batch of beer. For an R user, the process is usually an open ended, interactive R session, OR the execution of a script, shiny app, or rmarkdown rendering.</li>
 </ol>
 <div class="layout-chunk" data-layout="l-body">
-<div id="htmlwidget-b4aeefadd4651ed65d97" style="width:624px;height:384px;" class="grViz html-widget"></div>
-<script type="application/json" data-for="htmlwidget-b4aeefadd4651ed65d97">{"x":{"diagram":"\n  digraph repos {\n  graph [layout = dot\n         rankdir = LR]\n  node[shape = box]\n  Dockerfile Image Container\n  \n  Dockerfile -> Image\n  Image -> Container\n}      \n","config":{"engine":"dot","options":null}},"evals":[],"jsHooks":[]}</script>
+<div id="htmlwidget-118bf1ab1a4dd3697703" style="width:624px;height:384px;" class="grViz html-widget"></div>
+<script type="application/json" data-for="htmlwidget-118bf1ab1a4dd3697703">{"x":{"diagram":"\n  digraph repos {\n  graph [layout = dot\n         rankdir = LR]\n  node[shape = box]\n  Dockerfile Image Container\n  \n  Dockerfile -> Image\n  Image -> Container\n}      \n","config":{"engine":"dot","options":null}},"evals":[],"jsHooks":[]}</script>
 </div>
 <p><strong>Docker is powerful because it allows you to create isolated, explicit environments where specific commands are run.</strong> In our analogy, the benefits are comparable to a group of friends going to a bar and ordering drinks:</p>
 <ol type="1">
@@ -1403,14 +1418,14 @@ If the Dockerfile uses a <a href="./reproduce.html">reproducible</a> strategy fo
 <h2 id="what-goes-in-a-container">What goes in a container?</h2>
 <p>This is where our analogy falls a part a bit. A beer brewer would not usually mix and match parts of the brewing process, a batch is handled from start to finish. In contrast, Docker images can inherit and build off of one another.</p>
 <div class="layout-chunk" data-layout="l-body">
-<div id="htmlwidget-affda0f0dee64d60dd52" style="width:624px;height:384px;" class="grViz html-widget"></div>
-<script type="application/json" data-for="htmlwidget-affda0f0dee64d60dd52">{"x":{"diagram":"\n digraph repos {\n  graph [layout = dot\n         rankdir = BT]\n  node[shape = box]\n  \"Base OS (ubunty xenial)\"; \"System Dependency (libssl)\"; \"R Version (3.5.2)\"; \"R Packages (xgboost)\"; \"Code (report.Rmd)\"\n  \n  node[shape=oval color=grey style=filled]\n  \"Command \n (R -e rmarkdown::render)\"\n  \n  \"Base OS (ubunty xenial)\"->\"System Dependency (libssl)\"\n  \"System Dependency (libssl)\"->\"R Version (3.5.2)\"\n  \"R Version (3.5.2)\"->\"R Packages (xgboost)\"\n  \"R Packages (xgboost)\"->\"Code (report.Rmd)\"\n  \"Code (report.Rmd)\" -> \"Command \n (R -e rmarkdown::render)\"\n}         \n","config":{"engine":"dot","options":null}},"evals":[],"jsHooks":[]}</script>
+<div id="htmlwidget-7a7ccede6e939fd6b2db" style="width:624px;height:384px;" class="grViz html-widget"></div>
+<script type="application/json" data-for="htmlwidget-7a7ccede6e939fd6b2db">{"x":{"diagram":"\n digraph repos {\n  graph [layout = dot\n         rankdir = BT]\n  node[shape = box]\n  \"Base OS (ubunty xenial)\"; \"System Dependency (libssl)\"; \"R Version (3.5.2)\"; \"R Packages (xgboost)\"; \"Code (report.Rmd)\"\n  \n  node[shape=oval color=grey style=filled]\n  \"Command \n (R -e rmarkdown::render)\"\n  \n  \"Base OS (ubunty xenial)\"->\"System Dependency (libssl)\"\n  \"System Dependency (libssl)\"->\"R Version (3.5.2)\"\n  \"R Version (3.5.2)\"->\"R Packages (xgboost)\"\n  \"R Packages (xgboost)\"->\"Code (report.Rmd)\"\n  \"Code (report.Rmd)\" -> \"Command \n (R -e rmarkdown::render)\"\n}         \n","config":{"engine":"dot","options":null}},"evals":[],"jsHooks":[]}</script>
 </div>
 <p>One reason Docker is so successful is because the different layers in a container are cached. In the example above, you can update the step that pulls in your code, without rebuilding the entire image. Only the steps above the code layer would be re-run to create the new image. The order of layers is very important, because it impacts the caching involved and the build time of the image.</p>
 <p>In addition to caching, Docker images can build off of one another. As an example, the first 3 layers could be pulled into their own image:</p>
 <div class="layout-chunk" data-layout="l-body">
-<div id="htmlwidget-01e803b6f79d0b15806d" style="width:624px;height:384px;" class="grViz html-widget"></div>
-<script type="application/json" data-for="htmlwidget-01e803b6f79d0b15806d">{"x":{"diagram":"\n digraph repos {\n  graph [layout = dot\n         rankdir = BT]\n  node[shape = box]\n  \"Base OS (ubunty xenial)\"; \"System Dependency (libssl)\"; \"R Version (3.5.2)\"; \n  \n  node[shape=box color=grey style=filled]\n  \"Save as new base image \n (company/base-r-image:3.5.2-xenial)\"\n  \n  \"Base OS (ubunty xenial)\"->\"System Dependency (libssl)\"\n  \"System Dependency (libssl)\"->\"R Version (3.5.2)\"\n  \"R Version (3.5.2)\"->\"Save as new base image \n (company/base-r-image:3.5.2-xenial)\"\n}         \n","config":{"engine":"dot","options":null}},"evals":[],"jsHooks":[]}</script>
+<div id="htmlwidget-18be45aeef4828a85757" style="width:624px;height:384px;" class="grViz html-widget"></div>
+<script type="application/json" data-for="htmlwidget-18be45aeef4828a85757">{"x":{"diagram":"\n digraph repos {\n  graph [layout = dot\n         rankdir = BT]\n  node[shape = box]\n  \"Base OS (ubunty xenial)\"; \"System Dependency (libssl)\"; \"R Version (3.5.2)\"; \n  \n  node[shape=box color=grey style=filled]\n  \"Save as new base image \n (company/base-r-image:3.5.2-xenial)\"\n  \n  \"Base OS (ubunty xenial)\"->\"System Dependency (libssl)\"\n  \"System Dependency (libssl)\"->\"R Version (3.5.2)\"\n  \"R Version (3.5.2)\"->\"Save as new base image \n (company/base-r-image:3.5.2-xenial)\"\n}         \n","config":{"engine":"dot","options":null}},"evals":[],"jsHooks":[]}</script>
 </div>
 <aside>
 Base images can be saved in a <a href="./docker.html#dockerhub">registry</a>. The name and tags typically convey information about the image’s components and versions.
@@ -1444,14 +1459,14 @@ FROM centos:centos6</code></pre>
 #  install from a versioned repo
 RUN R -e &#39;install.packages(..., repo = &quot;https://rpkgs.company.com/frozen/repo/123&quot;)&#39;</code></pre>
 <aside>
-Learn more <a href="./shared.html">here</a>
+Learn more <a href="./reproduce.html#shared-baselines">here</a>
 </aside>
 <pre class="bash"><code>
 # pull in a manifest file and restore it
 COPY renv.lock ./
 RUN R -e &#39;renv::restore()&#39;</code></pre>
 <aside>
-Learn more <a href="./snapshot.html">here</a>
+Learn more <a href="./reproduce.html#snapshot-and-restore-using-renv">here</a>
 </aside>
 <p><strong>Using these types of commands ensures the package environment is maintained explicitly and upgraded intentionally, instead of having R packages upgraded as a side effect of an image rebuild (which can be hard to predict, due to the caching involved in image builds).</strong></p>
 <h4 id="looking-ahead-package-binaries">Looking ahead: Package Binaries</h4>
@@ -1467,8 +1482,8 @@ Learn more <a href="./snapshot.html">here</a>
 <h4 id="rstudio-or-not">RStudio or not?</h4>
 <p>Related to the question on code is whether or not RStudio should run in the container. There are two available options:</p>
 <div class="layout-chunk" data-layout="l-body">
-<div id="htmlwidget-428db140553091833f5d" style="width:624px;height:384px;" class="grViz html-widget"></div>
-<script type="application/json" data-for="htmlwidget-428db140553091833f5d">{"x":{"diagram":"\n digraph repos {\n  graph [layout = dot\n         rankdir = LR]\n  node[shape = box]\n  \"RStudio \n Code \n R & Packages \n Base Image\"; \n  \n  node[shape = box, style=filled, color=lightgrey]\n  \"RStudio Pro\"; \"RStudio Launcher \n Project Image\"; \"RStudio Launcher \n Project Image \"\n  \n  \"RStudio Pro\"-> \"RStudio Launcher \n Project Image\"\n  \"RStudio Pro\"->\"RStudio Launcher \n Project Image \"\n}         \n","config":{"engine":"dot","options":null}},"evals":[],"jsHooks":[]}</script>
+<div id="htmlwidget-13a23b68499e6608b91c" style="width:624px;height:384px;" class="grViz html-widget"></div>
+<script type="application/json" data-for="htmlwidget-13a23b68499e6608b91c">{"x":{"diagram":"\n digraph repos {\n  graph [layout = dot\n         rankdir = LR]\n  node[shape = box]\n  \"RStudio \n Code \n R & Packages \n Base Image\"; \n  \n  node[shape = box, style=filled, color=lightgrey]\n  \"RStudio Pro\"; \"RStudio Launcher \n Project Image\"; \"RStudio Launcher \n Project Image \"\n  \n  \"RStudio Pro\"-> \"RStudio Launcher \n Project Image\"\n  \"RStudio Pro\"->\"RStudio Launcher \n Project Image \"\n}         \n","config":{"engine":"dot","options":null}},"evals":[],"jsHooks":[]}</script>
 </div>
 <aside>
 Comparison of two architectures for using RStudio with Docker containers
@@ -1498,7 +1513,6 @@ Comparison of two architectures for using RStudio with Docker containers
 <li id="fn3"><p>While this freedom necessitates package management strategies, it is largely this flexibility that make R packages and the R ecosystem great! Package authors can develop rapidly as they see fit.<a href="#fnref3" class="footnote-back">↩</a></p></li>
 </ol>
 </section>
->>>>>>> Stashed changes
 <!--radix_placeholder_article_footer-->
 <!--/radix_placeholder_article_footer-->
 </div>
