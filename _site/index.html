@@ -1392,8 +1392,8 @@ Figure 1: Strategies for reproducibility fall on a spectrum. One side is not bet
 <p>Data science environments are built from a common set of tools.</p>
 <div class="layout-chunk" data-layout="l-body">
 <div class="figure"><span id="fig:unnamed-chunk-1"></span>
-<div id="htmlwidget-6a2e494cb0d7d39fa87b" style="width:624px;height:384px;" class="grViz html-widget"></div>
-<script type="application/json" data-for="htmlwidget-6a2e494cb0d7d39fa87b">{"x":{"diagram":"digraph env {\n\n graph [layout = dot\n        rankdir = BT]\n node [shape = box]\n \"Operating System\"\n \n node [shape = oval]\n \"R Installation\"; \"System Libraries\"; \"Python Installation\"; \"virtualenv\"; \"Project Library\"\n \n node [shape = egg]\n User\n \n \"Operating System\" -> \"Python Installation\"\n \"Operating System\" -> \"System Libraries\"\n \"Operating System\" -> \"R Installation\"\n \"R Installation\" -> \"Project Library\"\n \"System Libraries\" -> \"Project Library\"\n \"System Libraries\" -> \"virtualenv\"\n virtualenv -> User\n \"Project Library\" -> User\n \"Python Installation\" -> virtualenv\n}\n","config":{"engine":"dot","options":null}},"evals":[],"jsHooks":[]}</script>
+<div id="htmlwidget-72ae0757b5b6f2d1674f" style="width:624px;height:384px;" class="grViz html-widget"></div>
+<script type="application/json" data-for="htmlwidget-72ae0757b5b6f2d1674f">{"x":{"diagram":"digraph env {\n\n graph [layout = dot\n        rankdir = BT]\n node [shape = box]\n \"Operating System\"\n \n node [shape = oval]\n \"R Installation\"; \"System Libraries\"; \"Python Installation\"; \"virtualenv\"; \"Project Library\"\n \n node [shape = egg]\n User\n \n \"Operating System\" -> \"Python Installation\"\n \"Operating System\" -> \"System Libraries\"\n \"Operating System\" -> \"R Installation\"\n \"R Installation\" -> \"Project Library\"\n \"System Libraries\" -> \"Project Library\"\n \"System Libraries\" -> \"virtualenv\"\n virtualenv -> User\n \"Project Library\" -> User\n \"Python Installation\" -> virtualenv\n}\n","config":{"engine":"dot","options":null}},"evals":[],"jsHooks":[]}</script>
 <p class="caption">
 Figure 2: Components of an Environment
 </p>

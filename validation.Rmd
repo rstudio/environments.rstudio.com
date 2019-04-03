@@ -13,9 +13,7 @@ The first concern, reproducing environments, is covered at length by the differe
 
 The second concern forces us to answer the question: "Can we trust our
 environment?". To trust an environment, we must have confidence that the
-packages are accurate in their stated purpose. Unfortunately, with `r
-nrow(available.packages(repo="https://cran.rstudio.com"))`^[Run on `r
-Sys.Date()`] R packages on CRAN, and more added each day, it is impossible to
+packages are accurate in their stated purpose. Unfortunately, with `r nrow(available.packages(repo="https://cran.rstudio.com"))`^[Run on `r Sys.Date()`] R packages on CRAN, and more added each day, it is impossible to
 provide a single list of trusted packages. Every organization, or industry, will
 need to apply their own judgement in determining whether or not to approve a
 package. This page presents a set of metrics to help organizations make these
