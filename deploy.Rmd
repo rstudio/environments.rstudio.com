@@ -8,8 +8,6 @@ output:
     toc_depth: 3
 ---
 
-# Intro
-
 Data products built in R, such as dashboards, web applications, reports, and APIs, are increasingly deployed to production. While specific definitions of production can vary, everyone agrees that production content should be stable. This section provides instructions for creating stable environments for production code that uses R.
 
 Production systems come in different shapes and sizes. Some organizations store code in Git and use continuous integration tools like Jenkins to deploy content. Your organizations might use containers and an orchestration tool like Kubernetes. Or, you may use infrastructure-as-code tooling like Chef or Puppet to deploy products onto physical, virtual, or cloud servers. Your notion of production might also include staging, UAT, or QA environments.
@@ -137,13 +135,11 @@ cat renv.lock | grep -A1 "\[R\]" | sed -En "s/Version=(.*)$/\1/p"
 3. Build and deploy the docker image.
 
 
-# Details
-
-## Acceptable Differences Between Dev and Prod
+# Acceptable Differences Between Dev and Prod
 
 Most organizations recognize that production environments should be similar to development environments. Often there are affordances for components that must differ between environments. For example, [differences in data connections](https://db.rstudio.com/best-practices/portable-code/) are common. For R and R packages, there are two things that could acceptably differ between environments: the R patch version and the R package source.
 
-### R Patch Version
+## R Patch Version
 
 R's version scheme has there components, the major version, the minor version, and a patch. For example, R version 3.5.2 has:
 - Major version: 3  
@@ -156,7 +152,7 @@ For the reason above, we recommend that development and production systems have 
 
 **R packages do not follow these same rules, and package versions should match exactly!**
 
-### R Package Source
+## R Package Source
 
 It is possible for development and production environments to have different operating systems. For example, development could be performed on a Windows desktop, while production lives on a Linux server. 
 
@@ -165,7 +161,7 @@ It is possible for development and production environments to have different ope
 In the case where operating systems vary, the source of an R package may vary as well. Using the scenario above, R packages on Windows are typically installed from [pre-compiled CRAN binaries](./repositories.html#binary-packages). When the same packages are restored on a Linux system, they are normally installed from source. This difference will not impact behavior, but it explains why information about the package (name, version, repository) is transferred as opposed to transferring the installed package library.
 
 
-### Do I need to treat Dev like Prod?
+## Do I need to treat Dev like Prod?
 
 The record, restore, isolate method is designed to transfer a project's dependencies from a development environment to a production environment. It is not necessary for the development environment to manage projects in the same fashion. For example, during development, an R user might share packages across projects by using a global library. During deployment, the specific packages used by the project are recorded. 
 
@@ -204,7 +200,7 @@ They can also have varied environments.
 Record and Restore handles these differences in portability.
 </aside>
 
-## Testing and Staging Environments
+# Testing and Staging Environments
 
 The focus so far has been deploying R environments to production systems. With proper record keeping and environment isolation, there is a high chance that deployed content will work as expected. However, for systems that require minimal downtime, it is still imperative to test content in a pre-production system before officially deploying to production. The concept is simple:
 
@@ -239,7 +235,7 @@ While conceptually simple, in practice there are two challenges: Ensuring the st
 
 The specific details would require an entire website all their own, but the good news is that most R users do not need to worry about re-inventing this process. Typically organizations will have a "DevOps" team or strategy in place. The main task is explaining how those strategies should be adapted for data products using R. The adaptation is simply including our *record, restore, and isolate* steps. 
 
-### Example: RStudio Connect with Git, Jenkins, and Chef
+## Example: RStudio Connect with Git, Jenkins, and Chef
 
 In this example, a DevOps team maintains staging and production servers using Chef. They also maintain an enterprise Git application and use Jenkins for continuous integration. The current process relies on Git branches. Branches of a repository are automatically deployed to staging, whereas the master branch is deployed to production. To integrate R based data products:
 
@@ -289,7 +285,7 @@ digraph repos {
 More details are available [here](https://solutions.rstudio.com/deploy/deploy)
 
 
-## Environment Upgrades
+# Environment Upgrades
 
 In production, one does not simply upgrade packages or system dependencies! These tips can enable successful maintenance of your production system overtime:
 
@@ -297,7 +293,7 @@ In production, one does not simply upgrade packages or system dependencies! Thes
 - *R Versions*: New R versions should be **added instead of upgrading R**. Production systems must have multiple versions of R. As content is updated and redeployed, old versions of R will become less used and can eventually be removed. In order to accomplish this goal, **R should be installed from source**, not from a system repository using `apt` or `yum`. See [R Installations](./R-installation.html) for details.
 - *System Dependencies*: System dependencies such as shared objects, compilers, or even the operating system are updated less frequently. Normally, these components are stable or strictly backwards compatible within an operating system release. These components should be updated in a staging environment. Often, major updates will require rebuilding R and redeploying content. For limited downtime, we recommend creating a clone of production, applying the update, and redeploying content. Once complete, swap the DNS records for this clone with production. Alternatively, this is an area where [Docker containers](./docker.html) are useful, because they tend to isolate the entire system environment per data product. This means system dependencies can be updated individually for each data product, instead of all at once.
 
-## Shiny in Production
+# Shiny in Production
 
 This content focuses on the steps needed to manage R dependencies in production. There are important considerations for deploying code to production, such as testing, performance optimization, and data security. These questions are especially relevant for shiny applications, which are the most popular R data product used in production. Guidelines for approaching these critical steps is available [here](https://kellobri.github.io/shiny-prod-book/).
 
