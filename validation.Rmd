@@ -1,14 +1,14 @@
 ---
 title: "Validation"
 description: |
-  Using R for Validated Work [In Progress]
+  Using R for Validated Work
 ---
 
 Validating a environmnent consists of 2 elements:
 
 1. Confidently recreating the same environment
 2. Trusting what is in the environment
-
+  
 The first concern, reproducing environments, is covered at length by the different [strategies](./reproducible.html) for environment management. The [validated](./validated.html) strategy is particularly useful for creating sets of approved packages, though other strategies can be used depending on the context.
 
 The second concern forces us to answer the question: "Can we trust our

@@ -1387,8 +1387,8 @@ A simple checklist should include RRI:<br />
 <p>These steps are the same steps used in the <a href="./snapshot.html">“snapshot and restore” strategy</a> for reproducing environments. The following two sections provide example steps for implementing this process. These examples are not exhaustive, other processes can work, but they should meet the key requirements of record, restore, and isolate.</p>
 <h2 id="example-rstudio-connect">Example: RStudio Connect</h2>
 <div class="layout-chunk" data-layout="l-body">
-<div id="htmlwidget-d814bf9e2fe9259a5af7" style="width:624px;height:384px;" class="grViz html-widget"></div>
-<script type="application/json" data-for="htmlwidget-d814bf9e2fe9259a5af7">{"x":{"diagram":"\ndigraph repos {\n  graph [layout = dot\n         rankdir = LR]\n  node[shape = box]\n  \"Dev\"; \"Connect\";\n  \n  node[fillcolor = grey, style = filled, shape = oval]\n  \"Manifest\"; R; \"Package Environment\"\n  \n  node[shape = egg, fillcolor = white]\n  Record; Restore; Isolate\n  \n  \n   Dev -> \"Manifest\"\n   Manifest -> Record\n   \"Manifest\" -> Connect\n   Connect -> R\n   Connect -> Restore\n   R -> \"Package Environment\"\n   Isolate -> \"Package Environment\"\n}      \n","config":{"engine":"dot","options":null}},"evals":[],"jsHooks":[]}</script>
+<div id="htmlwidget-60fbb630dfc9684f4148" style="width:624px;height:384px;" class="grViz html-widget"></div>
+<script type="application/json" data-for="htmlwidget-60fbb630dfc9684f4148">{"x":{"diagram":"\ndigraph repos {\n  graph [layout = dot\n         rankdir = LR]\n  node[shape = box]\n  \"Dev\"; \"Connect\";\n  \n  node[fillcolor = grey, style = filled, shape = oval]\n  \"Manifest\"; R; \"Package Environment\"\n  \n  node[shape = egg, fillcolor = white]\n  Record; Restore; Isolate\n  \n  \n   Dev -> \"Manifest\"\n   Manifest -> Record\n   \"Manifest\" -> Connect\n   Connect -> R\n   Connect -> Restore\n   R -> \"Package Environment\"\n   Isolate -> \"Package Environment\"\n}      \n","config":{"engine":"dot","options":null}},"evals":[],"jsHooks":[]}</script>
 </div>
 <p><a href="https://rstudio.com/products/connect">RStudio Connect</a> is a production ready publishing platform for data products, that <em>automatically implements these steps</em> when users publish content. If you’re using RStudio Connect, you don’t need to manually manage this process. Here is what happens when a data product is deployed:</p>
 <ol type="1">
@@ -1400,8 +1400,8 @@ A simple checklist should include RRI:<br />
 <h2 id="example-renv-and-docker">Example: <code>renv</code> and Docker</h2>
 <p>In this example, a Docker container is used to isolate the data product, and <code>renv</code> is used to restore the appropriate package environment. More details are available for using <a href="./docker.html">R with Docker here</a>.</p>
 <div class="layout-chunk" data-layout="l-body">
-<div id="htmlwidget-72d79729266da654c0d5" style="width:624px;height:384px;" class="grViz html-widget"></div>
-<script type="application/json" data-for="htmlwidget-72d79729266da654c0d5">{"x":{"diagram":"\ndigraph repos {\n  graph [layout = dot\n         rankdir = LR]\n  node[shape = box]\n  Dev; Prod\n  \n  node[fillcolor = grey, style = filled, shape = oval]\n  Lockfile; Image; \"renv::restore\"\n  \n  node[shape = egg, fillcolor = white]\n  Record; Restore; Isolate\n  \n  \n   Dev -> Lockfile\n   Lockfile -> Record\n   Lockfile -> Prod\n   Prod -> Image\n   Image -> Isolate\n   Image -> \"renv::restore\"\n   Restore -> \"renv::restore\"\n}      \n","config":{"engine":"dot","options":null}},"evals":[],"jsHooks":[]}</script>
+<div id="htmlwidget-f5c49df38afa569924d9" style="width:624px;height:384px;" class="grViz html-widget"></div>
+<script type="application/json" data-for="htmlwidget-f5c49df38afa569924d9">{"x":{"diagram":"\ndigraph repos {\n  graph [layout = dot\n         rankdir = LR]\n  node[shape = box]\n  Dev; Prod\n  \n  node[fillcolor = grey, style = filled, shape = oval]\n  Lockfile; Image; \"renv::restore\"\n  \n  node[shape = egg, fillcolor = white]\n  Record; Restore; Isolate\n  \n  \n   Dev -> Lockfile\n   Lockfile -> Record\n   Lockfile -> Prod\n   Prod -> Image\n   Image -> Isolate\n   Image -> \"renv::restore\"\n   Restore -> \"renv::restore\"\n}      \n","config":{"engine":"dot","options":null}},"evals":[],"jsHooks":[]}</script>
 </div>
 <ol type="1">
 <li><p>In the development environment, create a <code>renv.lock</code> file for the project by running <code>renv::snapshot()</code>. The lock file records the version of the R packages in use. Commit this lock file alongside the code.</p></li>
@@ -1439,8 +1439,8 @@ cat renv.lock | grep -A1 &quot;\[R\]&quot; | sed -En &quot;s/Version=(.*)$/\1/p&
 <li>If everything works as expected, re-run the steps to deploy the data product into production.</li>
 </ol>
 <div class="layout-chunk" data-layout="l-body">
-<div id="htmlwidget-938332baf1573e5e9c46" style="width:624px;height:384px;" class="grViz html-widget"></div>
-<script type="application/json" data-for="htmlwidget-938332baf1573e5e9c46">{"x":{"diagram":"\ndigraph repos {\n  graph [layout = dot\n        rankdir = LR]\n  \n  \n  node[shape = box]\n  \"Dev\"\n  \n  node[fillcolor = grey, style = filled]\n  \"Staging\"; \"Prod\"\n  \n  Dev -> Staging\n  Staging -> Prod\n}      \n","config":{"engine":"dot","options":null}},"evals":[],"jsHooks":[]}</script>
+<div id="htmlwidget-1e52b976fa212c8ccdf2" style="width:624px;height:384px;" class="grViz html-widget"></div>
+<script type="application/json" data-for="htmlwidget-1e52b976fa212c8ccdf2">{"x":{"diagram":"\ndigraph repos {\n  graph [layout = dot\n        rankdir = LR]\n  \n  \n  node[shape = box]\n  \"Dev\"\n  \n  node[fillcolor = grey, style = filled]\n  \"Staging\"; \"Prod\"\n  \n  Dev -> Staging\n  Staging -> Prod\n}      \n","config":{"engine":"dot","options":null}},"evals":[],"jsHooks":[]}</script>
 </div>
 <aside>
 Staging and Production should be identical clones!
@@ -1458,8 +1458,8 @@ Staging and Production should be identical clones!
 <li><p>The user or admin can merge the branch, triggering a deployment to the production server.</p></li>
 </ol>
 <div class="layout-chunk" data-layout="l-page">
-<div id="htmlwidget-63860def31932e393cde" style="width:624px;height:384px;" class="grViz html-widget"></div>
-<script type="application/json" data-for="htmlwidget-63860def31932e393cde">{"x":{"diagram":"\ndigraph repos {\n  graph [layout = dot\n        rankdir = LR]\n  \n  \n  node[shape = box]\n  \"Dev\"; \"Git Branch\"; \"Jenkins\"; \"Connect Staging\"; \"Git Master\"; \"Connect Prod\"; \"Jenkins \"\n  \n  node[fillcolor = grey, style = filled]\n  \"Dependency Manifest\"; \"Code\"\n  \n  node[fillcolor = grey, style = filled, shape = oval]\n  Approval\n  \n  Dev -> \"Dependency Manifest\"\n  Dev -> \"Code\"\n  \"Code\" -> \"Git Branch\"\n  \"Dependency Manifest\" -> \"Git Branch\"\n  \"Git Branch\" -> \"Jenkins\"\n  \"Jenkins\" -> \"Connect Staging\"\n  \"Connect Staging\" -> Approval\n  Approval -> \"Git Master\"\n  \"Git Master\" -> \"Jenkins \"\n  \"Jenkins \" -> \"Connect Prod\" \n}      \n","config":{"engine":"dot","options":null}},"evals":[],"jsHooks":[]}</script>
+<div id="htmlwidget-b289eddd8a8fb9d705c1" style="width:624px;height:384px;" class="grViz html-widget"></div>
+<script type="application/json" data-for="htmlwidget-b289eddd8a8fb9d705c1">{"x":{"diagram":"\ndigraph repos {\n  graph [layout = dot\n        rankdir = LR]\n  \n  \n  node[shape = box]\n  \"Dev\"; \"Git Branch\"; \"Jenkins\"; \"Connect Staging\"; \"Git Master\"; \"Connect Prod\"; \"Jenkins \"\n  \n  node[fillcolor = grey, style = filled]\n  \"Dependency Manifest\"; \"Code\"\n  \n  node[fillcolor = grey, style = filled, shape = oval]\n  Approval\n  \n  Dev -> \"Dependency Manifest\"\n  Dev -> \"Code\"\n  \"Code\" -> \"Git Branch\"\n  \"Dependency Manifest\" -> \"Git Branch\"\n  \"Git Branch\" -> \"Jenkins\"\n  \"Jenkins\" -> \"Connect Staging\"\n  \"Connect Staging\" -> Approval\n  Approval -> \"Git Master\"\n  \"Git Master\" -> \"Jenkins \"\n  \"Jenkins \" -> \"Connect Prod\" \n}      \n","config":{"engine":"dot","options":null}},"evals":[],"jsHooks":[]}</script>
 </div>
 <p>More details are available <a href="https://solutions.rstudio.com/deploy/deploy">here</a>.</p>
 <h1 id="acceptable-differences">Acceptable Differences</h1>

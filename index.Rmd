@@ -13,7 +13,7 @@ library(DiagrammeR)
 > This site, like your environment, is useful even while it is in progress.
 
 Great data science work should be reproducible. Being able to repeat experiments
-is the foundation of all science. Reproducing work is also critical for buisness
+is the foundation of all science. Reproducing work is also critical for business
 applications: scheduled reporting, team collaboration, project validation. 
 
 The purpose of this site is to help you understand the key [**use

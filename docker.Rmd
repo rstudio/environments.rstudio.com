@@ -80,7 +80,7 @@ A data science container for R will contain six fundamental components:
 5. [Code](./docker.html#code)
 6. [Data](./docker/html#data)
 
-Docker images can inherit and build off of one another, allowing these six components to be layerd together to form a complete image that inherits components from earlier base images.
+Docker images can inherit and build off of one another, allowing these six components to be layers together to form a complete image that inherits components from earlier base images.
 
 ```{r}
 grViz("
@@ -149,7 +149,7 @@ FROM ubuntu:xenial
 FROM centos:centos6
 ```
 
-This layer is the least likely to change, and ios normally the "bottom" layer. For reproducibility, the Dockerfile should tag the desired release of the operating system.
+This layer is the least likely to change, and is normally the "bottom" layer. For reproducibility, the Dockerfile should tag the desired release of the operating system.
 
 ### System Dependencies
 
@@ -157,7 +157,7 @@ R itself requires a number of system libraries in order to run, and a further se
 
 In addition to the requirements for R, R packages often depend on system libraries. These dependencies can be determined manually by looking at the package's Description file, or automatically using [RStudio Package Manager](//TODO: link to admin guide on sys reqs) or the [`sysreq` R package](https://github.com/r-hub/sysreqs).
 
-The Dockerfile steps to install system libraries for R and system libraries for R packages are best separated. This separation allows you to change the two lists independently without reinstalling everything. 
+The Dockerfile steps to install system libraries for R and system libraries for R packages are best separated. This separation allows you to change the two lists independently without re-installing everything. 
 
 ```bash
 FROM ubuntu:xenial
@@ -306,7 +306,7 @@ for installing the appropriate database drivers are added to the Dockerfile.
 
 ## Example Registries
 
-This final section provides a quick list of references to projects using R and Docker. These projects can be useful as a way to source images for your own work, or serve as a catalogue of Dockerfiles that can be tweaked, copied, or extended. 
+This final section provides a quick list of references to projects using R and Docker. These projects can be useful as a way to source images for your own work, or serve as a catalog of Dockerfiles that can be tweaked, copied, or extended. 
 
 **Keep in mind, each project has a different goal and context. R users new to Docker should take care to understand why the project exists before using a project as the basis for new work.**
 

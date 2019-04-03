@@ -19,7 +19,7 @@ environment. This strategy is appropriate if you require:
 - security audits  
 
 Please refer to the section ["package
-selection"](./picking.html) for more ideas on how to arrive at an approved set of
+selection"](./validation.html) for more ideas on how to arrive at an approved set of
 packages. Once a set is determined, this strategy ensures users accurately use
 those packages.
 
