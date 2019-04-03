@@ -8,17 +8,19 @@ output:
     toc_depth: 3
 ---
 
-Unfortunately, many assume Docker^[Throughout we'll refer to "Docker" as the main container technology, but the concepts apply to other container implementations such as Singularity] containers are synonymous with reproducible. This assumption is often incorrect - Docker's main strength is isolation, not recreation. This section describes how containers can be used as one part of a strategy for reproducible data science work.
+Docker is a large topic. This site focuses on how Docker relates to reproducible environments, specifically environments for R. R users and admins should be familiar with four key concepts: Dockerfiles, Images, Registries, and Containers. Then they should focus on the layers required in an image for R.
 
 ## Docker 101 for Data Scientists
 
-This may be a poor^[pun intended] analogy, but computing in containers can be compared to brewing and drinking a beer. You start with a recipe that describes all the ingredients you'll need. From the recipe, you make a batch of the beer. The batch is stored, ready for use. Finally, on specific occasions, you can pour a glass of beer and drink it. 
+Computing in containers can be compared to brewing and drinking a beer. You start with a recipe that describes all the ingredients you'll need. From the recipe, you make a batch of the beer. The batch is stored, ready for use. Finally, on specific occasions, you can pour a glass of beer and drink it. 
 
 In Docker, we have:
 
 1. **Dockerfile** - Describes the steps needed to create an environment. This is the recipe.
 2. **Image** - When you execute the steps in a Dockerfile, you _build_ the Dockerfile into an image which contains the environment you described. This is the batch of beer.
-3. **Container** - At a specific moment, you can _start_ a container from the image, which amounts to running a process in the built environment. This is drinking a pint from the batch of beer. For an R user, the process is usually an open ended, interactive R session, OR the execution of a script, shiny app, or rmarkdown rendering.
+3. **Registry** - Stores built images, so that others can use them. This is akin to a liquor store.
+4. **Container** - At a specific moment, you can _start_ a container from the image, which amounts to running a process in the built environment. This is drinking a pint from the batch of beer. 
+
 
 
 ```{r}
@@ -29,6 +31,12 @@ grViz("
          rankdir = LR]
   node[shape = box]
   Dockerfile Image Container
+  
+  node[shape = box, style=filled, color=grey]
+  Registry 
+  
+  Image -> Registry
+  Registry -> Image
   
   Dockerfile -> Image
   Image -> Container
@@ -42,51 +50,37 @@ grViz("
 2. The bartender (a server, in computer terms), is decoupled from the beer we want - we don't have to go to the brewer and brew a new beer each time we want a pint.
 3. As a result, the same bartender can offer many different types of beers 
 
-Like every analogy, this one has limitations. However, the mental model can help answer real questions about Docker. For example, many R users new to Docker are tempted to treat a container like a virtual machine - starting a container and then installing software. In the mental model, this sequence is comparable to pouring a beer and then adding in ingredients as you drink it...possible, but defeating many of the original benefits!
+For R users and admins, it is important to understand that containers are tied to a process. This is the key difference in most user's experience between a container and a virtual machine. For R users, the process that is running can fall into two buckets:
 
-## Docker & Reproducible Environments
-
-### The Pro: Isolation
-
-For data science work, the most common pattern is to create a container for a project. In this pattern, the container helps create a reproducible environment by creating an isolated environment for the project. Normally, the dependencies of the project are explicitly stated in a Dockerfile. The code for the project then executes in that environment. *With containers, you don't have to worry about one project's dependencies interfering with another*. If project A needs R version 3.4 and project B needs 3.5, they can both co-exist in separate containers.
-
-### The Trap? Reproducibility
-
-Recall, a Dockerfile is like a recipe. Have you ever used the same recipe, but gotten different results? The same problem can occur with containers. Consider a Dockerfile that includes this line:
-
-```
-RUN R -e 'install.packages("shiny")
-```
-<aside>
-Dockerfiles with this line can  return different versions of a package whenever the image has to be rebuilt.
-</aside>
-
-If you build this Dockerfile into an image in June 2018, you would end up with an image containing shiny version 1.1.0. Like a pint poured from a batch of beer, any containers started from this image would use version 1.1.0.
-
-However, if rebuild the Dockerfile in December 2018, this step could be re-triggered and this time `install.packages` would give you shiny version 1.2.0! The recipe is the same, but the ingredients changed, leading to a different result.
-
-Many organizations address part of this problem by retaining images. The
-motivation is simple, if you keep every single image, you can re-run them
-anytime. While retaining images is possible, it comes with two challenges.
-First, retaining all images ever used takes up significant storage space. Second, simply retaining images doesn't address a key problem: updating one component of an image can have the unintended side-affect of upgrading other components.
-
-In practice, a solution to this problem is replacing `install.packages` with a [reproducible installation command](./reproduce.html). For example, the Dockerfile could contain the line:
-
-```
-RUN R -e 'install.packages("shiny", repo = "https://r-pkgs.example.com/cran/123")
+```{r fig.cap="Two Types of Containers for Data Science"}
+library(gt)
+library(dplyr)
+library(tidyr)
+procs <- data.frame(
+  dev = c("Create an analysis in a controlled environment", "RStudio", "IDE Session", "Changes are Saved"),
+  prod = c("Run a production model", "R", "R -e shiny::runApp", "Read Only"),
+  rowname_col = c("Use Case", "Runtime Entrypoint", "Example Process", "Code & Environment")
+  , stringsAsFactors = FALSE
+)
+  
+gt(procs, rowname_col = "rowname_col") %>% 
+  cols_label(dev = "Development Session", prod = "Production Runtime")
+  
 ```
 
-<aside>
-If the Dockerfile uses a [reproducible](./reproduce.html) strategy for package installs, rebuilding will result in the same package versions
-</aside>
 
-Here, the `install.packages` command references a frozen repository, ensuring anytime the command is run the same packages are installed. This strategy gives you a more reliable recipe: you can rebuild the Dockerfile with confidence, allowing you to make updates to individual components safely.
+## Layers in a Container
 
-You may be wondering about the other instructions in the Dockerfile. What about the lines that install system requirements or the version of R itself? Normally the versions of these components are encoded in the base image or operating system, ensuring they are safely reproduced. For example, system dependencies like `libxml` are ABI compatible within an OS release. A Dockerfile that is rebuilt using the same OS version, captured in the base image's label and tag, will include a compatible `libxml` install. R packages require special care because they change so frequently, on unpredictable schedules, with varying degrees of backwards compatibility.^[While this freedom necessitates package management strategies, it is largely this flexibility that make R packages and the R ecosystem great! Package authors can develop rapidly as they see fit.]
+A data science container for R will contain six fundamental components:
 
-## What goes in a container?
+1. [Base Operating System](./docker.html#base-operating-system)
+2. [System Dependencies](./docker.html#system-dependencies)
+3. [R](./docker.html#R)
+4. [R Packages](./docker.html#r-packages)
+5. [Code](./docker.html#code)
+6. [Data](./docker/html#data)
 
-This is where our analogy falls a part a bit. A beer brewer would not usually mix and match parts of the brewing process, a batch is handled from start to finish. In contrast, Docker images can inherit and build off of one another. 
+Docker images can inherit and build off of one another, allowing these six components to be layerd together to form a complete image that inherits components from earlier base images.
 
 ```{r}
 grViz("
@@ -108,7 +102,7 @@ grViz("
 ")
 ```
 
-One reason Docker is so successful is because the different layers in a container are cached. In the example above, you can update the step that pulls in your code, without rebuilding the entire image. Only the steps above the code layer would be re-run to create the new image. The order of layers is very important, because it impacts the caching involved and the build time of the image.
+One reason Docker is so successful is because the different layers in a container are cached. In the example above, you can layer with code, without rebuilding the entire image. Only the steps "above" the code layer are re-run to create the updated image. The order of layers is very important, because it impacts the caching involved and the build time of the image.
 
 In addition to caching, Docker images can build off of one another. As an example, the first 3 layers could be pulled into their own image:
 
@@ -141,6 +135,7 @@ FROM company/base-r-image:3.5.2-xenial
 RUN ...
 ```
 
+The following sections will cover each component, with a special emphasis on reproducible environments.
 
 ### Base Operating System
 
@@ -154,29 +149,95 @@ FROM ubuntu:xenial
 FROM centos:centos6
 ```
 
+This layer is the least likely to change, and ios normally the "bottom" layer. For reproducibility, the Dockerfile should tag the desired release of the operating system.
+
 ### System Dependencies
 
 R itself requires a number of system libraries in order to run, and a further set of system libraries are needed if the image will build R from source. See this section for [details](./r-installation.html).
 
 In addition to the requirements for R, R packages often depend on system libraries. These dependencies can be determined manually by looking at the package's Description file, or automatically using [RStudio Package Manager](//TODO: link to admin guide on sys reqs) or the [`sysreq` R package](https://github.com/r-hub/sysreqs).
 
-The Dockerfile steps to install system libraries for R and for R packages are best separated, as the two lists may need to change independently. For instance, R packages are updated more frequently than R - you don't want to rebuild all the layers in order to change one of the top layers!
+The Dockerfile steps to install system libraries for R and system libraries for R packages are best separated. This separation allows you to change the two lists independently without reinstalling everything. 
+
+```bash
+FROM ubuntu:xenial
+# Install system dependencies for R
+RUN apt-get update -qq && \
+    DEBIAN_FRONTEND=noninteractive apt-get install -y \
+    apt-transport-https \
+    build-essential \
+    curl \
+    gfortran \
+    libatlas-base-dev \
+    libbz2-dev \
+    libcairo2 \
+    libcurl4-openssl-dev \
+    libicu-dev \
+    liblzma-dev \
+    libpango-1.0-0 \
+    libpangocairo-1.0-0 \
+    libpcre3-dev \
+    libtcl8.6 \
+    libtiff5 \
+    libtk8.6 \
+    libx11-6 \
+    libxt6 \
+    locales \
+    tzdata \
+    zlib1g-dev
+    
+# Install system dependencies for the tidyverse R packages
+RUN apt-get install -y \
+    make
+    libcurl4-openssl-dev
+    libssl-dev
+    pandoc
+    libxml2-dev
+```
+
+Normally, system dependencies are reproducible within an operating system release. In the example above, the versions of each system dependency are not encoded in the Dockerfile explicitly because apt-get is implicitly providing versions that are known to be stable   for the xenial Ubuntu release. This implicit versioning ensures the system dependencies are reproducible.
 
 ### R
 
 R can be added to a Docker image in one of three ways:
 
-1. Starting from a base image that includes R, for example: [`rstudio/r-base:3.5-xenial`](//TODO). 
+1. Start from a base image that includes R.
 
-2. Building R from source within the image, after adding R's build-time dependencies. See [these instructions](./r-installation.html).
+```
+FROM rstudio/r-base:3.5-xenial
+```
 
-3. Installing R using the system package manager, such as `apt`, `yum`, or `zypper`. **If you do this, be sure to request a specific version**, e.g.  `apt-get install r-base=3.0.2-1precise0` NOT `apt-get install r-base`
+2. Build R from source within an image, after adding R's build-time dependencies. See [these instructions](./r-installation.html).
 
+```bash
+# download a version of R and build from source
+ARG R_VERSION=3.5.2
+RUN mkdir -p /opt/R && \
+    cd /opt/R && \
+    wget https://cran.r-project.org/src/base/R-3/R-${R_VERSION}.tar.gz && \
+    tar zxvf R-${R_VERSION}.tar.gz && \
+    cd R-${R_VERSION}  && \
+    ./configure --prefix=/opt/R/${R_VERSION} --enable-memory-profiling --enable-R-shlib --with-blas --with-lapack && \
+    make && \
+    make install && \
+    rm -rf /opt/R/R-${R_VERSION}.tar.gz && \
+    rm -rf /opt/R/R-${R_VERSION}
+```
+
+3. Install R using the system package manager, such as `apt`, `yum`, or `zypper`. See the [details](https://cran.r-project.org/bin/linux/) specific to your desired OS.
+
+```bash
+# not the recommended approach
+# be sure you request a specific version of 
+RUN apt-get install -y \
+  r-base=3.4.4-1ubuntu1
+```
+ 
 The key in any of the three methods is to be explicit about the version of R you want included in the image. Similar to R packages, being explicit prevents R from being updated as a side-effect of rebuilding the image, and instead ensures R upgrades are intentional.
 
 ### R Packages
 
-R packages are handled in a variety of ways. For quick analysis, some organizations will mount [R libraries](./libraries.html) into running Docker containers. Organizations looking for reproducible environments tend to prefer listing the package installation in the Dockerfile which embeds the packages into the image.
+R packages are handled in a variety of ways. For quick analysis, some organizations will mount [R libraries](./libraries.html) into running Docker containers. Organizations looking for reproducible environments tend to prefer including package installation in the Dockerfile which embeds the packages into the image.
 
 In the latter case, it is helpful to replace the standard `install.packages` command with a command that will return the same packages, regardless of when the Dockerfile is built into an image:
 
@@ -186,7 +247,7 @@ RUN R -e 'install.packages(..., repo = "https://rpkgs.company.com/frozen/repo/12
 ```
 
 <aside>
-Learn more [here](./reproduce.html#shared-baselines)
+Learn more [here](./shared.html)
 </aside>
 
 ```bash
@@ -196,12 +257,10 @@ RUN R -e 'renv::restore()'
 ```
 
 <aside>
-Learn more [here](./reproduce.html#snapshot-and-restore-using-renv)
+Learn more [here](./snapshot.html)
 </aside>
 
 **Using these types of commands ensures the package environment is maintained explicitly and upgraded intentionally, instead of having R packages upgraded as a side effect of an image rebuild (which can be hard to predict, due to the caching involved in image builds).**
-
-#### Looking ahead: Package Binaries
 
 A challenge to adding explicit package installation steps into Dockerfiles is
 the amount of time it takes to compile the Docker images increases dramatically.
@@ -214,60 +273,26 @@ Manager](https://rstudio.com/products/package-manager).
 
 ### Code
 
-Code can be added to an image by:
+Code can be added to an image in three ways:
 
-1. Cloning a Git repository, e.g. `RUN git clone https://git.company.com/jane/project.git`
+1. Cloning a Git repository
+
+```bash
+RUN git clone https://git.company.com/jane/project.git
+```
+
 2. Mounting the files at run time using [Docker volumes](https://docs.docker.com/storage/volumes/)
+
 3. Copying the files into the image with `COPY`
 
 The choice between these three options depends on the intended use of the
-container. If the code will be executed but not changed, e.g. as part of a
-deployed model, option 1 is usually the most reliable with option 3 serving as a
-fallback. If the code will be changed, e.g. the container is being used as a
-development environment, option 2 is the most common. Option 1 is also available
-in this scenario, but the user must commit their changes back to Git **before**
-the container dies, otherwise any changes made in the container will be lost.
+container. If the container is being is used to execute production code, then
+option 1 is usually the most reliable choice, with option 3 serving as a
+fallback. If the container is being used for interactive development, mounting
+in files is the most common, because it ensures the changes to the code are
+persisted even after the docker container ends.
 
-#### RStudio or not?
-
-Related to the question on code is whether or not RStudio should run in the container. There are two available options:
-
-```{r}
-grViz("
- digraph repos {
-  graph [layout = dot
-         rankdir = LR]
-  node[shape = box]
-  'RStudio \n Code \n R & Packages \n Base Image'; 
-  
-  node[shape = box, style=filled, color=lightgrey]
-  'RStudio Pro'; 'RStudio Launcher \n Project Image'; 'RStudio Launcher \n Project Image '
-  
-  'RStudio Pro'-> 'RStudio Launcher \n Project Image'
-  'RStudio Pro'->'RStudio Launcher \n Project Image '
-}         
-")
-```
-
-<aside>
-Comparison of two architectures for using RStudio with Docker containers
-</aside>
-
-1. The first option uses the professional [RStudio Launcher](https://solutions.rstudio.com/launcher/overview/). RStudio is separated from the containers running R, allowing projects and code to be handled independently from RStudio itself. 
-
-2. The second option uses RStudio Open Source Server, and bundles all of RStudio inside of the container alongside the rest of the image components.
-
-**Keep in mind, Docker containers run processes, they are not just
-specifications of an environment.** This makes containers a natural fit for
-running production code. As an example, if your container runs a [plumber
-API](https://rplumber.io), the command executing in the container can just be
-`CMD Rscript -f "plumber::plumb('plumber.R)"`. More care is necessary if you
-plan to use the container as a development environment. In this case, the
-command must start an interactive session, for instance by invoking RStudio, and you
-must be careful to persist any desired changes to code or data outside the
-container! The [RStudio
-Launcher](https://solutions.rstudio.com/launcher/overview/) handles this
-distinction seamlessly.
+A related question is whether or not RStudio should be included in the container. The answer depends on the use of the container: whether the container is being used to execute R code or being used to develop R code. In the first case, RStudio is not necessary. In the second case, RStudio should be involved. There are a variety of architectures for using RStudio with Docker, we recommend learning about the [RStudio Launcher](https://solutions.rstudio.com/launcher/overview/).
 
 ### Data
 
@@ -279,23 +304,23 @@ code executed inside the container might [connect to a
 database](https://db.rstudio.com), in which case you'll want to ensure the steps
 for installing the appropriate database drivers are added to the Dockerfile.
 
-## DockerHub 
+## Example Registries
 
-A concept that was not described in [the introduction](./docker.html#docker-101-for-data-scientists) is the idea of a container **registry**. A registry is a place where images are stored. Registries can be private or public. The largest registry is [DockerHub](https://hub.docker.com/), where users can grab images of all shapes and sizes.
+This final section provides a quick list of references to projects using R and Docker. These projects can be useful as a way to source images for your own work, or serve as a catalogue of Dockerfiles that can be tweaked, copied, or extended. 
 
-If you go searching, you'll find quite a few images to use as the starting point for work in R. A non-exhaustive list of images is described below.
-
-Images in a registry are named and tagged. The name and label together contain information about the image's contents and use.
+**Keep in mind, each project has a different goal and context. R users new to Docker should take care to understand why the project exists before using a project as the basis for new work.**
 
 ### Rocker Project
 
-The [Rocker project](https://www.rocker-project.org/), R plus Docker, is a community driven effort to create a series of self-contained images for R users. These images can often be used almost as "virtual machines". The image labels define their contents, e.g. the `rocker/tidyverse` image includes R and the tidyverse packages. The tag specifies the specific version of R used in the image. These images are all based off of Debian. 
+The [Rocker project](https://www.rocker-project.org/) is a community driven effort to create a series of self-contained images for R development. These images can often be used as "virtual machines". The image labels define their contents, e.g. the `rocker/tidyverse` image includes R and the tidyverse packages. The tag specifies the specific version of R used in the image. These images are all based off of the Debian OS.
 
 ### R-Hub
 
-[R-Hub](https://hub.docker.com/u/rhub) is a project designed to R package authors prepare for [CRAN](https://docs.r-hub.io/#which-platform) checks. As part of the project, R-Hub maintains a series of docker images designed to replicate the environments CRAN uses for testing. The image label includes key descriptions of the environment, for example, `rhub/ubuntu-gcc-release` includes the current R release version built with gcc on Ubuntu.
+[R-Hub](https://hub.docker.com/u/rhub) is a project designed to help R package authors prepare for [CRAN](https://docs.r-hub.io/#which-platform) package checks. As part of the project, R-Hub maintains a series of docker images designed to replicate the environments CRAN uses for testing. The image label includes key descriptions of the environment, for example, `rhub/ubuntu-gcc-release` includes the current R release version built with gcc on Ubuntu.
 
-### RStudio Images - In Progress, Subject to Change!
+### RStudio Images 
+
+> In progress, subject to change
 
 RStudio provides a series of images designed to act as base layers for those using [RStudio Launcher](https://solutions.rstudio.com/launcher/overview/). These images contain minimal dependencies, but include standardized R installations compatible with package binaries. The label indicates the OS and R version, e.g `rstudio/r-base:3.4-xenial` is an image with R version 3.4 built on Ubuntu's xenial release.
 
