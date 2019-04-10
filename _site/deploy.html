@@ -1257,7 +1257,7 @@
   </script>
   
   <!--/radix_placeholder_distill-->
-  <script src="site_libs/htmlwidgets-1.2.1/htmlwidgets.js"></script>
+  <script src="site_libs/htmlwidgets-1.3/htmlwidgets.js"></script>
   <script src="site_libs/viz-0.3/viz.js"></script>
   <link href="site_libs/DiagrammeR-styles-0.2/styles.css" rel="stylesheet" />
   <script src="site_libs/grViz-binding-1.0.0/grViz.js"></script>
@@ -1365,43 +1365,597 @@ Tools
 <li><a href="#r-package-source">R Package Source</a></li>
 </ul></li>
 <li><a href="#environment-upgrades">Environment Upgrades</a></li>
-<li><a href="#shiny-in-production">Shiny in Production</a></li>
 </ul>
 </nav>
 <hr class="d-toc-separator"/>
-<p>Data products built in R, such as dashboards, web applications, reports, and APIs, are increasingly deployed to production. While specific definitions of production can vary, everyone agrees that production content should be stable. This section provides instructions for creating stable environments for production code that uses R.</p>
+<p>Data products built in R, such as dashboards, web applications, reports, and APIs, are increasingly deployed to production. While specific definitions of production can vary, everyone agrees that production content should be stable. Most production systems use a variation of the <a href="./snapshot.html">Snapshot and Restore</a> strategy. Here, we focuse on examples of production systems that apply the snapshot and restore strategy. This page also describes <a href="./deloy.html#testing-and-staging">staging environments</a>, <a href="./acceptable-differences">acceptable differences</a> between development and production environments, and <a href="./environment-upgrades">strategies for upgrading</a> production environments.</p>
+<p>This page focuses on reproducible environments for production content. There are other important concerns for placing R code in production:</p>
+<ul>
+<li><a href="https://happygitwithr.com/">version control</a></li>
+<li><a href="http://r-pkgs.had.co.nz/tests.html">unit testing</a> and <a href="https://rstudio.github.io/shinytest/articles/shinytest.html">integration testing</a></li>
+<li><a href="https://rstudio.github.io/profvis/">performance profiling</a> and <a href="https://rstudio.github.io/shinyloadtest/">load testing</a></li>
+<li><a href="https://db.rstudio.com/best-practices/deployment/">data security</a></li>
+</ul>
 <h1 id="development-to-production">Development to Production</h1>
 <p>Production systems come in different shapes and sizes. Some organizations store code in Git and use continuous integration tools like Jenkins to deploy content. Other organizations might use containers and an orchestration tool like Kubernetes. Or, you may use infrastructure-as-code tooling like Chef or Puppet to deploy products onto physical, virtual, or cloud servers.</p>
 <p>Regardless of the specific implementation, there are three basic steps required to deploy R environments to production:</p>
 <ol type="1">
-<li>In the development environment, the data product’s dependencies should be <strong>recorded</strong>, specifically the version of R and the versions of required R packages.</li>
-<li>In the target (production) environment, the data product’s dependencies should be <strong>restored</strong> using the same versions.</li>
-<li>Once restored, the data product’s environment should be <strong>isolated</strong> from other environments running in production.</li>
+<li>In the development environment, the data product’s dependencies should be <strong>snapshotted</strong>.</li>
+<li>In production, an <strong>isolated</strong> environment should be created for the data product.</li>
+<li>In the isolated environment, the dependencies should be <strong>restored</strong> exactly, with matching versions.</li>
 </ol>
 <aside>
-A simple checklist should include RRI:<br />
-- [ ] record<br />
-- [ ] restore<br />
-- [ ] isolate
+A simple checklist: - [ ] snapshot<br />
+- [ ] isolate - [ ] restore
 </aside>
-<p>These steps are the same steps used in the <a href="./snapshot.html">“snapshot and restore” strategy</a> for reproducing environments. The following two sections provide example steps for implementing this process. These examples are not exhaustive, other processes can work, but they should meet the key requirements of record, restore, and isolate.</p>
+<p>These steps are the heart of the <a href="./snapshot.html">“snapshot and restore” strategy</a> for reproducing environments. The following two examples showcase implementations of this strategy in production systems. These examples are not exhaustive, and you can certainly design other processes. All implementations should meet the key requirements of snapshot, isolate, and restore.</p>
 <h2 id="example-rstudio-connect">Example: RStudio Connect</h2>
 <div class="layout-chunk" data-layout="l-body">
-<div id="htmlwidget-60fbb630dfc9684f4148" style="width:624px;height:384px;" class="grViz html-widget"></div>
-<script type="application/json" data-for="htmlwidget-60fbb630dfc9684f4148">{"x":{"diagram":"\ndigraph repos {\n  graph [layout = dot\n         rankdir = LR]\n  node[shape = box]\n  \"Dev\"; \"Connect\";\n  \n  node[fillcolor = grey, style = filled, shape = oval]\n  \"Manifest\"; R; \"Package Environment\"\n  \n  node[shape = egg, fillcolor = white]\n  Record; Restore; Isolate\n  \n  \n   Dev -> \"Manifest\"\n   Manifest -> Record\n   \"Manifest\" -> Connect\n   Connect -> R\n   Connect -> Restore\n   R -> \"Package Environment\"\n   Isolate -> \"Package Environment\"\n}      \n","config":{"engine":"dot","options":null}},"evals":[],"jsHooks":[]}</script>
+<style>html {
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Helvetica Neue', 'Fira Sans', 'Droid Sans', Arial, sans-serif;
+}
+
+#fjrdanrmam .gt_table {
+  display: table;
+  border-collapse: collapse;
+  margin-left: auto;
+  margin-right: auto;
+  color: #000000;
+  font-size: 16px;
+  background-color: #FFFFFF;
+  /* table.background.color */
+  width: auto;
+  /* table.width */
+  border-top-style: solid;
+  /* table.border.top.style */
+  border-top-width: 2px;
+  /* table.border.top.width */
+  border-top-color: #A8A8A8;
+  /* table.border.top.color */
+}
+
+#fjrdanrmam .gt_heading {
+  background-color: #FFFFFF;
+  /* heading.background.color */
+  border-bottom-color: #FFFFFF;
+}
+
+#fjrdanrmam .gt_title {
+  color: #000000;
+  font-size: 125%;
+  /* heading.title.font.size */
+  padding-top: 4px;
+  /* heading.top.padding */
+  padding-bottom: 1px;
+  border-bottom-color: #FFFFFF;
+  border-bottom-width: 0;
+}
+
+#fjrdanrmam .gt_subtitle {
+  color: #000000;
+  font-size: 85%;
+  /* heading.subtitle.font.size */
+  padding-top: 1px;
+  padding-bottom: 4px;
+  /* heading.bottom.padding */
+  border-top-color: #FFFFFF;
+  border-top-width: 0;
+}
+
+#fjrdanrmam .gt_bottom_border {
+  border-bottom-style: solid;
+  /* heading.border.bottom.style */
+  border-bottom-width: 2px;
+  /* heading.border.bottom.width */
+  border-bottom-color: #A8A8A8;
+  /* heading.border.bottom.color */
+}
+
+#fjrdanrmam .gt_column_spanner {
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #A8A8A8;
+  padding-top: 4px;
+  padding-bottom: 4px;
+}
+
+#fjrdanrmam .gt_col_heading {
+  color: #000000;
+  background-color: #FFFFFF;
+  /* column_labels.background.color */
+  font-size: 16px;
+  /* column_labels.font.size */
+  font-weight: initial;
+  /* column_labels.font.weight */
+  vertical-align: middle;
+  padding: 10px;
+  margin: 10px;
+}
+
+#fjrdanrmam .gt_sep_right {
+  border-right: 5px solid #FFFFFF;
+}
+
+#fjrdanrmam .gt_group_heading {
+  padding: 8px;
+  color: #000000;
+  background-color: #FFFFFF;
+  /* row_group.background.color */
+  font-size: 16px;
+  /* row_group.font.size */
+  font-weight: initial;
+  /* row_group.font.weight */
+  border-top-style: solid;
+  /* row_group.border.top.style */
+  border-top-width: 2px;
+  /* row_group.border.top.width */
+  border-top-color: #A8A8A8;
+  /* row_group.border.top.color */
+  border-bottom-style: solid;
+  /* row_group.border.bottom.style */
+  border-bottom-width: 2px;
+  /* row_group.border.bottom.width */
+  border-bottom-color: #A8A8A8;
+  /* row_group.border.bottom.color */
+  vertical-align: middle;
+}
+
+#fjrdanrmam .gt_empty_group_heading {
+  padding: 0.5px;
+  color: #000000;
+  background-color: #FFFFFF;
+  /* row_group.background.color */
+  font-size: 16px;
+  /* row_group.font.size */
+  font-weight: initial;
+  /* row_group.font.weight */
+  border-top-style: solid;
+  /* row_group.border.top.style */
+  border-top-width: 2px;
+  /* row_group.border.top.width */
+  border-top-color: #A8A8A8;
+  /* row_group.border.top.color */
+  border-bottom-style: solid;
+  /* row_group.border.bottom.style */
+  border-bottom-width: 2px;
+  /* row_group.border.bottom.width */
+  border-bottom-color: #A8A8A8;
+  /* row_group.border.bottom.color */
+  vertical-align: middle;
+}
+
+#fjrdanrmam .gt_striped {
+  background-color: #f2f2f2;
+}
+
+#fjrdanrmam .gt_from_md > :first-child {
+  margin-top: 0;
+}
+
+#fjrdanrmam .gt_from_md > :last-child {
+  margin-bottom: 0;
+}
+
+#fjrdanrmam .gt_row {
+  padding: 10px;
+  /* row.padding */
+  margin: 10px;
+  vertical-align: middle;
+}
+
+#fjrdanrmam .gt_stub {
+  border-right-style: solid;
+  border-right-width: 2px;
+  border-right-color: #A8A8A8;
+  padding-left: 12px;
+}
+
+#fjrdanrmam .gt_stub.gt_row {
+  background-color: #FFFFFF;
+}
+
+#fjrdanrmam .gt_summary_row {
+  background-color: #FFFFFF;
+  /* summary_row.background.color */
+  padding: 6px;
+  /* summary_row.padding */
+  text-transform: inherit;
+  /* summary_row.text_transform */
+}
+
+#fjrdanrmam .gt_first_summary_row {
+  border-top-style: solid;
+  border-top-width: 2px;
+  border-top-color: #A8A8A8;
+}
+
+#fjrdanrmam .gt_table_body {
+  border-top-style: solid;
+  /* table_body.border.top.style */
+  border-top-width: 2px;
+  /* table_body.border.top.width */
+  border-top-color: #A8A8A8;
+  /* table_body.border.top.color */
+  border-bottom-style: solid;
+  /* table_body.border.bottom.style */
+  border-bottom-width: 2px;
+  /* table_body.border.bottom.width */
+  border-bottom-color: #A8A8A8;
+  /* table_body.border.bottom.color */
+}
+
+#fjrdanrmam .gt_footnote {
+  font-size: 90%;
+  /* footnote.font.size */
+  padding: 4px;
+  /* footnote.padding */
+}
+
+#fjrdanrmam .gt_sourcenote {
+  font-size: 90%;
+  /* sourcenote.font.size */
+  padding: 4px;
+  /* sourcenote.padding */
+}
+
+#fjrdanrmam .gt_center {
+  text-align: center;
+}
+
+#fjrdanrmam .gt_left {
+  text-align: left;
+}
+
+#fjrdanrmam .gt_right {
+  text-align: right;
+  font-variant-numeric: tabular-nums;
+}
+
+#fjrdanrmam .gt_font_normal {
+  font-weight: normal;
+}
+
+#fjrdanrmam .gt_font_bold {
+  font-weight: bold;
+}
+
+#fjrdanrmam .gt_font_italic {
+  font-style: italic;
+}
+
+#fjrdanrmam .gt_super {
+  font-size: 65%;
+}
+
+#fjrdanrmam .gt_footnote_glyph {
+  font-style: italic;
+  font-size: 65%;
+}
+</style>
+<div id="fjrdanrmam" style="overflow-x:auto;"><!--gt table start-->
+<table class='gt_table'>
+<tr>
+<th class='gt_col_heading gt_left' rowspan='1' colspan='1'></th>
+<th class='gt_col_heading gt_left' rowspan='1' colspan='1'>RStudio Connect Implementation</th>
+</tr>
+<tbody class='gt_table_body'>
+<tr>
+<td class='gt_row gt_stub gt_left'>Snapshot</td>
+<td class='gt_row gt_left'>Manifest file is created during publication</td>
+</tr>
+<tr>
+<td class='gt_row gt_stub gt_left'>Isolate</td>
+<td class='gt_row gt_left gt_striped'>RStudio Connect creates an isolated package library for each piece of content</td>
+</tr>
+<tr>
+<td class='gt_row gt_stub gt_left'>Restore</td>
+<td class='gt_row gt_left'>Connect installs the packages listed in the manifest into the isolated library</td>
+</tr>
+</tbody>
+</table>
+<!--gt table end-->
 </div>
-<p><a href="https://rstudio.com/products/connect">RStudio Connect</a> is a production ready publishing platform for data products, that <em>automatically implements these steps</em> when users publish content. If you’re using RStudio Connect, you don’t need to manually manage this process. Here is what happens when a data product is deployed:</p>
+</div>
+<p><a href="https://rstudio.com/products/connect">RStudio Connect</a> is a publishing platform for data products, that <em>automatically implements the snapshot and restore strategy</em> when users publish content. If you’re using RStudio Connect, you don’t need to manually manage this process. Here is what happens when a data product is deployed:</p>
 <ol type="1">
-<li><p>The version of R in use, the current <a href="./repositories.html">repository</a>, and the list of R packages and their versions are recorded in a manifest file. Users typically don’t see this file, but if you’d like to explore it, run this R code in your project’s working directory on the development environment: <code>rsconnect::writeManifest()</code>. <code>packrat</code> is used under the hood, though future versions will use <code>renv</code>.</p></li>
-<li><p>The manifest file, application code, and supporting files, are sent to the production RStudio Connect server.</p></li>
-<li><p>The RStudio Connect server restores the environment from the manifest, by matching the requested version of R to the available <a href="./r-installation.html">versions of R installed</a>, and then installing the required packages from the listed <a href="./repository.html">repository</a>.</p></li>
-<li><p>The restored environment is isolated. Connect maintains per-content package libraries, allowing content A to depend on <code>ISLR</code> 1.0 and content B to depend on <code>ISLR</code> 2.0. Installed R packages are, however, intelligently cached. If content A and content C both rely on <code>ISLR</code> 1.0, the package will only be installed once!</p></li>
+<li>The version of R in use, the current <a href="./repositories.html">repository</a>, and the list of R packages are recorded in a manifest file. Users typically don’t see this file, but if you’d like to explore it, run <code>rsconnect::writeManifest()</code> from within your project’s working directory on the development environment. Here is a sample from a manifest file:</li>
+</ol>
+<pre><code>
+{
+  &quot;version&quot;: 1,
+  &quot;locale&quot;: &quot;en_US&quot;,
+  &quot;platform&quot;: &quot;3.4.4&quot;,
+  &quot;metadata&quot;: {
+    &quot;appmode&quot;: &quot;api&quot;,
+    &quot;primary_rmd&quot;: null,
+    &quot;primary_html&quot;: null,
+    &quot;content_category&quot;: null,
+    &quot;has_parameters&quot;: false
+  },
+  &quot;packages&quot;: {
+    &quot;BH&quot;: {
+      &quot;Source&quot;: &quot;CRAN&quot;,
+      &quot;Repository&quot;: &quot;https://cran.rstudio.com/&quot;,
+      &quot;description&quot;: {
+        &quot;Package&quot;: &quot;BH&quot;,
+        &quot;Type&quot;: &quot;Package&quot;,
+        &quot;Title&quot;: &quot;Boost C++ Header Files&quot;,
+        &quot;Version&quot;: &quot;1.66.0-1&quot;,
+        &quot;Date&quot;: &quot;2018-02-12&quot;,
+        &quot;Author&quot;: &quot;Dirk Eddelbuettel, John W. Emerson and Michael J. Kane&quot;,
+        &quot;Maintainer&quot;: &quot;Dirk Eddelbuettel &lt;edd@debian.org&gt;&quot;,</code></pre>
+<ol start="2" type="1">
+<li><p>The manifest file, application code, and supporting files are sent to the production RStudio Connect server.</p></li>
+<li><p>The RStudio Connect server creates an isolated library for each piece of content.</p></li>
+<li><p>The required packages are restored into the isolated library using the manifest file. As an example, if content A depends on <code>ISLR</code> 1.0 and content B depends on <code>ISLR</code> 2.0, the appropriate version will be installed into the separate content libraries. RStudio Connect maintains a cache so that packages are appropriately reused when possible.</p></li>
 </ol>
 <h2 id="example-renv-and-docker">Example: <code>renv</code> and Docker</h2>
-<p>In this example, a Docker container is used to isolate the data product, and <code>renv</code> is used to restore the appropriate package environment. More details are available for using <a href="./docker.html">R with Docker here</a>.</p>
+<p>In this example, a Docker container is used to isolate the data product, and <code>renv</code> is used to snapshot and restore the appropriate package environment. More details are available for using <a href="./docker.html">R with Docker here</a>.</p>
 <div class="layout-chunk" data-layout="l-body">
-<div id="htmlwidget-f5c49df38afa569924d9" style="width:624px;height:384px;" class="grViz html-widget"></div>
-<script type="application/json" data-for="htmlwidget-f5c49df38afa569924d9">{"x":{"diagram":"\ndigraph repos {\n  graph [layout = dot\n         rankdir = LR]\n  node[shape = box]\n  Dev; Prod\n  \n  node[fillcolor = grey, style = filled, shape = oval]\n  Lockfile; Image; \"renv::restore\"\n  \n  node[shape = egg, fillcolor = white]\n  Record; Restore; Isolate\n  \n  \n   Dev -> Lockfile\n   Lockfile -> Record\n   Lockfile -> Prod\n   Prod -> Image\n   Image -> Isolate\n   Image -> \"renv::restore\"\n   Restore -> \"renv::restore\"\n}      \n","config":{"engine":"dot","options":null}},"evals":[],"jsHooks":[]}</script>
+<style>html {
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Helvetica Neue', 'Fira Sans', 'Droid Sans', Arial, sans-serif;
+}
+
+#ppzsioqmvc .gt_table {
+  display: table;
+  border-collapse: collapse;
+  margin-left: auto;
+  margin-right: auto;
+  color: #000000;
+  font-size: 16px;
+  background-color: #FFFFFF;
+  /* table.background.color */
+  width: auto;
+  /* table.width */
+  border-top-style: solid;
+  /* table.border.top.style */
+  border-top-width: 2px;
+  /* table.border.top.width */
+  border-top-color: #A8A8A8;
+  /* table.border.top.color */
+}
+
+#ppzsioqmvc .gt_heading {
+  background-color: #FFFFFF;
+  /* heading.background.color */
+  border-bottom-color: #FFFFFF;
+}
+
+#ppzsioqmvc .gt_title {
+  color: #000000;
+  font-size: 125%;
+  /* heading.title.font.size */
+  padding-top: 4px;
+  /* heading.top.padding */
+  padding-bottom: 1px;
+  border-bottom-color: #FFFFFF;
+  border-bottom-width: 0;
+}
+
+#ppzsioqmvc .gt_subtitle {
+  color: #000000;
+  font-size: 85%;
+  /* heading.subtitle.font.size */
+  padding-top: 1px;
+  padding-bottom: 4px;
+  /* heading.bottom.padding */
+  border-top-color: #FFFFFF;
+  border-top-width: 0;
+}
+
+#ppzsioqmvc .gt_bottom_border {
+  border-bottom-style: solid;
+  /* heading.border.bottom.style */
+  border-bottom-width: 2px;
+  /* heading.border.bottom.width */
+  border-bottom-color: #A8A8A8;
+  /* heading.border.bottom.color */
+}
+
+#ppzsioqmvc .gt_column_spanner {
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #A8A8A8;
+  padding-top: 4px;
+  padding-bottom: 4px;
+}
+
+#ppzsioqmvc .gt_col_heading {
+  color: #000000;
+  background-color: #FFFFFF;
+  /* column_labels.background.color */
+  font-size: 16px;
+  /* column_labels.font.size */
+  font-weight: initial;
+  /* column_labels.font.weight */
+  vertical-align: middle;
+  padding: 10px;
+  margin: 10px;
+}
+
+#ppzsioqmvc .gt_sep_right {
+  border-right: 5px solid #FFFFFF;
+}
+
+#ppzsioqmvc .gt_group_heading {
+  padding: 8px;
+  color: #000000;
+  background-color: #FFFFFF;
+  /* row_group.background.color */
+  font-size: 16px;
+  /* row_group.font.size */
+  font-weight: initial;
+  /* row_group.font.weight */
+  border-top-style: solid;
+  /* row_group.border.top.style */
+  border-top-width: 2px;
+  /* row_group.border.top.width */
+  border-top-color: #A8A8A8;
+  /* row_group.border.top.color */
+  border-bottom-style: solid;
+  /* row_group.border.bottom.style */
+  border-bottom-width: 2px;
+  /* row_group.border.bottom.width */
+  border-bottom-color: #A8A8A8;
+  /* row_group.border.bottom.color */
+  vertical-align: middle;
+}
+
+#ppzsioqmvc .gt_empty_group_heading {
+  padding: 0.5px;
+  color: #000000;
+  background-color: #FFFFFF;
+  /* row_group.background.color */
+  font-size: 16px;
+  /* row_group.font.size */
+  font-weight: initial;
+  /* row_group.font.weight */
+  border-top-style: solid;
+  /* row_group.border.top.style */
+  border-top-width: 2px;
+  /* row_group.border.top.width */
+  border-top-color: #A8A8A8;
+  /* row_group.border.top.color */
+  border-bottom-style: solid;
+  /* row_group.border.bottom.style */
+  border-bottom-width: 2px;
+  /* row_group.border.bottom.width */
+  border-bottom-color: #A8A8A8;
+  /* row_group.border.bottom.color */
+  vertical-align: middle;
+}
+
+#ppzsioqmvc .gt_striped {
+  background-color: #f2f2f2;
+}
+
+#ppzsioqmvc .gt_from_md > :first-child {
+  margin-top: 0;
+}
+
+#ppzsioqmvc .gt_from_md > :last-child {
+  margin-bottom: 0;
+}
+
+#ppzsioqmvc .gt_row {
+  padding: 10px;
+  /* row.padding */
+  margin: 10px;
+  vertical-align: middle;
+}
+
+#ppzsioqmvc .gt_stub {
+  border-right-style: solid;
+  border-right-width: 2px;
+  border-right-color: #A8A8A8;
+  padding-left: 12px;
+}
+
+#ppzsioqmvc .gt_stub.gt_row {
+  background-color: #FFFFFF;
+}
+
+#ppzsioqmvc .gt_summary_row {
+  background-color: #FFFFFF;
+  /* summary_row.background.color */
+  padding: 6px;
+  /* summary_row.padding */
+  text-transform: inherit;
+  /* summary_row.text_transform */
+}
+
+#ppzsioqmvc .gt_first_summary_row {
+  border-top-style: solid;
+  border-top-width: 2px;
+  border-top-color: #A8A8A8;
+}
+
+#ppzsioqmvc .gt_table_body {
+  border-top-style: solid;
+  /* table_body.border.top.style */
+  border-top-width: 2px;
+  /* table_body.border.top.width */
+  border-top-color: #A8A8A8;
+  /* table_body.border.top.color */
+  border-bottom-style: solid;
+  /* table_body.border.bottom.style */
+  border-bottom-width: 2px;
+  /* table_body.border.bottom.width */
+  border-bottom-color: #A8A8A8;
+  /* table_body.border.bottom.color */
+}
+
+#ppzsioqmvc .gt_footnote {
+  font-size: 90%;
+  /* footnote.font.size */
+  padding: 4px;
+  /* footnote.padding */
+}
+
+#ppzsioqmvc .gt_sourcenote {
+  font-size: 90%;
+  /* sourcenote.font.size */
+  padding: 4px;
+  /* sourcenote.padding */
+}
+
+#ppzsioqmvc .gt_center {
+  text-align: center;
+}
+
+#ppzsioqmvc .gt_left {
+  text-align: left;
+}
+
+#ppzsioqmvc .gt_right {
+  text-align: right;
+  font-variant-numeric: tabular-nums;
+}
+
+#ppzsioqmvc .gt_font_normal {
+  font-weight: normal;
+}
+
+#ppzsioqmvc .gt_font_bold {
+  font-weight: bold;
+}
+
+#ppzsioqmvc .gt_font_italic {
+  font-style: italic;
+}
+
+#ppzsioqmvc .gt_super {
+  font-size: 65%;
+}
+
+#ppzsioqmvc .gt_footnote_glyph {
+  font-style: italic;
+  font-size: 65%;
+}
+</style>
+<div id="ppzsioqmvc" style="overflow-x:auto;"><!--gt table start-->
+<table class='gt_table'>
+<tr>
+<th class='gt_col_heading gt_left' rowspan='1' colspan='1'></th>
+<th class='gt_col_heading gt_left' rowspan='1' colspan='1'>Docker + renv Implementation</th>
+</tr>
+<tbody class='gt_table_body'>
+<tr>
+<td class='gt_row gt_stub gt_left'>Snapshot</td>
+<td class='gt_row gt_left'>renv::snapshot() creates a lock file from the development environment</td>
+</tr>
+<tr>
+<td class='gt_row gt_stub gt_left'>Isolate</td>
+<td class='gt_row gt_left gt_striped'>The Docker container creates an isolated environment for the data product</td>
+</tr>
+<tr>
+<td class='gt_row gt_stub gt_left'>Restore</td>
+<td class='gt_row gt_left'>renv::restore() is run in the Docker container to recreate the package environment</td>
+</tr>
+</tbody>
+</table>
+<!--gt table end-->
+</div>
 </div>
 <ol type="1">
 <li><p>In the development environment, create a <code>renv.lock</code> file for the project by running <code>renv::snapshot()</code>. The lock file records the version of the R packages in use. Commit this lock file alongside the code.</p></li>
@@ -1429,7 +1983,7 @@ CMD ...</code></pre>
 <pre class="bash"><code>
 cat renv.lock | grep -A1 &quot;\[R\]&quot; | sed -En &quot;s/Version=(.*)$/\1/p&quot;</code></pre>
 <ol start="3" type="1">
-<li>Build and deploy the docker image. This image contains the environment for your production code. The image can then be used as the basis for containers to execute your code in a a tool like Kubernetes.</li>
+<li>Build and deploy the docker image. This image contains the environment for your production code. The image can then be used as the basis for containers to execute your code.</li>
 </ol>
 <h1 id="testing-and-staging-environments">Testing and Staging Environments</h1>
 <p>The focus so far has been deploying R environments to production systems. With proper record keeping and environment isolation, there is a high chance that deployed content will work as expected. However, for systems that require minimal downtime, it is still imperative to test content in a pre-production system before officially deploying to production. The concept is simple:</p>
@@ -1439,27 +1993,31 @@ cat renv.lock | grep -A1 &quot;\[R\]&quot; | sed -En &quot;s/Version=(.*)$/\1/p&
 <li>If everything works as expected, re-run the steps to deploy the data product into production.</li>
 </ol>
 <div class="layout-chunk" data-layout="l-body">
-<div id="htmlwidget-1e52b976fa212c8ccdf2" style="width:624px;height:384px;" class="grViz html-widget"></div>
-<script type="application/json" data-for="htmlwidget-1e52b976fa212c8ccdf2">{"x":{"diagram":"\ndigraph repos {\n  graph [layout = dot\n        rankdir = LR]\n  \n  \n  node[shape = box]\n  \"Dev\"\n  \n  node[fillcolor = grey, style = filled]\n  \"Staging\"; \"Prod\"\n  \n  Dev -> Staging\n  Staging -> Prod\n}      \n","config":{"engine":"dot","options":null}},"evals":[],"jsHooks":[]}</script>
+<div id="htmlwidget-de2a016190a8aacb66ad" style="width:624px;height:384px;" class="grViz html-widget"></div>
+<script type="application/json" data-for="htmlwidget-de2a016190a8aacb66ad">{"x":{"diagram":"\ndigraph repos {\n  graph [layout = dot\n        rankdir = LR]\n  \n  \n  node[shape = box]\n  \"Dev\"\n  \n  node[fillcolor = grey, style = filled]\n  \"Staging\"; \"Prod\"\n  \n  Dev -> Staging\n  Staging -> Prod\n}      \n","config":{"engine":"dot","options":null}},"evals":[],"jsHooks":[]}</script>
 </div>
 <aside>
 Staging and Production should be identical clones!
 </aside>
-<p>While conceptually simple, in practice there are two challenges: Ensuring the staging environment is a true clone of production, and repeating the same steps on both the clone and production system. To solve these problems, most organizations use either containers or infrastructure-as-code tooling (or both!). Luckily the idea is straight forward: instead of manually running this process, automate as much as possible by writing explicit code that accomplishes steps 1-3.</p>
-<p>The specific details would require an entire website all their own, but the good news is that most R users do not need to worry about re-inventing this process. Typically organizations will have a “DevOps” team or strategy in place. The main task is explaining how those strategies should be adapted for data products using R. The adaptation is simply including our <em>record, restore, and isolate</em> steps.</p>
+<p>While conceptually simple, in practice there are two challenges:</p>
+<ol type="1">
+<li>Ensuring the staging environment is a true clone of production.</li>
+<li>Repeating the same steps on both the clone and production system.</li>
+</ol>
+<p>To solve these problems, most organizations use either containers or infrastructure-as-code. Luckily the idea is straight forward: instead of manually running this process, automate as much as possible by writing explicit code that accomplishes steps 1 and 2. The specific details for implementing these steps would require an entire website all their own, but most R users do not need to worry about re-inventing this process. Typically organizations will have a “DevOps” team or strategy in place for staging content. The main task for the R user is explaining how those tools should be adapted for data products using R. The adaptation is simply including our <em>snapshot, isolate, and restore</em> steps.</p>
 <h2 id="example-rstudio-connect-with-git-jenkins-and-chef">Example: RStudio Connect with Git, Jenkins, and Chef</h2>
-<p>In this example, a DevOps team maintains staging and production servers using Chef. They also maintain an enterprise Git application and use Jenkins for continuous integration. The current process relies on Git branches. Branches of a repository are automatically deployed to staging, whereas the master branch is deployed to production. To integrate R based data products:</p>
+<p>In this example, a DevOps team maintains staging and production servers using Chef. They also maintain an enterprise Git application and use Jenkins for continuous integration. The current DevOps strategy relies on Git branches. Branches of a repository are automatically deployed to staging, whereas the master branch is deployed to production. To integrate R based data products:</p>
 <ol type="1">
 <li><p>The DevOps team should create Chef recipes responsible for installing multiple versions of R onto the staging and production servers.</p></li>
-<li><p>The DevOps team should create a Chef recipe to install and configure RStudio Connect</p></li>
-<li><p>The DevOps team should configure Jenkins to deploy a repository’s branches to the staging environment. Jenkins should also be configured to deploy the master branch to production. In both cases, the Jenkins pipeline will consist of bash shells that clone the repository, create a tar file, and then call RStudio Connect API endpoints to deploy. Example <a href="https://github.com/rstudio/connect-api-deploy-shiny/tree/master/deploy">shell scripts are available</a>.</p></li>
-<li><p>When the R users is ready to deploy content, they should start by running <code>rsconnect::writeManifest</code> inside of the development environment. The resulting manifest file should be included alongside the application code in a Git commit to a staging branch.</p></li>
-<li><p>The prior step will trigger Jenkins to deploy the code to the staging RStudio Connect environment, using the automatic process <a href="./deploy.html#example-rstudio-connect">described above</a>. The R user should confirm the content looks correct.</p></li>
-<li><p>The user or admin can merge the branch, triggering a deployment to the production server.</p></li>
+<li><p>The DevOps team should create a Chef recipe to install and configure RStudio Connect.</p></li>
+<li><p>The DevOps team should configure Jenkins to deploy a repository’s branches to the staging environment. Jenkins should also be configured to deploy the master branch to production. In both cases, the Jenkins pipeline will consist of bash shell scripts that clone the Git repository, create a tar file, and then call RStudio Connect API endpoints to deploy. Example <a href="https://github.com/rstudio/connect-api-deploy-shiny/tree/master/deploy">shell scripts are available</a>.</p></li>
+<li><p>When the R user is ready to deploy content, they should start by running <code>rsconnect::writeManifest()</code> inside of the development environment. The resulting manifest file should be included alongside the application code in a Git commit to a staging branch.</p></li>
+<li><p>Following the commit, Jenkins will deploy the code to the staging RStudio Connect environment, using the automatic process <a href="./deploy.html#example-rstudio-connect">described above</a>. The R user should confirm the content looks correct.</p></li>
+<li><p>The user or admin can merge the staging branch into the master branch. This merge triggers a deployment to the production server.</p></li>
 </ol>
 <div class="layout-chunk" data-layout="l-page">
-<div id="htmlwidget-b289eddd8a8fb9d705c1" style="width:624px;height:384px;" class="grViz html-widget"></div>
-<script type="application/json" data-for="htmlwidget-b289eddd8a8fb9d705c1">{"x":{"diagram":"\ndigraph repos {\n  graph [layout = dot\n        rankdir = LR]\n  \n  \n  node[shape = box]\n  \"Dev\"; \"Git Branch\"; \"Jenkins\"; \"Connect Staging\"; \"Git Master\"; \"Connect Prod\"; \"Jenkins \"\n  \n  node[fillcolor = grey, style = filled]\n  \"Dependency Manifest\"; \"Code\"\n  \n  node[fillcolor = grey, style = filled, shape = oval]\n  Approval\n  \n  Dev -> \"Dependency Manifest\"\n  Dev -> \"Code\"\n  \"Code\" -> \"Git Branch\"\n  \"Dependency Manifest\" -> \"Git Branch\"\n  \"Git Branch\" -> \"Jenkins\"\n  \"Jenkins\" -> \"Connect Staging\"\n  \"Connect Staging\" -> Approval\n  Approval -> \"Git Master\"\n  \"Git Master\" -> \"Jenkins \"\n  \"Jenkins \" -> \"Connect Prod\" \n}      \n","config":{"engine":"dot","options":null}},"evals":[],"jsHooks":[]}</script>
+<div id="htmlwidget-4ec6fde20653b3f8e7e0" style="width:624px;height:384px;" class="grViz html-widget"></div>
+<script type="application/json" data-for="htmlwidget-4ec6fde20653b3f8e7e0">{"x":{"diagram":"\ndigraph repos {\n  graph [layout = dot\n        rankdir = LR]\n  \n  \n  node[shape = box]\n  \"Dev\"; \"Git Branch\"; \"Jenkins\"; \"Connect Staging\"; \"Git Master\"; \"Connect Prod\"; \"Jenkins \"\n  \n  node[fillcolor = grey, style = filled]\n  \"Dependency Manifest\"; \"Code\"\n  \n  node[fillcolor = grey, style = filled, shape = oval]\n  Approval\n  \n  Dev -> \"Dependency Manifest\"\n  Dev -> \"Code\"\n  \"Code\" -> \"Git Branch\"\n  \"Dependency Manifest\" -> \"Git Branch\"\n  \"Git Branch\" -> \"Jenkins\"\n  \"Jenkins\" -> \"Connect Staging\"\n  \"Connect Staging\" -> Approval\n  Approval -> \"Git Master\"\n  \"Git Master\" -> \"Jenkins \"\n  \"Jenkins \" -> \"Connect Prod\" \n}      \n","config":{"engine":"dot","options":null}},"evals":[],"jsHooks":[]}</script>
 </div>
 <p>More details are available <a href="https://solutions.rstudio.com/deploy/deploy">here</a>.</p>
 <h1 id="acceptable-differences">Acceptable Differences</h1>
@@ -1481,13 +2039,11 @@ Staging and Production should be identical clones!
 <h1 id="environment-upgrades">Environment Upgrades</h1>
 <p>In production, one does not simply upgrade packages or system dependencies! These tips can enable successful maintenance of your production system overtime:</p>
 <ul>
-<li><em>R Packages</em>: You should <strong>not</strong> be worried about upgrading R packages. Recall, the whole goal is to recreate the necessary development dependencies in an isolated environment. To upgrade R packages, start by <a href="./upgrades.html">upgrading them in development</a>, testing that the content works, and following the process to redeploy.<br />
+<li><em>R Packages</em>: You should <strong>not</strong> be worried about upgrading R packages. Recall, the whole goal of the <a href="./snapshot.html">Snapshot and Restore</a> strategy is to recreate the necessary development dependencies in an isolated environment. To upgrade R packages, start by <a href="./upgrades.html">upgrading them in development</a>, testing that the content works, and following the process to redeploy.<br />
 </li>
-<li><em>R Versions</em>: New R versions should be <strong>added instead of upgrading R</strong>. Production systems must have multiple versions of R. As content is updated and redeployed, old versions of R will become less used and can eventually be removed. In order to accomplish this goal, <strong>R should be installed from source</strong>, not from a system repository using <code>apt</code> or <code>yum</code>. See <a href="./R-installation.html">R Installations</a> for details.</li>
-<li><em>System Dependencies</em>: System dependencies such as shared objects, compilers, or even the operating system are updated less frequently. Normally, these components are stable or strictly backwards compatible within an operating system release. These components should be updated in a staging environment. Often, major updates will require rebuilding R and redeploying content. For limited downtime, we recommend creating a clone of production, applying the update, and redeploying content. Once complete, swap the DNS records for this clone with production. Alternatively, this is an area where <a href="./docker.html">Docker containers</a> are useful, because they tend to isolate the entire system environment per data product. This means system dependencies can be updated individually for each data product, instead of all at once.</li>
+<li><em>R Versions</em>: New R versions should be <strong>added instead of upgraded</strong>. Production systems must have multiple versions of R. As content is updated and redeployed, old versions of R will become less used and can eventually be removed. In order to accomplish this goal, <strong>R should be installed from source</strong>, not from a system repository using <code>apt</code> or <code>yum</code>. See <a href="./R-installation.html">R Installations</a> for details.</li>
+<li><em>System Dependencies</em>: System dependencies such as shared objects, compilers, or even the operating system are updated less frequently. Normally, these components are stable or strictly backwards compatible within an operating system release. These components should be updated in a staging environment. Often, major updates will require rebuilding R and redeploying content. For limited downtime, we recommend creating a clone of production, applying the update, and redeploying content. Once complete, swap the DNS records for this clone with the original production server. Production systems using <a href="./docker.html">Docker containers</a> can mitigate this challenge, because Docker containers tend to isolate the entire system environment per data product.</li>
 </ul>
-<h1 id="shiny-in-production">Shiny in Production</h1>
-<p>This content focuses on the steps needed to manage R dependencies in production. There are important considerations for deploying code to production, such as testing, performance optimization, and data security. These questions are especially relevant for shiny applications, which are the most popular R data product used in production. Guidelines for approaching these critical steps is available <a href="https://kellobri.github.io/shiny-prod-book/">here</a>.</p>
 <!--radix_placeholder_article_footer-->
 <!--/radix_placeholder_article_footer-->
 </div>
