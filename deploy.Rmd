@@ -29,10 +29,10 @@ Regardless of the specific implementation, there are three basic steps required 
 3. In the isolated environment, the dependencies should be **restored** exactly, with matching versions.
 
 <aside>
-A simple checklist: 
+A simple checklist:   
 - [ ] snapshot  
-- [ ] isolate
-- [ ] restore  
+- [ ] isolate  
+- [ ] restore    
 </aside>
 
 These steps are the heart of the ["snapshot and restore"
