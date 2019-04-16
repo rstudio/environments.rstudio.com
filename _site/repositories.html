@@ -1257,10 +1257,6 @@
   </script>
   
   <!--/radix_placeholder_distill-->
-  <script src="site_libs/htmlwidgets-1.3/htmlwidgets.js"></script>
-  <script src="site_libs/viz-0.3/viz.js"></script>
-  <link href="site_libs/DiagrammeR-styles-0.2/styles.css" rel="stylesheet" />
-  <script src="site_libs/grViz-binding-1.0.0/grViz.js"></script>
   <script src="site_libs/jquery-1.11.3/jquery.min.js"></script>
   <script src="site_libs/bowser-1.9.3/bowser.min.js"></script>
   <script src="site_libs/webcomponents-2.0.0/webcomponents.js"></script>
@@ -1372,11 +1368,14 @@ Tools
 </nav>
 <hr class="d-toc-separator"/>
 <div class="layout-chunk" data-layout="l-body">
-<div id="htmlwidget-fa8fb964bf0cc2d13795" style="width:624px;height:384px;" class="grViz html-widget"></div>
-<script type="application/json" data-for="htmlwidget-fa8fb964bf0cc2d13795">{"x":{"diagram":"\ndigraph repos {\n  graph [layout = dot\n         rankdir = LR]\n  node[shape = box]\n  \"Project Cache\"; \"Project 1 Library\"; \"Project 2 Library\"\n  \n  node[fillcolor = grey, style = filled]\n  Repository\n  \n  \"Repository\"-> \"Project Cache\"\n  \"Project Cache\" -> \"Project 1 Library\"\n  \"Project Cache\" -> \"Project 2 Library\"\n}      \n","config":{"engine":"dot","options":null}},"evals":[],"jsHooks":[]}</script>
+
 </div>
 <p>Every new R user quickly discovers that packages are how work gets done in R. To understand how to manage R packages, it is important to start by understanding where R packages come from. The majority of R users install packages from the Comprehenisve R Archive Network (CRAN). CRAN is a network of servers that distribute R along with R packages.</p>
 <p>CRAN is not the only place where users can access packages. In addition to CRAN, there are a number of other CRAN-like repositories, such as <a href="./repositories.html#r-forge">R-Forge</a> and <a href="./repositories.html#bioconductor">BioConductor</a>. These CRAN-like repositories have a similar structure to CRAN, and normally work with <code>install.packages</code>. Finally, some users access packages from locations such as GitHub. Unlike CRAN-like repositories, these locations require a different installation client.</p>
+<p>To see your current repository setting, run:</p>
+<pre class="r"><code>
+getOption(&quot;repos&quot;)</code></pre>
+<p>In RStudio 1.2 and above, users can change their repository by going to <code>Tools</code> -&gt; <code>Global Options</code> -&gt; <code>Packages</code>. RStudio Server administrators have a number of <a href="https://docs.rstudio.com/ide/server-pro/r-sessions.html#cran-repositories">options</a> for setting a repository for users.</p>
 <p>This page outlines the <a href="./repositories.html#structure-of-a-cran-like-repository">structure of a CRAN-like repository</a>, covers specific <a href="./repositories.html#Characteristics-Specific-to-CRAN">details about CRAN</a>, and discusses options for creating <a href="./repositories.html#internal-repositories">internal repositories</a>.</p>
 <p>Looking for a way to manage your own repository? Try <a href="https://rstudio.com/products/package-manager">RStudio Package Manager</a>.</p>
 <h2 id="structure-of-a-cran-like-repository">Structure of a CRAN-like Repository</h2>

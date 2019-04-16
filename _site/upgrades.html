@@ -1346,18 +1346,55 @@ Tools
 
 
 <div class="d-article">
-<p>This page is in the use case section, and describes a common problem, “how do I safely test if upgrading a package will break my code?”</p>
-<p>Each strategy should be arranged as: 1-2-3 steps; longer explanation, troubleshooting.</p>
-<h2 id="project-isolation">Project isolation</h2>
-<ul>
-<li>First, outline why isolating projects is so critical</li>
-</ul>
-<h3 id="snapshot-restore">Snapshot restore</h3>
-<p>This strategy outlines <code>renv</code> and the ability to restore if an upgrade fails.</p>
-<h3 id="new-library">New library</h3>
-<p>This strategy outlines a more manual approach to the prior strategy, and has users create a new library that contains the packages for the point in time they’re upgrading to. Rollback is achieved by switching back to the old library.</p>
-<h3 id="rspm-curated-sources">RSPM Curated Sources</h3>
-<p>How to use the update command in RSPM to see what will happen in a curated repository.</p>
+<p>Upgrading packages can be a risky affair. Most R users have been in a situation where upgrading a package for a project accidentally breaks the code in another project. Another common challenge is upgrading a package only to realize the upgrade had unintended consequences, breaking other parts of your code. Luckily, the <a href="./reproduce.html">strategies for reproducible environments</a> can make package upgrafes save.</p>
+<p>Specifically, there are two ways reproducible environments support package upgrades:</p>
+<ol type="1">
+<li>They encourage project isolation.</li>
+<li>They provide a safety net in case you need to roll back a change.</li>
+</ol>
+<p>This page describes the <a href="./snapshot.html">Snaphot and Restore</a> strategy with an emphasis on package upgrades. Keep in mind that the other strategies promote safe package upgrades as well. We also present <a href="./upgrades.html#what-if-an-upgrade-breaks-code">troubleshooting tips</a> for cases where upgrading a packgae breaks code.</p>
+<h2 id="snaphot-and-restore-for-upgrades">Snaphot and Restore for Upgrades</h2>
+<p>The first concern for safe upgrades is project isolation. By isolating projects, you can ensure that upgrading the packages for one project won’t break code in other projects. This type of isolation is accomplished by creating per-project libraries. The <a href="https://github.com/rstudio/renv"><code>renv</code> package</a> makes this easy. Inside of your R project, simply use:</p>
+<div class="layout-chunk" data-layout="l-body">
+<pre class="r"><code>
+# inside the project directory
+renv::init()
+
+# check to see the isolated project library
+.libPaths()</code></pre>
+</div>
+<p>The next concern for safely upgrading packages is creating a safety net. If the package upgrade goes poorly, you’ll be able to revert the changes and return to a working state. Again, the <code>renv</code> package makes this process easy.</p>
+<div class="layout-chunk" data-layout="l-body">
+<pre class="r"><code>
+# record the current dependencies in a file called renv.lock
+renv::snapshot()
+# commit the lockfile alongside your code in version control</code></pre>
+</div>
+<p>With an isolated project and a safety net in place, you can now proceed to upgrade or add new packages, while remaining certain the current functional environment is still reproducible. The <a href="https://github.com/r-lib/pak"><code>pak</code> package</a> can be used to install and upgrade packages in an interactive environment:</p>
+<div class="layout-chunk" data-layout="l-body">
+<pre class="r"><code>
+# upgrade packages quickly and safely
+pak::pkg_install(&quot;ggplot2&quot;)
+
+# the interactive prompt shows you exactly what will change
+# helping avoid unintentional or surprising changes</code></pre>
+</div>
+<p>If the process of upgrading packages goes poorly, you can roll back the change using the safety net created earlier:</p>
+<div class="layout-chunk" data-layout="l-body">
+<pre class="r"><code>
+# use this function to view the history of your lockfile
+renv::history()
+
+# if an upgrade goes astray, revert the lockfile
+renv::revert(commit = &quot;abc123&quot;)
+
+# and restore the previous environment
+renv::restore()</code></pre>
+</div>
+<p>The safety net provided by the <code>renv</code> package relies on access to older versions of R packages. For public packages, CRAN provides these older versions in the <a href="https://cran.rstudio.com/src/contrib/Archive">CRAN archive</a>. Organizations can use tools like <a href="https://rstudio.com/products/package-manager">RStudio Package Manager</a> to make multiple versions of private packages available</p>
+<h2 id="what-if-an-upgrade-breaks-code">What if an upgrade breaks code?</h2>
+<p>If your code fails to run after an upgrade, and you have time to investigate and fix instead of rolling back your change, the first place to look is package’s News file. For example, this is the <a href="https://github.com/tidyverse/ggplot2/blob/master/NEWS">ggplot2 News file</a>. This file will normally explain what functions have changed, and detail what steps a user will need to take in order to fix their code. Focus on the changes listed between the version you were using and latest version - both pieces of information are displayed in the <code>pak</code> install prompt.</p>
+<p>Sometimes package upgrades will leave your project library in an <a href="./shared.html#the-big-risk">inconsistent state</a>. A common indicator that this has occured is if you see errors when executing the <code>library</code> statements in your code. One fix is to upgrade all of the packages used in your project. It is best to restart the R session prior to performing these upgrades, as loaded packages can often prevent successful upgrades. The <a href="./validated.html">Validated</a> and <a href="./shared.html">Shared Baseline</a> strategies address this problem by requiring upgrades to the entire repository.</p>
 <!--radix_placeholder_article_footer-->
 <!--/radix_placeholder_article_footer-->
 </div>

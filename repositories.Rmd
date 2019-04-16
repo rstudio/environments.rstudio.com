@@ -9,21 +9,21 @@ output:
 ---
 
 ```{r echo=FALSE}
-grViz("
-digraph repos {
-  graph [layout = dot
-         rankdir = LR]
-  node[shape = box]
-  'Project Cache'; 'Project 1 Library'; 'Project 2 Library'
-  
-  node[fillcolor = grey, style = filled]
-  Repository
-  
-  'Repository'-> 'Project Cache'
-  'Project Cache' -> 'Project 1 Library'
-  'Project Cache' -> 'Project 2 Library'
-}      
-")
+# grViz("
+# digraph repos {
+#   graph [layout = dot
+#          rankdir = LR]
+#   node[shape = box]
+#   'Project Cache'; 'Project 1 Library'; 'Project 2 Library'
+#   
+#   node[fillcolor = grey, style = filled]
+#   Repository
+#   
+#   'Repository'-> 'Project Cache'
+#   'Project Cache' -> 'Project 1 Library'
+#   'Project Cache' -> 'Project 2 Library'
+# }      
+# ")
 ```
 
 Every new R user quickly discovers that packages are how work gets done in R. To
@@ -39,6 +39,14 @@ there are a number of other CRAN-like repositories, such as
 have a similar structure to CRAN, and normally work with `install.packages`.
 Finally, some users access packages from locations such as GitHub. Unlike
  CRAN-like repositories, these locations require a different installation client.
+ 
+ To see your current repository setting, run:
+ 
+ ```r
+ getOption("repos")
+ ```
+ 
+ In RStudio 1.2 and above, users can change their repository by going to `Tools` -> `Global Options` -> `Packages`. RStudio Server administrators have a number of [options](https://docs.rstudio.com/ide/server-pro/r-sessions.html#cran-repositories) for setting a repository for users.
 
 This page outlines the [structure of a CRAN-like repository](./repositories.html#structure-of-a-cran-like-repository), covers
 specific [details about CRAN](./repositories.html#Characteristics-Specific-to-CRAN), and discusses
