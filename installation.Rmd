@@ -11,5 +11,5 @@ The best resource for understanding package installation is Wickham's ["What is 
 
  Most R users are familiar with the R function `install.packages`. Here, we recommend two alternatives:
  
- 1. [`pak` package](https://github.com/r-lib/pak) is used to install packages interactively. `pak`  is designed to help humans install packages quickly and safely.
- 2. [`remotes` packages](https://github.com/r-lib/remotes) is used to install packages programmatically. `remotes` is designed with to help machines install package. The `remotes` package is intentionally lightweight and does not, itself, have any dependencies.^[`remotes` powers `devtools::install_` and is a suitable, lightweight alternative.]
+ 1.The  [`pak` package](https://github.com/r-lib/pak) is used to install packages interactively. `pak`  is designed to help humans install packages quickly and safely.
+ 2. The [`remotes` package](https://github.com/r-lib/remotes) is used to install packages programmatically. `remotes` is designed with to help machines install package. The `remotes` package is intentionally lightweight and does not, itself, have any dependencies.^[`remotes` powers `devtools::install_` and is a suitable, lightweight alternative.]
