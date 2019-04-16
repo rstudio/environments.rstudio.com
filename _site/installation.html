@@ -1346,24 +1346,19 @@ Tools
 
 
 <div class="d-article">
-<p>This page will talk about how users can install packages, it will cover the tools: <code>pak</code>, <code>remotes</code>, and <code>install.packages</code> and describe when to use each. Thge site will link to pages on repositories and libraries (to put package installation in the context of installing from a repo to a library). This page will also cover how to handle system dependencies and the differences between binary and source packages.</p>
-<h1 id="package-installation">Package Installation</h1>
-<ul>
-<li>pak vs remotes</li>
-<li>bootstrapping with install.packages (chicken meet egg)</li>
-</ul>
-<h1 id="repositories-and-libraries">Repositories and Libraries</h1>
-<p>aka where do they come from, where do they go? - Links to repos - Links to libraries</p>
-<h1 id="details">Details</h1>
-<ul>
-<li>binaries</li>
-<li>caches</li>
-</ul>
-<h1 id="system-dependencies">System Dependencies</h1>
-<h1 id="upgrades-renv">Upgrades (renv)</h1>
-<ul>
-<li>link to use case</li>
-</ul>
+<p>This page isn’t quite ready, but it will describe what a package is, what happens during installation, and the tools you can use to install packages.</p>
+<p>The best resource for understanding package installation is Wickham’s <a href="http://r-pkgs.had.co.nz/package.html#package">“What is a package?”</a>.</p>
+<p>Most R users are familiar with the R function <code>install.packages</code>. Here, we recommend two alternatives:</p>
+<ol type="1">
+<li><a href="https://github.com/r-lib/pak"><code>pak</code> package</a> is used to install packages interactively. <code>pak</code> is designed to help humans install packages quickly and safely.</li>
+<li><a href="https://github.com/r-lib/remotes"><code>remotes</code> packages</a> is used to install packages programmatically. <code>remotes</code> is designed with to help machines install package. The <code>remotes</code> package is intentionally lightweight and does not, itself, have any dependencies.<a href="#fn1" class="footnote-ref" id="fnref1"><sup>1</sup></a></li>
+</ol>
+<section class="footnotes">
+<hr />
+<ol>
+<li id="fn1"><p><code>remotes</code> powers <code>devtools::install_</code> and is a suitable, lightweight alternative.<a href="#fnref1" class="footnote-back">↩</a></p></li>
+</ol>
+</section>
 <!--radix_placeholder_article_footer-->
 <!--/radix_placeholder_article_footer-->
 </div>

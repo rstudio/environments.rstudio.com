@@ -1346,15 +1346,24 @@ Tools
 
 
 <div class="d-article">
-<p>This page talks about package libraries and will primarily focus on creating isolated project libraries using <code>renv</code>. The page will also cover the standard user and system libraries, how you might want to share libaries with others (with a link to the team collaboration use case), and what to track in a version control repo to communicate the state of a library.</p>
-<h1 id="what-is-a-library">What is a library?</h1>
-<h1 id="multiple-libraries">Multiple Libraries</h1>
-<h1 id="the-role-of-renv">The role of renv</h1>
-<h1 id="record-keeping">Record Keeping</h1>
+<p>This page isn’t quite ready, but the focus will be describing what a library is, the constraints associated with libraries, and how to manage them.</p>
+<blockquote>
+<p>In short, a library is just a directory containing installed packages</p>
+</blockquote>
 <ul>
-<li>what to commit alongside your code</li>
-<li>how to restore an environment given this info</li>
+<li>Hadley Wickham, <a href="http://r-pkgs.had.co.nz/package.html#library">R Packages</a></li>
 </ul>
+<p>You can view your current libraries using:</p>
+<pre class="r"><code>
+.libPaths()</code></pre>
+<p>For the purpose of reproducible environments, a library is the unit we ultimately want to reproduce. R libraries are subject to a few constraints that must be understood to reproduce them:</p>
+<ol type="1">
+<li>Only 1 version of each R package can be installed and accessed in a library at a time.</li>
+<li>R packages have complex dependency relationships, a working library must have a consistent set of packages that work together</li>
+<li>An R library is tied to a specific version of R.</li>
+<li>R can search through multiple libraries, and libraries can be shared across projects and users.</li>
+</ol>
+<p>Addressing these constraints is the focus of the reproducible <a href="./reproduce.html">strategies</a>.</p>
 <!--radix_placeholder_article_footer-->
 <!--/radix_placeholder_article_footer-->
 </div>

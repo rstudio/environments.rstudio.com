@@ -4,31 +4,25 @@ description: |
   Installing and Managing R [In Progress]
 ---
 
-Managing R environments won't do you much good unless you have a game plan for managing R itself! This section provides recommendations for managing R installations on both desktops, shared servers, and Docker.
+This page isn't quite ready, but the focus will be installing and managing R on
+Unix servers. For reproducible environments, **the most critical step is
+installing R into a versioned directory!**. By doing so, your system can support
+multiple versions of R and avoid unintentional R upgrades.
 
-## R on a Server
+Instructions for building R from source and supporting multiple versions of R
+are [available
+here](https://support.rstudio.com/hc/en-us/articles/218004217-Building-R-from-source).
 
-### Why RStudio Server?
-
-### Building R from Source
-
-### Modifying R's Behavior
+This page also discusses the ways to customize R's behavior through:  
 
 - Renviron.site  
 - Rprofile.site  
 - System Library  
-- User Libraries
+- User Libraries  
 
-## R in Docker
-
-Building from source vs Inheriting a Layer
-Link to Docker Article
-
-## R on the Desktop
-
-??? I don't really know how this works
-
-https://support.rstudio.com/hc/en-us/articles/218004217-Building-R-from-source
-
-http://shiny.rstudio.com/articles/upgrade-R.html
+Current details are [outlined
+here](https://rviews.rstudio.com/2017/04/19/r-for-enterprise-understanding-r-s-startup/).
+Information on the system library is elaborated on the [libraries
+page](./libraries.html) as well as [this
+article](https://rviews.rstudio.com/2017/04/19/r-for-enterprise-understanding-r-s-startup/).
 

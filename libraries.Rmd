@@ -4,14 +4,27 @@ description: |
    Managing Installed Packages in Libraries [In Progress]
 ---
 
-This page talks about package libraries and will primarily focus on creating isolated project libraries using `renv`. The page will also cover the standard user and system libraries, how you might want to share libaries with others (with a link to the team collaboration use case), and what to track in a version control repo to communicate the state of a library.
+This page isn't quite ready, but the focus will be describing what a library is,
+the constraints associated with libraries, and how to manage them.
 
-# What is a library?
+> In short, a library is just a directory containing installed packages 
 
-# Multiple Libraries
+- Hadley Wickham, [R Packages](http://r-pkgs.had.co.nz/package.html#library)
 
-# The role of renv
+You can view your current libraries using:
 
-# Record Keeping 
-- what to commit alongside your code
-- how to restore an environment given this info
+```r
+.libPaths()
+```
+
+For the purpose of reproducible environments, a library is the unit we
+ultimately want to reproduce. R libraries are subject to a few constraints that
+must be understood to reproduce them:
+
+1. Only 1 version of each R package can be installed and accessed in a library at a time.
+2. R packages have complex dependency relationships, a working library must have a consistent set of packages that work together
+3. An R library is tied to a specific version of R.
+4. R can search through multiple libraries, and libraries can be shared across projects and users.
+
+Addressing these constraints is the focus of the reproducible [strategies](./reproduce.html).
+
