@@ -1,22 +1,27 @@
 ---
 title: "Upgrading Packages"
 description: |
-  How to Safely Upgrade Packages [In Progress]
+  How to Safely Upgrade Packages 
 ---
 
 Upgrading packages can be a risky affair. Most R users have been in a situation
-where upgrading a package for a project accidentally breaks the code in another
-project. Another common challenge is upgrading a package only to realize the
-upgrade had unintended consequences, breaking other parts of your code. Luckily, the [strategies for reproducible environments](./reproduce.html) can make package upgrafes save. 
+where upgrading a package uhad uninteded consequences. For example, the upgrade
+broke part of their code, or upgrading a package for one project accidentally
+broke the code in another project. Luckily, the [strategies for reproducible
+environments](./reproduce.html) can make package upgrades save.
 
 Specifically, there are two ways reproducible environments support package upgrades:
 
 1. They encourage project isolation.
 2. They provide a safety net in case you need to roll back a change.
 
-This page describes the [Snaphot and Restore](./snapshot.html) strategy with an emphasis on package upgrades. Keep in mind that the other strategies promote safe package upgrades as well. We also present [troubleshooting tips](./upgrades.html#what-if-an-upgrade-breaks-code) for cases where upgrading a packgae breaks code.
+This page describes the [Snaphot and Restore](./snapshot.html) strategy with an
+emphasis on package upgrades. Keep in mind that the other strategies promote
+safe package upgrades as well. We also present [troubleshooting
+tips](./upgrades.html#what-if-an-upgrade-breaks-code) for cases where upgrading
+a package breaks code.
 
-## Snaphot and Restore for Upgrades
+## Snapshot and Restore for Upgrades
 
 The first concern for safe upgrades is project isolation. By isolating projects, you can ensure that upgrading the packages for one project won't break code in other projects. This type of isolation is accomplished by
 creating per-project libraries. The [`renv`
@@ -57,7 +62,8 @@ pak::pkg_install("ggplot2")
 ```
 
 
-If the process of upgrading packages goes poorly, you can roll back the change using the safety net created earlier:
+If the process of upgrading packages goes poorly, you can roll back the change
+using the safety net created earlier:
 
 ```{r eval=FALSE, echo=TRUE}
 # use this function to view the history of your lockfile
@@ -80,6 +86,26 @@ of private packages available
 
 ## What if an upgrade breaks code?
 
-If your code fails to run after an upgrade, and you have time to investigate and fix instead of rolling back your change, the first place to look is package's News file. For example, this is the [ggplot2 News file](https://github.com/tidyverse/ggplot2/blob/master/NEWS). This file will normally explain what functions have changed, and detail what steps a user will need to take in order to fix their code. Focus on the changes listed between the version you were using and latest version - both pieces of information are displayed in the `pak` install prompt.
+A common problem after upgrading packages is to hit an error running the
+`library` statements in your code. This occurs because package upgrades can
+leave your project library in an [inconsistent
+state](./shared.html#the-big-risk). One fix is to upgrade all of the packages
+used in your project. It is best to restart the R session prior to performing
+these upgrades, as loaded packages can often prevent successful upgrades. The
+[Validated](./validated.html) and [Shared Baseline](./shared.html) strategies
+address this problem by requiring upgrades to the entire repository.
 
-Sometimes package upgrades will leave your project library in an [inconsistent state](./shared.html#the-big-risk). A common indicator that this has occured is if you see errors when executing the `library` statements in your code. One fix is to upgrade all of the packages used in your project. It is best to restart the R session prior to performing these upgrades, as loaded packages can often prevent successful upgrades. The [Validated](./validated.html) and [Shared Baseline](./shared.html) strategies address this problem by requiring upgrades to the entire repository.
+If all of your `library` statements work, but your code still fails to run, it
+is likely the functions in a package changed. At this point you can roll back
+your change or take time to investigate and update your code. The first place to
+look is the package's News file. For example, this is the [ggplot2 News
+file](https://github.com/tidyverse/ggplot2/blob/master/NEWS). A News file will
+what has changed, and detail what steps a user will should take in order to
+adapt their code. Focus on the changes listed between the version you were using
+and latest version - both pieces of information are displayed in the `pak`
+install prompt. Normally you can identify the problematic package based on where
+the error occurs in your code. The [`itdepends`
+package](https://github.com/jimhester/itdepends) can also help you identify
+which functions are in use.
+
+
