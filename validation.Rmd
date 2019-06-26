@@ -24,7 +24,7 @@ determinations.
 Not what you were expecting? Before continuing, here are some quick links to other resources specific to validation in the clinical pharma space:  
 
 - [Base R Validation Document for FDA](https://www.r-project.org/doc/R-FDA.pdf)  
-- [RStudio IDE Validation](https://www.rstudio.com/wp-content/uploads/2014/06/RStudio-Commercial-IDE-Validation.pdf)  
+- [RStudio Professional Product Validation](https://www.rstudio.com/wp-content/uploads/2019/06/rstudio_compliance_validation.pdf)  
 - [R in Pharma Validation Hub](https://www.pharmar.org/)  
 
 
@@ -96,6 +96,7 @@ app](https://hadley.shinyapps.io/cran-downloads/).
 ```{r}
 library(cranlogs)
 library(lubridate)
+library(ggplot2)
 downloads <- cranlogs::cran_downloads("ggplot2", from = "2019-01-01", to = today()-ddays(1))
 ggplot(downloads, aes(date, count)) + 
   geom_line() + 
