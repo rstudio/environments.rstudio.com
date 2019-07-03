@@ -64,7 +64,7 @@ digraph renv {
 2. (Users) Install the `renv` package: `remotes::install_github('rstudio/renv')`
 
 
-### Step 1: Initalize a Project
+### Step 1: Initialize a Project
 
 A *key* to package management is to isolate projects from one another. This allows you to upgrade or add packages for one project without breaking other work. Whether you are in an existing project or starting a new project, use:
 
