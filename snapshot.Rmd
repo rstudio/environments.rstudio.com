@@ -17,7 +17,7 @@ The strategy is implemented with the following steps:
 
 1. Start a project by creating a project-specific library
 2. Install and use packages from the project-specific library
-3. Record the state of the library alongside of the code 
+3. Record the state of the library alongside of the code
 4. Restore the library when the environment needs to be recreated
 
 A potential drawback of this strategy is the involvement required from the R
@@ -34,13 +34,13 @@ digraph renv {
          rankdir = LR]
   node [shape = box]
   '1. Create a Project'; 'Write Code'; '2. Install Packages'; '3. Snapshot'; '4. Restore'
-  
+
   '1. Create a Project'->'Write Code'
-  'Write Code'->'2. Install Packages' 
+  'Write Code'->'2. Install Packages'
   '2. Install Packages' -> 'Write Code'
   'Write Code'->'3. Snapshot'
   '3. Snapshot'->'4. Restore'
-  
+
 }      
 ")
 ```
@@ -51,6 +51,12 @@ digraph renv {
 3. `renv::snapshot()`
 4. `renv::restore()`
 </aside>
+
+<!--html_preserve-->
+<html>
+<script src="https://fast.wistia.com/embed/medias/sbyf1srsgh.jsonp" async></script><script src="https://fast.wistia.com/assets/external/E-v1.js" async></script><span class="wistia_embed wistia_async_sbyf1srsgh popover=true popoverAnimateThumbnail=true" style="display:inline-block;height:84px;position:relative;width:150px">&nbsp;</span>
+</html>
+<!--/html_preserve-->
 
 ### Pre-requisite Steps:
 
@@ -69,7 +75,7 @@ renv::init()
 
 Behind the scenes, `renv` works by creating a [new library](./libraries.html). A library stores installed packages.
 
-### Step 2: Install and Use Packages 
+### Step 2: Install and Use Packages
 
 With the project configured, you can now install and use packages. There are three ways to [install packages](./installation.html):
 
@@ -85,7 +91,7 @@ install.packages('ggplot2')
 # But we recommend using pak in interactive settings
 pak::pkg_install('ggplot2')
 
-# Or use remotes if you're working on an automated script or 
+# Or use remotes if you're working on an automated script or
 # in a lightweight environment like Docker
 remotes::install_cran('ggplot2')
 ```
@@ -99,7 +105,7 @@ library(ggplot2)
 
 ### Step 3: Snapshot the Environment
 
-Once you are ready to share your work, or you are finished with a project, you'll want to make a record of the current environment. 
+Once you are ready to share your work, or you are finished with a project, you'll want to make a record of the current environment.
 
 ```{r eval=FALSE}
 renv::snapshot()
@@ -129,7 +135,7 @@ dependencies when a project is ready for production. Generating a manifest of
 dependencies can be the first step in a deployment hand-off between a development
 environment and a production deployment. Learn more about [snapshotting for production](./deploy.html).
 
-**If you are using [RStudio Connect](https://rstudio.com/products/connect) then the snapshot strategy is automatically applied when content is deployed**. 
+**If you are using [RStudio Connect](https://rstudio.com/products/connect) then the snapshot strategy is automatically applied when content is deployed**.
 
 ### Common Challenges and Resolutions:
 
@@ -137,7 +143,7 @@ environment and a production deployment. Learn more about [snapshotting for prod
 
 To ensure the library is restorable, you'll need to _record_ and _make_ _available_ the same version of R used during development. The `renv` package automatically records the version of R used by a project. We recommend having multiple versions of R available, so that users can pick the version of R and then restore. This approach is also an effective way to [test if a project is ready to upgrade](./upgrades.html) to a new version of R.
 
-#### Non-Current CRAN Packages 
+#### Non-Current CRAN Packages
 
 Often, by the time a project is restored, some of the packages in use may have been updated on CRAN. For example:
 
@@ -153,7 +159,7 @@ snapshot strategy must record archived versions.* [RStudio Package Manager](http
 easy way to ensure your internal repository handles this case appropriately.
 
 
-#### Internal Packages 
+#### Internal Packages
 
 If your package is publicly available, tools like `renv` will work automatically. If you wish to use the snapshot strategy along with internal packages (packages that are not publicly available on CRAN nor in a public Git repository), it is easiest to store and source those internal packages in a [CRAN-like](./repositories.html) repository. Follow these steps:
 
@@ -186,7 +192,7 @@ To solve this problem, implementations of the snapshot and restore strategy shou
 binaries](./repositories.html#binary-packages) for the operating systems in-use.
 By default, `renv` creates a cache for each user. This means if two projects
 rely on `ggplot2` version 3.1.0, the user will only need to install `ggplot2`
-3.1.0 once. A repository that serves binaries accomplishes the same result, 
+3.1.0 once. A repository that serves binaries accomplishes the same result,
 effectively caching installed packages for all users!
 
 Often restoring a project on a different computer or a new system can take time
@@ -207,7 +213,7 @@ example, say you wanted to use Docker to execute an ETL job:
 FROM ubuntu
 ...
 RUN git clone https://github.com/me/etl-project.git
-RUN R -e 'renv::restore()' 
+RUN R -e 'renv::restore()'
 CMD <some process>
 ```
 
