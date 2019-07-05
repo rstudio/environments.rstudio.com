@@ -5,10 +5,10 @@ description: |
 ---
 
 Upgrading packages can be a risky affair. Most R users have been in a situation
-where upgrading a package uhad uninteded consequences. For example, the upgrade
+where upgrading a package had uninteded consequences. For example, the upgrade
 broke part of their code, or upgrading a package for one project accidentally
 broke the code in another project. Luckily, the [strategies for reproducible
-environments](./reproduce.html) can make package upgrades save.
+environments](./reproduce.html) can make package upgrades safe.
 
 Specifically, there are two ways reproducible environments support package upgrades:
 
