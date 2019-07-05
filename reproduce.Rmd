@@ -8,7 +8,7 @@ output:
     toc_depth: 3
 ---
 
-Reproducing data science work is the main objective of environment management. This site details three strategies for reproducing R environments overtime. To select a strategy, you will need to answer two questions:  
+Reproducing data science work is the main objective of environment management. This site details three strategies for reproducing R environments over time. To select a strategy, you will need to answer two questions:  
 
 1. Who is responsible for managing the environment?  
 2. How open is the environment?  
@@ -139,7 +139,7 @@ come from and address issues around trust.
 
 Come to this discussion prepared to advocate for either the [shared
 baseline](./reproduce.html#shared-baselines) or
-[validation](./validated.html) strategies. It may also help your admin
+[validation](./validated.html) strategy. It may also help your admin
 team to know that there are supported products, like [RStudio Package
 Manager](https://rstudio.com/products/package-manager), designed to help them
 help you!
