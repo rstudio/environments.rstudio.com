@@ -94,7 +94,7 @@ There are three main strategies covered in this site.
 
 1. The [Snapshot and Restore](./snapshot.html) strategy is used when individual data scientists are responsible for managing a project and have full access to install packages. The strategy uses tools like [renv](https://rstudio.github.io/renv)^[renv is packrat 2.0] to record a project's dependencies and restore them. 
 
-2. The [Shared Baseline](./shared.html) strategy helps administrators co-ordinate the work of many data scientists, by providing common sets of packages to use across projects. The key to this strategy is determining a consistent set of packages that work together.
+2. The [Shared Baseline](./shared.html) strategy helps administrators coordinate the work of many data scientists by providing common sets of packages to use across projects. The key to this strategy is determining a consistent set of packages that work together.
 
 3. The [Validated](./validated.html) strategy is used when packages must be controlled and meet specific organization standards.
 
@@ -140,7 +140,7 @@ versions of R installed. If your organization uses Docker containers, you might
 have a base image with some of these components, and runtime installation of
 others. Understanding these tools will help you create reproducible environments.
 
-- **R Packages** Managing and recording R packages makes up the bulk of the website, specifically learn about [repositories](./repositories.html), [installing packages](./installation.html), and [managing libraries](./libraries).
+- **R Packages** Managing and recording R packages makes up the bulk of this website. Specifically learn about [repositories](./repositories.html), [installing packages](./installation.html), and [managing libraries](./libraries).
 
 - **R Installation** Packages like `renv` will normally document the version of R used by the project. On shared servers, it is common to install multiple versions of R. Organizations using Docker will typically include R in a base image. Learn more [best practices for R installations](./R-installation.html).
 
