@@ -237,7 +237,7 @@ The key in any of the three methods is to be explicit about the version of R you
 
 ### R Packages
 
-R packages are handled in a variety of ways. oOne approach is to include package installation in the Dockerfile which embeds the packages into the image. A second approach is to add appropriate R packages when the container is run.
+R packages are handled in a variety of ways. One approach is to include package installation in the Dockerfile which embeds the packages into the image. A second approach is to add appropriate R packages when the container is run.
 
 In the former case, it is important to replace the standard `install.packages` command with a command that will return the same packages, regardless of when the Dockerfile is built into an image:
 
