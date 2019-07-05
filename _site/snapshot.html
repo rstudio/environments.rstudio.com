@@ -1358,6 +1358,7 @@ Tools
 <li><a href="#step-2-install-and-use-packages">Step 2: Install and Use Packages</a></li>
 <li><a href="#step-3-snapshot-the-environment">Step 3: Snapshot the Environment</a></li>
 <li><a href="#step-4-recreate-the-environment">Step 4: Recreate the Environment</a></li>
+<li><a href="#watch-a-video-demo-of-snapshot-and-restore-with-renv">Watch a video demo of Snapshot and Restore with <code>renv</code></a></li>
 <li><a href="#implementing-the-snapshot-strategy-in-production">Implementing the Snapshot Strategy in Production</a></li>
 <li><a href="#common-challenges-and-resolutions">Common Challenges and Resolutions:</a></li>
 <li><a href="#additional-resources">Additional Resources:</a></li>
@@ -1379,8 +1380,8 @@ Tools
 <p>A potential drawback of this strategy is the involvement required from the R user. For new users, these steps can create an energy barrier that prevents them from being successful. Often organizations will start new users (e.g. Excel converts) with a different strategy, and allow power R users the flexibility and responsibility of this strategy.</p>
 <div class="layout-chunk" data-layout="l-body">
 <div class="figure"><span id="fig:unnamed-chunk-1"></span>
-<div id="htmlwidget-524bd282b81790cfa554" style="width:624px;height:384px;" class="grViz html-widget"></div>
-<script type="application/json" data-for="htmlwidget-524bd282b81790cfa554">{"x":{"diagram":"\ndigraph renv {\n  graph [layout = dot\n         rankdir = LR]\n  node [shape = box]\n  \"1. Create a Project\"; \"Write Code\"; \"2. Install Packages\"; \"3. Snapshot\"; \"4. Restore\"\n  \n  \"1. Create a Project\"->\"Write Code\"\n  \"Write Code\"->\"2. Install Packages\" \n  \"2. Install Packages\" -> \"Write Code\"\n  \"Write Code\"->\"3. Snapshot\"\n  \"3. Snapshot\"->\"4. Restore\"\n  \n}      \n","config":{"engine":"dot","options":null}},"evals":[],"jsHooks":[]}</script>
+<div id="htmlwidget-10d012bf43edb99c3d00" style="width:624px;height:384px;" class="grViz html-widget"></div>
+<script type="application/json" data-for="htmlwidget-10d012bf43edb99c3d00">{"x":{"diagram":"\ndigraph renv {\n  graph [layout = dot\n         rankdir = LR]\n  node [shape = box]\n  \"1. Create a Project\"; \"Write Code\"; \"2. Install Packages\"; \"3. Snapshot\"; \"4. Restore\"\n  \n  \"1. Create a Project\"->\"Write Code\"\n  \"Write Code\"->\"2. Install Packages\" \n  \"2. Install Packages\" -> \"Write Code\"\n  \"Write Code\"->\"3. Snapshot\"\n  \"3. Snapshot\"->\"4. Restore\"\n  \n}      \n","config":{"engine":"dot","options":null}},"evals":[],"jsHooks":[]}</script>
 <p class="caption">
 Figure 1: Simple Workflow for Reproducible Environments
 </p>
@@ -1432,6 +1433,12 @@ Figure 1: Simple Workflow for Reproducible Environments
 
 </div>
 <p><code>renv</code> will recreate the package environment for you, and you’ll be back to working on R code instead of troubleshooting problems!</p>
+<h3 id="watch-a-video-demo-of-snapshot-and-restore-with-renv">Watch a video demo of Snapshot and Restore with <code>renv</code></h3>
+
+<html>
+<script src="https://fast.wistia.com/embed/medias/sbyf1srsgh.jsonp" async></script><script src="https://fast.wistia.com/assets/external/E-v1.js" async></script><div class="wistia_embed wistia_async_sbyf1srsgh" style="height:360px;position:relative;width:640px"><div class="wistia_swatch" style="height:100%;left:0;opacity:0;overflow:hidden;position:absolute;top:0;transition:opacity 200ms;width:100%;"><img src="https://fast.wistia.com/embed/medias/sbyf1srsgh/swatch" style="filter:blur(5px);height:100%;object-fit:contain;width:100%;" alt="" aria-hidden="true" onload="this.parentNode.style.opacity=1;" /></div></div>
+</html>
+
 <h3 id="implementing-the-snapshot-strategy-in-production">Implementing the Snapshot Strategy in Production</h3>
 <p>In some organizations, you may only want to worry about recording project dependencies when a project is ready for production. Generating a manifest of dependencies can be the first step in a deployment hand-off between a development environment and a production deployment. Learn more about <a href="./deploy.html">snapshotting for production</a>.</p>
 <p><strong>If you are using <a href="https://rstudio.com/products/connect">RStudio Connect</a> then the snapshot strategy is automatically applied when content is deployed</strong>.</p>

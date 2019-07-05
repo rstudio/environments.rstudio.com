@@ -32,6 +32,8 @@ The snapshot and restore strategy is easily adapted for collaboration using a to
 2. The collaborator clones the Git repository into a new project. The `renv.lock` file is included.
 3. The collaborator can use `renv::restore()` to recreate the necessary package environment for the project.
 
+For more details, refer to the [`renv` vignette on collaboration](https://rstudio.github.io/renv/articles/collaborating.html).
+
 ## Comparison 
 
 The shared baseline strategy requires initial work to create a shared development server, a frozen repository, and multiple R installations. Once this upfront work is complete, day to day collaboration is straightforward. This strategy is best suited for a team with strong R administrators, and can help teams that need to on-board new R users rapidly.
