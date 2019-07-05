@@ -36,7 +36,7 @@ For more details, refer to the [`renv` vignette on collaboration](https://rstudi
 
 ## Comparison 
 
-The shared baseline strategy requires initial work to create a shared development server, a frozen repository, and multiple R installations. Once this upfront work is complete, day to day collaboration is straightforward. This strategy is best suited for a team with strong R administrators, and can help teams that need to on-board new R users rapidly.
+The shared baseline strategy requires initial work to create a shared development server, a frozen repository, and multiple R installations. Once this upfront work is complete, day to day collaboration is straightforward. This strategy is best suited for a team with strong R administrators and can help teams that need to on board new R users rapidly.
 
 In contrast, the snapshot and restore strategy has minimal initial work, but requires vigilance during day to day development and collaboration. This strategy is best suited for power R users or cases where a shared development server is not possible.
 
