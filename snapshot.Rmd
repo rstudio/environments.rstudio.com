@@ -54,7 +54,7 @@ digraph renv {
 
 ### Pre-requisite Steps:
 
-1. (Administrators) Install each desired version of [R from source](./installation.Rmd).
+1. (Administrators) Install each desired version of [R from source](./R-installation.html).
 2. (Users) Install the `renv` package: `remotes::install_github('rstudio/renv')`
 
 
