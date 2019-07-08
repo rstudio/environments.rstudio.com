@@ -1260,7 +1260,7 @@
   <script src="site_libs/htmlwidgets-1.3/htmlwidgets.js"></script>
   <script src="site_libs/viz-0.3/viz.js"></script>
   <link href="site_libs/DiagrammeR-styles-0.2/styles.css" rel="stylesheet" />
-  <script src="site_libs/grViz-binding-1.0.0/grViz.js"></script>
+  <script src="site_libs/grViz-binding-1.0.1/grViz.js"></script>
   <script src="site_libs/jquery-1.11.3/jquery.min.js"></script>
   <script src="site_libs/bowser-1.9.3/bowser.min.js"></script>
   <script src="site_libs/webcomponents-2.0.0/webcomponents.js"></script>
@@ -1394,11 +1394,10 @@ A simple checklist:<br />
 <h2 id="example-rstudio-connect">Example: RStudio Connect</h2>
 <div class="layout-chunk" data-layout="l-body">
 <style>html {
-  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Helvetica Neue', 'Fira Sans', 'Droid Sans', Arial, sans-serif;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Fira Sans', 'Droid Sans', 'Helvetica Neue', Arial, sans-serif;
 }
 
-#vbypyyelex .gt_table {
-  display: table;
+#oomhfgucsv .gt_table {
   border-collapse: collapse;
   margin-left: auto;
   margin-right: auto;
@@ -1416,13 +1415,13 @@ A simple checklist:<br />
   /* table.border.top.color */
 }
 
-#vbypyyelex .gt_heading {
+#oomhfgucsv .gt_heading {
   background-color: #FFFFFF;
   /* heading.background.color */
   border-bottom-color: #FFFFFF;
 }
 
-#vbypyyelex .gt_title {
+#oomhfgucsv .gt_title {
   color: #000000;
   font-size: 125%;
   /* heading.title.font.size */
@@ -1433,7 +1432,7 @@ A simple checklist:<br />
   border-bottom-width: 0;
 }
 
-#vbypyyelex .gt_subtitle {
+#oomhfgucsv .gt_subtitle {
   color: #000000;
   font-size: 85%;
   /* heading.subtitle.font.size */
@@ -1444,7 +1443,7 @@ A simple checklist:<br />
   border-top-width: 0;
 }
 
-#vbypyyelex .gt_bottom_border {
+#oomhfgucsv .gt_bottom_border {
   border-bottom-style: solid;
   /* heading.border.bottom.style */
   border-bottom-width: 2px;
@@ -1453,7 +1452,7 @@ A simple checklist:<br />
   /* heading.border.bottom.color */
 }
 
-#vbypyyelex .gt_column_spanner {
+#oomhfgucsv .gt_column_spanner {
   border-bottom-style: solid;
   border-bottom-width: 2px;
   border-bottom-color: #A8A8A8;
@@ -1461,102 +1460,90 @@ A simple checklist:<br />
   padding-bottom: 4px;
 }
 
-#vbypyyelex .gt_col_heading {
+#oomhfgucsv .gt_col_heading {
   color: #000000;
   background-color: #FFFFFF;
-  /* column_labels.background.color */
+  /* boxhead.background.color */
   font-size: 16px;
-  /* column_labels.font.size */
+  /* boxhead.font.size */
   font-weight: initial;
-  /* column_labels.font.weight */
-  vertical-align: middle;
+  /* boxhead.font.weight */
   padding: 10px;
   margin: 10px;
 }
 
-#vbypyyelex .gt_sep_right {
+#oomhfgucsv .gt_sep_right {
   border-right: 5px solid #FFFFFF;
 }
 
-#vbypyyelex .gt_group_heading {
+#oomhfgucsv .gt_group_heading {
   padding: 8px;
   color: #000000;
   background-color: #FFFFFF;
-  /* row_group.background.color */
+  /* stub_group.background.color */
   font-size: 16px;
-  /* row_group.font.size */
+  /* stub_group.font.size */
   font-weight: initial;
-  /* row_group.font.weight */
+  /* stub_group.font.weight */
   border-top-style: solid;
-  /* row_group.border.top.style */
+  /* stub_group.border.top.style */
   border-top-width: 2px;
-  /* row_group.border.top.width */
+  /* stub_group.border.top.width */
   border-top-color: #A8A8A8;
-  /* row_group.border.top.color */
+  /* stub_group.border.top.color */
   border-bottom-style: solid;
-  /* row_group.border.bottom.style */
+  /* stub_group.border.bottom  .style */
   border-bottom-width: 2px;
-  /* row_group.border.bottom.width */
+  /* stub_group.border.bottom  .width */
   border-bottom-color: #A8A8A8;
-  /* row_group.border.bottom.color */
-  vertical-align: middle;
+  /* stub_group.border.bottom  .color */
 }
 
-#vbypyyelex .gt_empty_group_heading {
+#oomhfgucsv .gt_empty_group_heading {
   padding: 0.5px;
   color: #000000;
   background-color: #FFFFFF;
-  /* row_group.background.color */
+  /* stub_group.background.color */
   font-size: 16px;
-  /* row_group.font.size */
+  /* stub_group.font.size */
   font-weight: initial;
-  /* row_group.font.weight */
+  /* stub_group.font.weight */
   border-top-style: solid;
-  /* row_group.border.top.style */
+  /* stub_group.border.top.style */
   border-top-width: 2px;
-  /* row_group.border.top.width */
+  /* stub_group.border.top.width */
   border-top-color: #A8A8A8;
-  /* row_group.border.top.color */
+  /* stub_group.border.top.color */
   border-bottom-style: solid;
-  /* row_group.border.bottom.style */
+  /* stub_group.border.bottom  .style */
   border-bottom-width: 2px;
-  /* row_group.border.bottom.width */
+  /* stub_group.border.bottom  .width */
   border-bottom-color: #A8A8A8;
-  /* row_group.border.bottom.color */
-  vertical-align: middle;
+  /* stub_group.border.bottom  .color */
 }
 
-#vbypyyelex .gt_striped {
+#oomhfgucsv .gt_striped tr:nth-child(even) {
   background-color: #f2f2f2;
 }
 
-#vbypyyelex .gt_from_md > :first-child {
-  margin-top: 0;
-}
-
-#vbypyyelex .gt_from_md > :last-child {
-  margin-bottom: 0;
-}
-
-#vbypyyelex .gt_row {
+#oomhfgucsv .gt_row {
   padding: 10px;
   /* row.padding */
   margin: 10px;
-  vertical-align: middle;
 }
 
-#vbypyyelex .gt_stub {
+#oomhfgucsv .gt_stub {
   border-right-style: solid;
   border-right-width: 2px;
   border-right-color: #A8A8A8;
-  padding-left: 12px;
+  text-indent: 5px;
 }
 
-#vbypyyelex .gt_stub.gt_row {
+#oomhfgucsv .gt_stub.gt_row {
   background-color: #FFFFFF;
 }
 
-#vbypyyelex .gt_summary_row {
+#oomhfgucsv .gt_summary_row {
   background-color: #FFFFFF;
   /* summary_row.background.color */
   padding: 6px;
@@ -1565,89 +1552,89 @@ A simple checklist:<br />
   /* summary_row.text_transform */
 }
 
-#vbypyyelex .gt_first_summary_row {
+#oomhfgucsv .gt_first_summary_row {
   border-top-style: solid;
   border-top-width: 2px;
   border-top-color: #A8A8A8;
 }
 
-#vbypyyelex .gt_table_body {
+#oomhfgucsv .gt_table_body {
   border-top-style: solid;
-  /* table_body.border.top.style */
+  /* field.border.top.style */
   border-top-width: 2px;
-  /* table_body.border.top.width */
+  /* field.border.top.width */
   border-top-color: #A8A8A8;
-  /* table_body.border.top.color */
+  /* field.border.top.color */
   border-bottom-style: solid;
-  /* table_body.border.bottom.style */
+  /* field.border.bottom.style */
   border-bottom-width: 2px;
-  /* table_body.border.bottom.width */
+  /* field.border.bottom.width */
   border-bottom-color: #A8A8A8;
-  /* table_body.border.bottom.color */
+  /* field.border.bottom.color */
 }
 
-#vbypyyelex .gt_footnote {
+#oomhfgucsv .gt_footnote {
   font-size: 90%;
   /* footnote.font.size */
   padding: 4px;
   /* footnote.padding */
 }
 
-#vbypyyelex .gt_sourcenote {
+#oomhfgucsv .gt_sourcenote {
   font-size: 90%;
   /* sourcenote.font.size */
   padding: 4px;
   /* sourcenote.padding */
 }
 
-#vbypyyelex .gt_center {
+#oomhfgucsv .gt_center {
   text-align: center;
 }
 
-#vbypyyelex .gt_left {
+#oomhfgucsv .gt_left {
   text-align: left;
 }
 
-#vbypyyelex .gt_right {
+#oomhfgucsv .gt_right {
   text-align: right;
   font-variant-numeric: tabular-nums;
 }
 
-#vbypyyelex .gt_font_normal {
+#oomhfgucsv .gt_font_normal {
   font-weight: normal;
 }
 
-#vbypyyelex .gt_font_bold {
+#oomhfgucsv .gt_font_bold {
   font-weight: bold;
 }
 
-#vbypyyelex .gt_font_italic {
+#oomhfgucsv .gt_font_italic {
   font-style: italic;
 }
 
-#vbypyyelex .gt_super {
+#oomhfgucsv .gt_super {
   font-size: 65%;
 }
 
-#vbypyyelex .gt_footnote_glyph {
+#oomhfgucsv .gt_footnote_glyph {
   font-style: italic;
   font-size: 65%;
 }
 </style>
-<div id="vbypyyelex" style="overflow-x:auto;"><!--gt table start-->
+<div id="oomhfgucsv"><!--gt table start-->
 <table class='gt_table'>
 <tr>
 <th class='gt_col_heading gt_left' rowspan='1' colspan='1'></th>
 <th class='gt_col_heading gt_left' rowspan='1' colspan='1'>RStudio Connect Implementation</th>
 </tr>
-<tbody class='gt_table_body'>
+<tbody class='gt_table_body gt_striped'>
 <tr>
 <td class='gt_row gt_stub gt_left'>Snapshot</td>
-<td class='gt_row gt_left'>Manifest file is created during publication</td>
+<td class='gt_row gt_left'>Manifest file is created during publication                                   </td>
 </tr>
 <tr>
 <td class='gt_row gt_stub gt_left'>Isolate</td>
-<td class='gt_row gt_left gt_striped'>RStudio Connect creates an isolated package library for each piece of content</td>
+<td class='gt_row gt_left'>RStudio Connect creates an isolated package library for each piece of content </td>
 </tr>
 <tr>
 <td class='gt_row gt_stub gt_left'>Restore</td>
@@ -1695,11 +1682,10 @@ A simple checklist:<br />
 <p>In this example, a Docker container is used to isolate the data product, and <code>renv</code> is used to snapshot and restore the appropriate package environment. More details are available for using <a href="./docker.html">R with Docker here</a>.</p>
 <div class="layout-chunk" data-layout="l-body">
 <style>html {
-  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Helvetica Neue', 'Fira Sans', 'Droid Sans', Arial, sans-serif;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Fira Sans', 'Droid Sans', 'Helvetica Neue', Arial, sans-serif;
 }
 
-#nqqffgvgdz .gt_table {
-  display: table;
+#bmgbqlsfhf .gt_table {
   border-collapse: collapse;
   margin-left: auto;
   margin-right: auto;
@@ -1717,13 +1703,13 @@ A simple checklist:<br />
   /* table.border.top.color */
 }
 
-#nqqffgvgdz .gt_heading {
+#bmgbqlsfhf .gt_heading {
   background-color: #FFFFFF;
   /* heading.background.color */
   border-bottom-color: #FFFFFF;
 }
 
-#nqqffgvgdz .gt_title {
+#bmgbqlsfhf .gt_title {
   color: #000000;
   font-size: 125%;
   /* heading.title.font.size */
@@ -1734,7 +1720,7 @@ A simple checklist:<br />
   border-bottom-width: 0;
 }
 
-#nqqffgvgdz .gt_subtitle {
+#bmgbqlsfhf .gt_subtitle {
   color: #000000;
   font-size: 85%;
   /* heading.subtitle.font.size */
@@ -1745,7 +1731,7 @@ A simple checklist:<br />
   border-top-width: 0;
 }
 
-#nqqffgvgdz .gt_bottom_border {
+#bmgbqlsfhf .gt_bottom_border {
   border-bottom-style: solid;
   /* heading.border.bottom.style */
   border-bottom-width: 2px;
@@ -1754,7 +1740,7 @@ A simple checklist:<br />
   /* heading.border.bottom.color */
 }
 
-#nqqffgvgdz .gt_column_spanner {
+#bmgbqlsfhf .gt_column_spanner {
   border-bottom-style: solid;
   border-bottom-width: 2px;
   border-bottom-color: #A8A8A8;
@@ -1762,102 +1748,90 @@ A simple checklist:<br />
   padding-bottom: 4px;
 }
 
-#nqqffgvgdz .gt_col_heading {
+#bmgbqlsfhf .gt_col_heading {
   color: #000000;
   background-color: #FFFFFF;
-  /* column_labels.background.color */
+  /* boxhead.background.color */
   font-size: 16px;
-  /* column_labels.font.size */
+  /* boxhead.font.size */
   font-weight: initial;
-  /* column_labels.font.weight */
-  vertical-align: middle;
+  /* boxhead.font.weight */
   padding: 10px;
   margin: 10px;
 }
 
-#nqqffgvgdz .gt_sep_right {
+#bmgbqlsfhf .gt_sep_right {
   border-right: 5px solid #FFFFFF;
 }
 
-#nqqffgvgdz .gt_group_heading {
+#bmgbqlsfhf .gt_group_heading {
   padding: 8px;
   color: #000000;
   background-color: #FFFFFF;
-  /* row_group.background.color */
+  /* stub_group.background.color */
   font-size: 16px;
-  /* row_group.font.size */
+  /* stub_group.font.size */
   font-weight: initial;
-  /* row_group.font.weight */
+  /* stub_group.font.weight */
   border-top-style: solid;
-  /* row_group.border.top.style */
+  /* stub_group.border.top.style */
   border-top-width: 2px;
-  /* row_group.border.top.width */
+  /* stub_group.border.top.width */
   border-top-color: #A8A8A8;
-  /* row_group.border.top.color */
+  /* stub_group.border.top.color */
   border-bottom-style: solid;
-  /* row_group.border.bottom.style */
+  /* stub_group.border.bottom  .style */
   border-bottom-width: 2px;
-  /* row_group.border.bottom.width */
+  /* stub_group.border.bottom  .width */
   border-bottom-color: #A8A8A8;
-  /* row_group.border.bottom.color */
-  vertical-align: middle;
+  /* stub_group.border.bottom  .color */
 }
 
-#nqqffgvgdz .gt_empty_group_heading {
+#bmgbqlsfhf .gt_empty_group_heading {
   padding: 0.5px;
   color: #000000;
   background-color: #FFFFFF;
-  /* row_group.background.color */
+  /* stub_group.background.color */
   font-size: 16px;
-  /* row_group.font.size */
+  /* stub_group.font.size */
   font-weight: initial;
-  /* row_group.font.weight */
+  /* stub_group.font.weight */
   border-top-style: solid;
-  /* row_group.border.top.style */
+  /* stub_group.border.top.style */
   border-top-width: 2px;
-  /* row_group.border.top.width */
+  /* stub_group.border.top.width */
   border-top-color: #A8A8A8;
-  /* row_group.border.top.color */
+  /* stub_group.border.top.color */
   border-bottom-style: solid;
-  /* row_group.border.bottom.style */
+  /* stub_group.border.bottom  .style */
   border-bottom-width: 2px;
-  /* row_group.border.bottom.width */
+  /* stub_group.border.bottom  .width */
   border-bottom-color: #A8A8A8;
-  /* row_group.border.bottom.color */
-  vertical-align: middle;
+  /* stub_group.border.bottom  .color */
 }
 
-#nqqffgvgdz .gt_striped {
+#bmgbqlsfhf .gt_striped tr:nth-child(even) {
   background-color: #f2f2f2;
 }
 
-#nqqffgvgdz .gt_from_md > :first-child {
-  margin-top: 0;
-}
-
-#nqqffgvgdz .gt_from_md > :last-child {
-  margin-bottom: 0;
-}
-
-#nqqffgvgdz .gt_row {
+#bmgbqlsfhf .gt_row {
   padding: 10px;
   /* row.padding */
   margin: 10px;
-  vertical-align: middle;
 }
 
-#nqqffgvgdz .gt_stub {
+#bmgbqlsfhf .gt_stub {
   border-right-style: solid;
   border-right-width: 2px;
   border-right-color: #A8A8A8;
-  padding-left: 12px;
+  text-indent: 5px;
 }
 
-#nqqffgvgdz .gt_stub.gt_row {
+#bmgbqlsfhf .gt_stub.gt_row {
   background-color: #FFFFFF;
 }
 
-#nqqffgvgdz .gt_summary_row {
+#bmgbqlsfhf .gt_summary_row {
   background-color: #FFFFFF;
   /* summary_row.background.color */
   padding: 6px;
@@ -1866,89 +1840,89 @@ A simple checklist:<br />
   /* summary_row.text_transform */
 }
 
-#nqqffgvgdz .gt_first_summary_row {
+#bmgbqlsfhf .gt_first_summary_row {
   border-top-style: solid;
   border-top-width: 2px;
   border-top-color: #A8A8A8;
 }
 
-#nqqffgvgdz .gt_table_body {
+#bmgbqlsfhf .gt_table_body {
   border-top-style: solid;
-  /* table_body.border.top.style */
+  /* field.border.top.style */
   border-top-width: 2px;
-  /* table_body.border.top.width */
+  /* field.border.top.width */
   border-top-color: #A8A8A8;
-  /* table_body.border.top.color */
+  /* field.border.top.color */
   border-bottom-style: solid;
-  /* table_body.border.bottom.style */
+  /* field.border.bottom.style */
   border-bottom-width: 2px;
-  /* table_body.border.bottom.width */
+  /* field.border.bottom.width */
   border-bottom-color: #A8A8A8;
-  /* table_body.border.bottom.color */
+  /* field.border.bottom.color */
 }
 
-#nqqffgvgdz .gt_footnote {
+#bmgbqlsfhf .gt_footnote {
   font-size: 90%;
   /* footnote.font.size */
   padding: 4px;
   /* footnote.padding */
 }
 
-#nqqffgvgdz .gt_sourcenote {
+#bmgbqlsfhf .gt_sourcenote {
   font-size: 90%;
   /* sourcenote.font.size */
   padding: 4px;
   /* sourcenote.padding */
 }
 
-#nqqffgvgdz .gt_center {
+#bmgbqlsfhf .gt_center {
   text-align: center;
 }
 
-#nqqffgvgdz .gt_left {
+#bmgbqlsfhf .gt_left {
   text-align: left;
 }
 
-#nqqffgvgdz .gt_right {
+#bmgbqlsfhf .gt_right {
   text-align: right;
   font-variant-numeric: tabular-nums;
 }
 
-#nqqffgvgdz .gt_font_normal {
+#bmgbqlsfhf .gt_font_normal {
   font-weight: normal;
 }
 
-#nqqffgvgdz .gt_font_bold {
+#bmgbqlsfhf .gt_font_bold {
   font-weight: bold;
 }
 
-#nqqffgvgdz .gt_font_italic {
+#bmgbqlsfhf .gt_font_italic {
   font-style: italic;
 }
 
-#nqqffgvgdz .gt_super {
+#bmgbqlsfhf .gt_super {
   font-size: 65%;
 }
 
-#nqqffgvgdz .gt_footnote_glyph {
+#bmgbqlsfhf .gt_footnote_glyph {
   font-style: italic;
   font-size: 65%;
 }
 </style>
-<div id="nqqffgvgdz" style="overflow-x:auto;"><!--gt table start-->
+<div id="bmgbqlsfhf"><!--gt table start-->
 <table class='gt_table'>
 <tr>
 <th class='gt_col_heading gt_left' rowspan='1' colspan='1'></th>
 <th class='gt_col_heading gt_left' rowspan='1' colspan='1'>Docker + renv Implementation</th>
 </tr>
-<tbody class='gt_table_body'>
+<tbody class='gt_table_body gt_striped'>
 <tr>
 <td class='gt_row gt_stub gt_left'>Snapshot</td>
-<td class='gt_row gt_left'>renv::snapshot() creates a lock file from the development environment</td>
+<td class='gt_row gt_left'>renv::snapshot() creates a lock file from the development environment             </td>
 </tr>
 <tr>
 <td class='gt_row gt_stub gt_left'>Isolate</td>
-<td class='gt_row gt_left gt_striped'>The Docker container creates an isolated environment for the data product</td>
+<td class='gt_row gt_left'>The Docker container creates an isolated environment for the data product         </td>
 </tr>
 <tr>
 <td class='gt_row gt_stub gt_left'>Restore</td>
@@ -1995,8 +1969,8 @@ cat renv.lock | grep -A1 &quot;\[R\]&quot; | sed -En &quot;s/Version=(.*)$/\1/p&
 <li>If everything works as expected, re-run the steps to deploy the data product into production.</li>
 </ol>
 <div class="layout-chunk" data-layout="l-body">
-<div id="htmlwidget-3f25bf34cff85ffdd13f" style="width:624px;height:384px;" class="grViz html-widget"></div>
-<script type="application/json" data-for="htmlwidget-3f25bf34cff85ffdd13f">{"x":{"diagram":"\ndigraph repos {\n  graph [layout = dot\n        rankdir = LR]\n  \n  \n  node[shape = box]\n  \"Dev\"\n  \n  node[fillcolor = grey, style = filled]\n  \"Staging\"; \"Prod\"\n  \n  Dev -> Staging\n  Staging -> Prod\n}      \n","config":{"engine":"dot","options":null}},"evals":[],"jsHooks":[]}</script>
+<div id="htmlwidget-92064042afaf426c9623" style="width:624px;height:384px;" class="grViz html-widget"></div>
+<script type="application/json" data-for="htmlwidget-92064042afaf426c9623">{"x":{"diagram":"\ndigraph repos {\n  graph [layout = dot\n        rankdir = LR]\n  \n  \n  node[shape = box]\n  \"Dev\"\n  \n  node[fillcolor = grey, style = filled]\n  \"Staging\"; \"Prod\"\n  \n  Dev -> Staging\n  Staging -> Prod\n}      \n","config":{"engine":"dot","options":null}},"evals":[],"jsHooks":[]}</script>
 </div>
 <aside>
 Staging and Production should be identical clones!
@@ -2018,8 +1992,8 @@ Staging and Production should be identical clones!
 <li><p>The user or admin can merge the staging branch into the master branch. This merge triggers a deployment to the production server.</p></li>
 </ol>
 <div class="layout-chunk" data-layout="l-page">
-<div id="htmlwidget-9b479534e1294d75d1c1" style="width:624px;height:384px;" class="grViz html-widget"></div>
-<script type="application/json" data-for="htmlwidget-9b479534e1294d75d1c1">{"x":{"diagram":"\ndigraph repos {\n  graph [layout = dot\n        rankdir = LR]\n  \n  \n  node[shape = box]\n  \"Dev\"; \"Git Branch\"; \"Jenkins\"; \"Connect Staging\"; \"Git Master\"; \"Connect Prod\"; \"Jenkins \"\n  \n  node[fillcolor = grey, style = filled]\n  \"Dependency Manifest\"; \"Code\"\n  \n  node[fillcolor = grey, style = filled, shape = oval]\n  Approval\n  \n  Dev -> \"Dependency Manifest\"\n  Dev -> \"Code\"\n  \"Code\" -> \"Git Branch\"\n  \"Dependency Manifest\" -> \"Git Branch\"\n  \"Git Branch\" -> \"Jenkins\"\n  \"Jenkins\" -> \"Connect Staging\"\n  \"Connect Staging\" -> Approval\n  Approval -> \"Git Master\"\n  \"Git Master\" -> \"Jenkins \"\n  \"Jenkins \" -> \"Connect Prod\" \n}      \n","config":{"engine":"dot","options":null}},"evals":[],"jsHooks":[]}</script>
+<div id="htmlwidget-c2d108dcdbfde56bfb3e" style="width:624px;height:384px;" class="grViz html-widget"></div>
+<script type="application/json" data-for="htmlwidget-c2d108dcdbfde56bfb3e">{"x":{"diagram":"\ndigraph repos {\n  graph [layout = dot\n        rankdir = LR]\n  \n  \n  node[shape = box]\n  \"Dev\"; \"Git Branch\"; \"Jenkins\"; \"Connect Staging\"; \"Git Master\"; \"Connect Prod\"; \"Jenkins \"\n  \n  node[fillcolor = grey, style = filled]\n  \"Dependency Manifest\"; \"Code\"\n  \n  node[fillcolor = grey, style = filled, shape = oval]\n  Approval\n  \n  Dev -> \"Dependency Manifest\"\n  Dev -> \"Code\"\n  \"Code\" -> \"Git Branch\"\n  \"Dependency Manifest\" -> \"Git Branch\"\n  \"Git Branch\" -> \"Jenkins\"\n  \"Jenkins\" -> \"Connect Staging\"\n  \"Connect Staging\" -> Approval\n  Approval -> \"Git Master\"\n  \"Git Master\" -> \"Jenkins \"\n  \"Jenkins \" -> \"Connect Prod\" \n}      \n","config":{"engine":"dot","options":null}},"evals":[],"jsHooks":[]}</script>
 </div>
 <p>More details are available <a href="https://solutions.rstudio.com/deploy/deploy">here</a>.</p>
 <h1 id="acceptable-differences">Acceptable Differences</h1>
