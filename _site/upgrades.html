@@ -1395,6 +1395,12 @@ renv::restore()</code></pre>
 <h2 id="what-if-an-upgrade-breaks-code">What if an upgrade breaks code?</h2>
 <p>A common problem after upgrading packages is to hit an error running the <code>library</code> statements in your code. This occurs because package upgrades can leave your project library in an <a href="./shared.html#the-big-risk">inconsistent state</a>. One fix is to upgrade all of the packages used in your project. It is best to restart the R session prior to performing these upgrades, as loaded packages can often prevent successful upgrades. The <a href="./validated.html">Validated</a> and <a href="./shared.html">Shared Baseline</a> strategies address this problem by requiring upgrades to the entire repository.</p>
 <p>If all of your <code>library</code> statements work, but your code still fails to run, it is likely the functions in a package changed. At this point you can roll back your change or take time to investigate and update your code. The first place to look is the package’s News file. For example, this is the <a href="https://github.com/tidyverse/ggplot2/blob/master/NEWS">ggplot2 News file</a>. A News file will what has changed, and detail what steps a user will should take in order to adapt their code. Focus on the changes listed between the version you were using and latest version - both pieces of information are displayed in the <code>pak</code> install prompt. Normally you can identify the problematic package based on where the error occurs in your code. The <a href="https://github.com/jimhester/itdepends"><code>itdepends</code> package</a> can also help you identify which functions are in use.</p>
+<h2 id="watch-a-video-demo-of-snapshot-and-restore-with-renv">Watch a video demo of Snapshot and Restore with <code>renv</code></h2>
+
+<html>
+<script src="https://fast.wistia.com/embed/medias/sbyf1srsgh.jsonp" async></script><script src="https://fast.wistia.com/assets/external/E-v1.js" async></script><div class="wistia_embed wistia_async_sbyf1srsgh" style="height:360px;position:relative;width:640px"><div class="wistia_swatch" style="height:100%;left:0;opacity:0;overflow:hidden;position:absolute;top:0;transition:opacity 200ms;width:100%;"><img src="https://fast.wistia.com/embed/medias/sbyf1srsgh/swatch" style="filter:blur(5px);height:100%;object-fit:contain;width:100%;" alt="" aria-hidden="true" onload="this.parentNode.style.opacity=1;" /></div></div>
+</html>
+
 <!--radix_placeholder_article_footer-->
 <!--/radix_placeholder_article_footer-->
 </div>
