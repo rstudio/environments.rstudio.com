@@ -62,7 +62,7 @@ digraph renv {
 
 A *key* to package management is to isolate projects from one another. This allows you to upgrade or add packages for one project without breaking other work. Whether you are in an existing project or starting a new project, use:
 
-```{r eval=FALSE}
+```{r eval=FALSE, echo=TRUE}
 renv::init()
 ```
 
@@ -78,7 +78,7 @@ With the project configured, you can now install and use packages. There are thr
 3. Use `install.packages` as a fall back option.
 
 
-```{r eval=FALSE}
+```{r eval=FALSE, echo=TRUE}
 # You can use install.packages
 install.packages('ggplot2')
 
@@ -92,7 +92,7 @@ remotes::install_cran('ggplot2')
 
 Use packages just how you normally would!
 
-```{r eval = FALSE}
+```{r eval=FALSE, echo=TRUE}
 library(ggplot2)
 ```
 
@@ -101,7 +101,7 @@ library(ggplot2)
 
 Once you are ready to share your work, or you are finished with a project, you'll want to make a record of the current environment. 
 
-```{r eval=FALSE}
+```{r eval=FALSE, echo=TRUE}
 renv::snapshot()
 ```
 
@@ -114,7 +114,7 @@ If you are familiar with version control for your code, we recommend calling `sn
 
 This step is where the work above pays off! If you need to share your work with others, or need to roll back changes to get back to a working library, cash in by using restore:
 
-```{r eval=FALSE}
+```{r eval=FALSE, echo=TRUE}
 # open the project, and use
 renv::restore()
 ```
