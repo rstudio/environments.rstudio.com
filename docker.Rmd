@@ -237,9 +237,9 @@ The key in any of the three methods is to be explicit about the version of R you
 
 ### R Packages
 
-R packages are handled in a variety of ways. For quick analysis, some organizations will mount [R libraries](./libraries.html) into running Docker containers. Organizations looking for reproducible environments tend to prefer including package installation in the Dockerfile which embeds the packages into the image.
+R packages are handled in a variety of ways. One approach is to include package installation in the Dockerfile which embeds the packages into the image. A second approach is to add appropriate R packages when the container is run.
 
-In the latter case, it is helpful to replace the standard `install.packages` command with a command that will return the same packages, regardless of when the Dockerfile is built into an image:
+In the former case, it is important to replace the standard `install.packages` command with a command that will return the same packages, regardless of when the Dockerfile is built into an image:
 
 ```bash
 #  install from a versioned repo
@@ -270,6 +270,19 @@ repository](./repositories.html) supports Linux binaries for packages.
 Unfortunately, CRAN does not support Linux binaries today, but work is underway
 to extend this support for [RStudio Package
 Manager](https://rstudio.com/products/package-manager).
+
+The second approach is to add packages into the container at runtime, instead of including them in the image. Packages added in this manner can be easier to cache, installed packages can effectively be mounted into the container. Similar to the first approach, tools like `renv` ensure the version stability. A downside to this approach is that reproducibility now relies on tracking the Docker run invocation in addition to the Dockerfile and image. The [`renv` vignette on Docker](https://rstudio.github.io/renv/articles/docker.html) provides more details.
+
+```bash
+# example docker run command with renv
+RENV_PATHS_CACHE_HOST=/opt/local/renv/cache
+RENV_PATHS_CACHE_CONTAINER=/renv/cache
+docker run --rm \
+    -e "RENV_PATHS_CACHE=${RENV_PATHS_CACHE_CONTAINER}" \
+    -v "${RENV_PATHS_CACHE_HOST}:${RENV_PATHS_CACHE_CONTAINER}" \
+    R --vanilla --slave -e 'renv::activate(); renv::restore()'
+```
+
 
 ### Code
 
