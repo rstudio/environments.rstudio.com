@@ -1260,7 +1260,7 @@
   <script src="site_libs/htmlwidgets-1.3/htmlwidgets.js"></script>
   <script src="site_libs/viz-0.3/viz.js"></script>
   <link href="site_libs/DiagrammeR-styles-0.2/styles.css" rel="stylesheet" />
-  <script src="site_libs/grViz-binding-1.0.1/grViz.js"></script>
+  <script src="site_libs/grViz-binding-1.0.0/grViz.js"></script>
   <script src="site_libs/jquery-1.11.3/jquery.min.js"></script>
   <script src="site_libs/bowser-1.9.3/bowser.min.js"></script>
   <script src="site_libs/webcomponents-2.0.0/webcomponents.js"></script>
@@ -1381,8 +1381,8 @@ Tools
 <li><strong>Container</strong> - At a specific moment, you can <em>start</em> a container from the image, which amounts to running a process in the built environment. This is drinking a pint from the batch of beer.</li>
 </ol>
 <div class="layout-chunk" data-layout="l-body">
-<div id="htmlwidget-75bad958cceceec9041c" style="width:624px;height:384px;" class="grViz html-widget"></div>
-<script type="application/json" data-for="htmlwidget-75bad958cceceec9041c">{"x":{"diagram":"\n  digraph repos {\n  graph [layout = dot\n         rankdir = LR]\n  node[shape = box]\n  Dockerfile Image Container\n  \n  node[shape = box, style=filled, color=grey]\n  Registry \n  \n  Image -> Registry\n  Registry -> Image\n  \n  Dockerfile -> Image\n  Image -> Container\n}      \n","config":{"engine":"dot","options":null}},"evals":[],"jsHooks":[]}</script>
+<div id="htmlwidget-12e3b8ce5134f71a70be" style="width:624px;height:384px;" class="grViz html-widget"></div>
+<script type="application/json" data-for="htmlwidget-12e3b8ce5134f71a70be">{"x":{"diagram":"\n  digraph repos {\n  graph [layout = dot\n         rankdir = LR]\n  node[shape = box]\n  Dockerfile Image Container\n  \n  node[shape = box, style=filled, color=grey]\n  Registry \n  \n  Image -> Registry\n  Registry -> Image\n  \n  Dockerfile -> Image\n  Image -> Container\n}      \n","config":{"engine":"dot","options":null}},"evals":[],"jsHooks":[]}</script>
 </div>
 <p><strong>Docker is powerful because it allows you to create isolated, explicit environments where specific commands are run.</strong> In our analogy, the benefits are comparable to a group of friends going to a bar and ordering drinks:</p>
 <ol type="1">
@@ -1393,10 +1393,11 @@ Tools
 <p>For R users and admins, it is important to understand that containers are tied to a process. This is the key difference in most user’s experience between a container and a virtual machine. For R users, the process that is running can fall into two buckets:</p>
 <div class="layout-chunk" data-layout="l-body">
 <style>html {
-  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Fira Sans', 'Droid Sans', 'Helvetica Neue', Arial, sans-serif;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Helvetica Neue', 'Fira Sans', 'Droid Sans', Arial, sans-serif;
 }
 
-#drspmzqtvp .gt_table {
+#uvbruaeddo .gt_table {
+  display: table;
   border-collapse: collapse;
   margin-left: auto;
   margin-right: auto;
@@ -1414,13 +1415,13 @@ Tools
   /* table.border.top.color */
 }
 
-#drspmzqtvp .gt_heading {
+#uvbruaeddo .gt_heading {
   background-color: #FFFFFF;
   /* heading.background.color */
   border-bottom-color: #FFFFFF;
 }
 
-#drspmzqtvp .gt_title {
+#uvbruaeddo .gt_title {
   color: #000000;
   font-size: 125%;
   /* heading.title.font.size */
@@ -1431,7 +1432,7 @@ Tools
   border-bottom-width: 0;
 }
 
-#drspmzqtvp .gt_subtitle {
+#uvbruaeddo .gt_subtitle {
   color: #000000;
   font-size: 85%;
   /* heading.subtitle.font.size */
@@ -1442,7 +1443,7 @@ Tools
   border-top-width: 0;
 }
 
-#drspmzqtvp .gt_bottom_border {
+#uvbruaeddo .gt_bottom_border {
   border-bottom-style: solid;
   /* heading.border.bottom.style */
   border-bottom-width: 2px;
@@ -1451,7 +1452,7 @@ Tools
   /* heading.border.bottom.color */
 }
 
-#drspmzqtvp .gt_column_spanner {
+#uvbruaeddo .gt_column_spanner {
   border-bottom-style: solid;
   border-bottom-width: 2px;
   border-bottom-color: #A8A8A8;
@@ -1459,90 +1460,102 @@ Tools
   padding-bottom: 4px;
 }
 
-#drspmzqtvp .gt_col_heading {
+#uvbruaeddo .gt_col_heading {
   color: #000000;
   background-color: #FFFFFF;
-  /* boxhead.background.color */
+  /* column_labels.background.color */
   font-size: 16px;
-  /* boxhead.font.size */
+  /* column_labels.font.size */
   font-weight: initial;
-  /* boxhead.font.weight */
+  /* column_labels.font.weight */
+  vertical-align: middle;
   padding: 10px;
   margin: 10px;
 }
 
-#drspmzqtvp .gt_sep_right {
+#uvbruaeddo .gt_sep_right {
   border-right: 5px solid #FFFFFF;
 }
 
-#drspmzqtvp .gt_group_heading {
+#uvbruaeddo .gt_group_heading {
   padding: 8px;
   color: #000000;
   background-color: #FFFFFF;
-  /* stub_group.background.color */
+  /* row_group.background.color */
   font-size: 16px;
-  /* stub_group.font.size */
+  /* row_group.font.size */
   font-weight: initial;
-  /* stub_group.font.weight */
+  /* row_group.font.weight */
   border-top-style: solid;
-  /* stub_group.border.top.style */
+  /* row_group.border.top.style */
   border-top-width: 2px;
-  /* stub_group.border.top.width */
+  /* row_group.border.top.width */
   border-top-color: #A8A8A8;
-  /* stub_group.border.top.color */
+  /* row_group.border.top.color */
   border-bottom-style: solid;
-  /* stub_group.border.bottom  .style */
+  /* row_group.border.bottom.style */
   border-bottom-width: 2px;
-  /* stub_group.border.bottom  .width */
+  /* row_group.border.bottom.width */
   border-bottom-color: #A8A8A8;
-  /* stub_group.border.bottom  .color */
+  /* row_group.border.bottom.color */
+  vertical-align: middle;
 }
 
-#drspmzqtvp .gt_empty_group_heading {
+#uvbruaeddo .gt_empty_group_heading {
   padding: 0.5px;
   color: #000000;
   background-color: #FFFFFF;
-  /* stub_group.background.color */
+  /* row_group.background.color */
   font-size: 16px;
-  /* stub_group.font.size */
+  /* row_group.font.size */
   font-weight: initial;
-  /* stub_group.font.weight */
+  /* row_group.font.weight */
   border-top-style: solid;
-  /* stub_group.border.top.style */
+  /* row_group.border.top.style */
   border-top-width: 2px;
-  /* stub_group.border.top.width */
+  /* row_group.border.top.width */
   border-top-color: #A8A8A8;
-  /* stub_group.border.top.color */
+  /* row_group.border.top.color */
   border-bottom-style: solid;
-  /* stub_group.border.bottom  .style */
+  /* row_group.border.bottom.style */
   border-bottom-width: 2px;
-  /* stub_group.border.bottom  .width */
+  /* row_group.border.bottom.width */
   border-bottom-color: #A8A8A8;
-  /* stub_group.border.bottom  .color */
+  /* row_group.border.bottom.color */
+  vertical-align: middle;
 }
 
-#drspmzqtvp .gt_striped tr:nth-child(even) {
+#uvbruaeddo .gt_striped {
   background-color: #f2f2f2;
 }
 
-#drspmzqtvp .gt_row {
+#uvbruaeddo .gt_from_md > :first-child {
+  margin-top: 0;
+}
+
+#uvbruaeddo .gt_from_md > :last-child {
+  margin-bottom: 0;
+}
+
+#uvbruaeddo .gt_row {
   padding: 10px;
   /* row.padding */
   margin: 10px;
+  vertical-align: middle;
 }
 
-#drspmzqtvp .gt_stub {
+#uvbruaeddo .gt_stub {
   border-right-style: solid;
   border-right-width: 2px;
   border-right-color: #A8A8A8;
-  text-indent: 5px;
+  padding-left: 12px;
 }
 
-#drspmzqtvp .gt_stub.gt_row {
+#uvbruaeddo .gt_stub.gt_row {
   background-color: #FFFFFF;
 }
 
-#drspmzqtvp .gt_summary_row {
+#uvbruaeddo .gt_summary_row {
   background-color: #FFFFFF;
   /* summary_row.background.color */
   padding: 6px;
@@ -1551,83 +1564,83 @@ Tools
   /* summary_row.text_transform */
 }
 
-#drspmzqtvp .gt_first_summary_row {
+#uvbruaeddo .gt_first_summary_row {
   border-top-style: solid;
   border-top-width: 2px;
   border-top-color: #A8A8A8;
 }
 
-#drspmzqtvp .gt_table_body {
+#uvbruaeddo .gt_table_body {
   border-top-style: solid;
-  /* field.border.top.style */
+  /* table_body.border.top.style */
   border-top-width: 2px;
-  /* field.border.top.width */
+  /* table_body.border.top.width */
   border-top-color: #A8A8A8;
-  /* field.border.top.color */
+  /* table_body.border.top.color */
   border-bottom-style: solid;
-  /* field.border.bottom.style */
+  /* table_body.border.bottom.style */
   border-bottom-width: 2px;
-  /* field.border.bottom.width */
+  /* table_body.border.bottom.width */
   border-bottom-color: #A8A8A8;
-  /* field.border.bottom.color */
+  /* table_body.border.bottom.color */
 }
 
-#drspmzqtvp .gt_footnote {
+#uvbruaeddo .gt_footnote {
   font-size: 90%;
   /* footnote.font.size */
   padding: 4px;
   /* footnote.padding */
 }
 
-#drspmzqtvp .gt_sourcenote {
+#uvbruaeddo .gt_sourcenote {
   font-size: 90%;
   /* sourcenote.font.size */
   padding: 4px;
   /* sourcenote.padding */
 }
 
-#drspmzqtvp .gt_center {
+#uvbruaeddo .gt_center {
   text-align: center;
 }
 
-#drspmzqtvp .gt_left {
+#uvbruaeddo .gt_left {
   text-align: left;
 }
 
-#drspmzqtvp .gt_right {
+#uvbruaeddo .gt_right {
   text-align: right;
   font-variant-numeric: tabular-nums;
 }
 
-#drspmzqtvp .gt_font_normal {
+#uvbruaeddo .gt_font_normal {
   font-weight: normal;
 }
 
-#drspmzqtvp .gt_font_bold {
+#uvbruaeddo .gt_font_bold {
   font-weight: bold;
 }
 
-#drspmzqtvp .gt_font_italic {
+#uvbruaeddo .gt_font_italic {
   font-style: italic;
 }
 
-#drspmzqtvp .gt_super {
+#uvbruaeddo .gt_super {
   font-size: 65%;
 }
 
-#drspmzqtvp .gt_footnote_glyph {
+#uvbruaeddo .gt_footnote_glyph {
   font-style: italic;
   font-size: 65%;
 }
 </style>
-<div id="drspmzqtvp"><!--gt table start-->
+<div id="uvbruaeddo" style="overflow-x:auto;"><!--gt table start-->
 <table class='gt_table'>
 <tr>
 <th class='gt_col_heading gt_left' rowspan='1' colspan='1'></th>
 <th class='gt_col_heading gt_left' rowspan='1' colspan='1'>Development Session</th>
 <th class='gt_col_heading gt_left' rowspan='1' colspan='1'>Production Runtime</th>
 </tr>
-<tbody class='gt_table_body gt_striped'>
+<tbody class='gt_table_body'>
 <tr>
 <td class='gt_row gt_stub gt_left'>Use Case</td>
 <td class='gt_row gt_left'>Create an analysis in a controlled environment</td>
@@ -1635,18 +1648,18 @@ Tools
 </tr>
 <tr>
 <td class='gt_row gt_stub gt_left'>Runtime Entrypoint</td>
-<td class='gt_row gt_left'>RStudio                                       </td>
-<td class='gt_row gt_left'>R                     </td>
+<td class='gt_row gt_left gt_striped'>RStudio</td>
+<td class='gt_row gt_left gt_striped'>R</td>
 </tr>
 <tr>
 <td class='gt_row gt_stub gt_left'>Example Process</td>
-<td class='gt_row gt_left'>IDE Session                                   </td>
-<td class='gt_row gt_left'>R -e shiny::runApp    </td>
+<td class='gt_row gt_left'>IDE Session</td>
+<td class='gt_row gt_left'>R -e shiny::runApp</td>
 </tr>
 <tr>
 <td class='gt_row gt_stub gt_left'>Code & Environment</td>
-<td class='gt_row gt_left'>Changes are Saved                             </td>
-<td class='gt_row gt_left'>Read Only             </td>
+<td class='gt_row gt_left gt_striped'>Changes are Saved</td>
+<td class='gt_row gt_left gt_striped'>Read Only</td>
 </tr>
 </tbody>
 </table>
@@ -1665,14 +1678,14 @@ Tools
 </ol>
 <p>Docker images can inherit and build off of one another, allowing these six components to be layers together to form a complete image that inherits components from earlier base images.</p>
 <div class="layout-chunk" data-layout="l-body">
-<div id="htmlwidget-23f484317ecd05fa39cc" style="width:624px;height:384px;" class="grViz html-widget"></div>
-<script type="application/json" data-for="htmlwidget-23f484317ecd05fa39cc">{"x":{"diagram":"\n digraph repos {\n  graph [layout = dot\n         rankdir = BT]\n  node[shape = box]\n  \"Base OS (ubunty xenial)\"; \"System Dependency (libssl)\"; \"R Version (3.5.2)\"; \"R Packages (xgboost)\"; \"Code (report.Rmd)\"\n  \n  node[shape=oval color=grey style=filled]\n  \"Command \n (R -e rmarkdown::render)\"\n  \n  \"Base OS (ubunty xenial)\"->\"System Dependency (libssl)\"\n  \"System Dependency (libssl)\"->\"R Version (3.5.2)\"\n  \"R Version (3.5.2)\"->\"R Packages (xgboost)\"\n  \"R Packages (xgboost)\"->\"Code (report.Rmd)\"\n  \"Code (report.Rmd)\" -> \"Command \n (R -e rmarkdown::render)\"\n}         \n","config":{"engine":"dot","options":null}},"evals":[],"jsHooks":[]}</script>
+<div id="htmlwidget-ac0a19df1a8af83d429e" style="width:624px;height:384px;" class="grViz html-widget"></div>
+<script type="application/json" data-for="htmlwidget-ac0a19df1a8af83d429e">{"x":{"diagram":"\n digraph repos {\n  graph [layout = dot\n         rankdir = BT]\n  node[shape = box]\n  \"Base OS (ubunty xenial)\"; \"System Dependency (libssl)\"; \"R Version (3.5.2)\"; \"R Packages (xgboost)\"; \"Code (report.Rmd)\"\n  \n  node[shape=oval color=grey style=filled]\n  \"Command \n (R -e rmarkdown::render)\"\n  \n  \"Base OS (ubunty xenial)\"->\"System Dependency (libssl)\"\n  \"System Dependency (libssl)\"->\"R Version (3.5.2)\"\n  \"R Version (3.5.2)\"->\"R Packages (xgboost)\"\n  \"R Packages (xgboost)\"->\"Code (report.Rmd)\"\n  \"Code (report.Rmd)\" -> \"Command \n (R -e rmarkdown::render)\"\n}         \n","config":{"engine":"dot","options":null}},"evals":[],"jsHooks":[]}</script>
 </div>
 <p>One reason Docker is so successful is because the different layers in a container are cached. In the example above, you can layer with code, without rebuilding the entire image. Only the steps “above” the code layer are re-run to create the updated image. The order of layers is very important, because it impacts the caching involved and the build time of the image.</p>
 <p>In addition to caching, Docker images can build off of one another. As an example, the first 3 layers could be pulled into their own image:</p>
 <div class="layout-chunk" data-layout="l-body">
-<div id="htmlwidget-ca599de1909a11eeeecc" style="width:624px;height:384px;" class="grViz html-widget"></div>
-<script type="application/json" data-for="htmlwidget-ca599de1909a11eeeecc">{"x":{"diagram":"\n digraph repos {\n  graph [layout = dot\n         rankdir = BT]\n  node[shape = box]\n  \"Base OS (ubunty xenial)\"; \"System Dependency (libssl)\"; \"R Version (3.5.2)\"; \n  \n  node[shape=box color=grey style=filled]\n  \"Save as new base image \n (company/base-r-image:3.5.2-xenial)\"\n  \n  \"Base OS (ubunty xenial)\"->\"System Dependency (libssl)\"\n  \"System Dependency (libssl)\"->\"R Version (3.5.2)\"\n  \"R Version (3.5.2)\"->\"Save as new base image \n (company/base-r-image:3.5.2-xenial)\"\n}         \n","config":{"engine":"dot","options":null}},"evals":[],"jsHooks":[]}</script>
+<div id="htmlwidget-72ae73ea2e676630f840" style="width:624px;height:384px;" class="grViz html-widget"></div>
+<script type="application/json" data-for="htmlwidget-72ae73ea2e676630f840">{"x":{"diagram":"\n digraph repos {\n  graph [layout = dot\n         rankdir = BT]\n  node[shape = box]\n  \"Base OS (ubunty xenial)\"; \"System Dependency (libssl)\"; \"R Version (3.5.2)\"; \n  \n  node[shape=box color=grey style=filled]\n  \"Save as new base image \n (company/base-r-image:3.5.2-xenial)\"\n  \n  \"Base OS (ubunty xenial)\"->\"System Dependency (libssl)\"\n  \"System Dependency (libssl)\"->\"R Version (3.5.2)\"\n  \"R Version (3.5.2)\"->\"Save as new base image \n (company/base-r-image:3.5.2-xenial)\"\n}         \n","config":{"engine":"dot","options":null}},"evals":[],"jsHooks":[]}</script>
 </div>
 <aside>
 Base images can be saved in a <a href="./docker.html#dockerhub">registry</a>. The name and tags typically convey information about the image’s components and versions.

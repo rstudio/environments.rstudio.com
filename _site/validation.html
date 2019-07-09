@@ -1346,13 +1346,13 @@ Tools
 
 
 <div class="d-article">
-<p>Validating a environmnent consists of 2 elements:</p>
+<p>Validating an environmnent consists of 2 elements:</p>
 <ol type="1">
 <li>Confidently recreating the same environment</li>
 <li>Trusting what is in the environment</li>
 </ol>
 <p>The first concern, reproducing environments, is covered at length by the different <a href="./reproducible.html">strategies</a> for environment management. The <a href="./validated.html">validated</a> strategy is particularly useful for creating sets of approved packages, though other strategies can be used depending on the context.</p>
-<p>The second concern forces us to answer the question: “Can we trust our environment?”. To trust an environment, we must have confidence that the packages are accurate in their stated purpose. Unfortunately, with 14495<a href="#fn1" class="footnote-ref" id="fnref1"><sup>1</sup></a> R packages on CRAN, and more added each day, it is impossible to provide a single list of trusted packages. Every organization, or industry, will need to apply their own judgement in determining whether or not to approve a package. This page presents a set of metrics to help organizations make these determinations.</p>
+<p>The second concern forces us to answer the question: “Can we trust our environment?”. To trust an environment, we must have confidence that the packages are accurate in their stated purpose. Unfortunately, with 14453<a href="#fn1" class="footnote-ref" id="fnref1"><sup>1</sup></a> R packages on CRAN, and more added each day, it is impossible to provide a single list of trusted packages. Every organization, or industry, will need to apply their own judgement in determining whether or not to approve a package. This page presents a set of metrics to help organizations make these determinations.</p>
 <h1 id="quick-links">Quick Links</h1>
 <p>Not what you were expecting? Before continuing, here are some quick links to other resources specific to validation in the clinical pharma space:</p>
 <ul>
@@ -1394,11 +1394,11 @@ Tools
 <p><img src="validation_files/figure-html5/unnamed-chunk-1-1.png" width="624" /></p>
 </div>
 <h2 id="dependencies">Dependencies</h2>
-<p>When you consider bringing a package into your environment, it is important to evaluate the package’s dependencies. Evaluating the risk of package dependencies is a complex process, a great place to start is reviewing <a href="https://resources.rstudio.com/rstudio-conf-2019/it-depends-a-dialog-about-dependencies">this talk</a> and the related <a href="https://github.com/jimhester/itdepends">itdepends</a> tool. A few quick tips:</p>
+<p>When you consider bringing a package into your environment, it is important to evaluate the package’s dependencies. Evaluating the risk of package dependencies is a complex process. A great place to start is reviewing <a href="https://resources.rstudio.com/rstudio-conf-2019/it-depends-a-dialog-about-dependencies">this talk</a> and the related <a href="https://github.com/jimhester/itdepends">itdepends</a> tool. A few quick tips:</p>
 <ul>
 <li>Package dependencies can be viewed in the package’s Description file and come in a <a href="http://r-pkgs.had.co.nz/description.html#dependencies">few flavors</a>: Suggests, Depends, Imports, and LinkingTo.<br />
 </li>
-<li>Package dependencies describe what a package relies on. For example ggplot2 imports rlang, which means ggplot2 requires rlang in order to work. Reverse dependencies indicate the opposite, ggplot is a reverse dependency for rlang.<br />
+<li>Package dependencies describe what a package relies on. For example ggplot2 imports rlang, which means ggplot2 requires rlang in order to work. Reverse dependencies indicate the opposite, so ggplot2 is a reverse dependency for rlang.<br />
 </li>
 <li>You should understand how <a href="./reproduce.html#the-big-risk">package inter-dependencies impact reproducibility</a>.<br />
 </li>
@@ -1429,7 +1429,7 @@ Tools
 <section class="footnotes">
 <hr />
 <ol>
-<li id="fn1"><p>Run on 2019-07-08<a href="#fnref1" class="footnote-back">↩</a></p></li>
+<li id="fn1"><p>Run on 2019-07-09<a href="#fnref1" class="footnote-back">↩</a></p></li>
 </ol>
 </section>
 <!--radix_placeholder_article_footer-->

@@ -4,7 +4,7 @@ description: |
   Using R for Validated Work
 ---
 
-Validating a environmnent consists of 2 elements:
+Validating an environmnent consists of 2 elements:
 
 1. Confidently recreating the same environment
 2. Trusting what is in the environment
@@ -112,14 +112,14 @@ ggplot(downloads, aes(date, count)) +
 
 When you consider bringing a package into your environment, it is important to
 evaluate the package's dependencies. Evaluating the risk of package dependencies
-is a complex process, a great place to start is reviewing [this
+is a complex process. A great place to start is reviewing [this
 talk](https://resources.rstudio.com/rstudio-conf-2019/it-depends-a-dialog-about-dependencies)
 and the related [itdepends](https://github.com/jimhester/itdepends) tool. A few
 quick tips:
 
 
 - Package dependencies can be viewed in the package's Description file and come in a [few flavors](http://r-pkgs.had.co.nz/description.html#dependencies): Suggests, Depends, Imports, and LinkingTo.  
-- Package dependencies describe what a package relies on. For example ggplot2 imports rlang, which means ggplot2 requires rlang in order to work. Reverse dependencies indicate the opposite, ggplot is a reverse dependency for rlang.  
+- Package dependencies describe what a package relies on. For example ggplot2 imports rlang, which means ggplot2 requires rlang in order to work. Reverse dependencies indicate the opposite, so ggplot2 is a reverse dependency for rlang.  
 - You should understand how [package inter-dependencies impact reproducibility](./reproduce.html#the-big-risk).    
 - In addition to depending on other R packages, a package can have system requirements. For example, the rJava package requires a Java installation. You can view system dependencies for a package in the Description file, though a more complete listing is available [here](https://sysreqs.r-hub.io/) or in [RStudio Package Manager](https://demo.rstudiopm.com/client/#/repos/4/packages/curl).  
 

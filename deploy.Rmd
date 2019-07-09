@@ -63,7 +63,7 @@ dat %>%
 
 [RStudio Connect](https://rstudio.com/products/connect) is a publishing platform for data products, that *automatically implements the snapshot and restore strategy* when users publish content. If you're using RStudio Connect, you don't need to manually manage this process. Here is what happens when a data product is deployed:
 
-1. The version of R in use, the current [repository](./repositories.html), and the list of R packages are recorded in a manifest file. Users typically don't see this file, but if you'd like to explore it, run `rsconnect::writeManifest()` from within your project's working directory on the development environment. Here is a sample from a manifest file:
+1. The version of R in use, the current [repository](./repositories.html), and the list of R packages are recorded in a manifest file. Users typically don't see this file, but if you'd like to explore it, run `rsconnect::writeManifest()` from within your project's working directory in the development environment. Here is a sample from a manifest file:
 
 ```
 {
@@ -250,7 +250,7 @@ R's version scheme has there components, the major version, the minor version, a
 - Minor version: 5  
 - Patch version: 2  
 
-Major versions are release rarely. Minor versions are released once a year in the spring. Patch versions are released on a regular, as-needed basis. *R packages are compatible across patch versions, but not major or minor versions*!. As an example, a package built on version 3.5.1 will work on 3.5.2, but is not guaranteed to work on 3.6.0. 
+Major versions are released rarely. Minor versions are released once a year in the spring. Patch versions are released on a regular, as-needed basis. *R packages are compatible across patch versions, but not major or minor versions*!. As an example, a package built on version 3.5.1 will work on 3.5.2, but is not guaranteed to work on 3.6.0. 
 
 For the reason above, we recommend that development and production systems have the same available major.minor version, but the patch version could vary. For example, content created in the development environment using R version 3.5.1 could be deployed to a production environment using 3.5.2.
 

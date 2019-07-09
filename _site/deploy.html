@@ -1260,7 +1260,7 @@
   <script src="site_libs/htmlwidgets-1.3/htmlwidgets.js"></script>
   <script src="site_libs/viz-0.3/viz.js"></script>
   <link href="site_libs/DiagrammeR-styles-0.2/styles.css" rel="stylesheet" />
-  <script src="site_libs/grViz-binding-1.0.1/grViz.js"></script>
+  <script src="site_libs/grViz-binding-1.0.0/grViz.js"></script>
   <script src="site_libs/jquery-1.11.3/jquery.min.js"></script>
   <script src="site_libs/bowser-1.9.3/bowser.min.js"></script>
   <script src="site_libs/webcomponents-2.0.0/webcomponents.js"></script>
@@ -1394,10 +1394,11 @@ A simple checklist:<br />
 <h2 id="example-rstudio-connect">Example: RStudio Connect</h2>
 <div class="layout-chunk" data-layout="l-body">
 <style>html {
-  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Fira Sans', 'Droid Sans', 'Helvetica Neue', Arial, sans-serif;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Helvetica Neue', 'Fira Sans', 'Droid Sans', Arial, sans-serif;
 }
 
-#oomhfgucsv .gt_table {
+#oilwogexmw .gt_table {
+  display: table;
   border-collapse: collapse;
   margin-left: auto;
   margin-right: auto;
@@ -1415,13 +1416,13 @@ A simple checklist:<br />
   /* table.border.top.color */
 }
 
-#oomhfgucsv .gt_heading {
+#oilwogexmw .gt_heading {
   background-color: #FFFFFF;
   /* heading.background.color */
   border-bottom-color: #FFFFFF;
 }
 
-#oomhfgucsv .gt_title {
+#oilwogexmw .gt_title {
   color: #000000;
   font-size: 125%;
   /* heading.title.font.size */
@@ -1432,7 +1433,7 @@ A simple checklist:<br />
   border-bottom-width: 0;
 }
 
-#oomhfgucsv .gt_subtitle {
+#oilwogexmw .gt_subtitle {
   color: #000000;
   font-size: 85%;
   /* heading.subtitle.font.size */
@@ -1443,7 +1444,7 @@ A simple checklist:<br />
   border-top-width: 0;
 }
 
-#oomhfgucsv .gt_bottom_border {
+#oilwogexmw .gt_bottom_border {
   border-bottom-style: solid;
   /* heading.border.bottom.style */
   border-bottom-width: 2px;
@@ -1452,7 +1453,7 @@ A simple checklist:<br />
   /* heading.border.bottom.color */
 }
 
-#oomhfgucsv .gt_column_spanner {
+#oilwogexmw .gt_column_spanner {
   border-bottom-style: solid;
   border-bottom-width: 2px;
   border-bottom-color: #A8A8A8;
@@ -1460,90 +1461,102 @@ A simple checklist:<br />
   padding-bottom: 4px;
 }
 
-#oomhfgucsv .gt_col_heading {
+#oilwogexmw .gt_col_heading {
   color: #000000;
   background-color: #FFFFFF;
-  /* boxhead.background.color */
+  /* column_labels.background.color */
   font-size: 16px;
-  /* boxhead.font.size */
+  /* column_labels.font.size */
   font-weight: initial;
-  /* boxhead.font.weight */
+  /* column_labels.font.weight */
+  vertical-align: middle;
   padding: 10px;
   margin: 10px;
 }
 
-#oomhfgucsv .gt_sep_right {
+#oilwogexmw .gt_sep_right {
   border-right: 5px solid #FFFFFF;
 }
 
-#oomhfgucsv .gt_group_heading {
+#oilwogexmw .gt_group_heading {
   padding: 8px;
   color: #000000;
   background-color: #FFFFFF;
-  /* stub_group.background.color */
+  /* row_group.background.color */
   font-size: 16px;
-  /* stub_group.font.size */
+  /* row_group.font.size */
   font-weight: initial;
-  /* stub_group.font.weight */
+  /* row_group.font.weight */
   border-top-style: solid;
-  /* stub_group.border.top.style */
+  /* row_group.border.top.style */
   border-top-width: 2px;
-  /* stub_group.border.top.width */
+  /* row_group.border.top.width */
   border-top-color: #A8A8A8;
-  /* stub_group.border.top.color */
+  /* row_group.border.top.color */
   border-bottom-style: solid;
-  /* stub_group.border.bottom  .style */
+  /* row_group.border.bottom.style */
   border-bottom-width: 2px;
-  /* stub_group.border.bottom  .width */
+  /* row_group.border.bottom.width */
   border-bottom-color: #A8A8A8;
-  /* stub_group.border.bottom  .color */
+  /* row_group.border.bottom.color */
+  vertical-align: middle;
 }
 
-#oomhfgucsv .gt_empty_group_heading {
+#oilwogexmw .gt_empty_group_heading {
   padding: 0.5px;
   color: #000000;
   background-color: #FFFFFF;
-  /* stub_group.background.color */
+  /* row_group.background.color */
   font-size: 16px;
-  /* stub_group.font.size */
+  /* row_group.font.size */
   font-weight: initial;
-  /* stub_group.font.weight */
+  /* row_group.font.weight */
   border-top-style: solid;
-  /* stub_group.border.top.style */
+  /* row_group.border.top.style */
   border-top-width: 2px;
-  /* stub_group.border.top.width */
+  /* row_group.border.top.width */
   border-top-color: #A8A8A8;
-  /* stub_group.border.top.color */
+  /* row_group.border.top.color */
   border-bottom-style: solid;
-  /* stub_group.border.bottom  .style */
+  /* row_group.border.bottom.style */
   border-bottom-width: 2px;
-  /* stub_group.border.bottom  .width */
+  /* row_group.border.bottom.width */
   border-bottom-color: #A8A8A8;
-  /* stub_group.border.bottom  .color */
+  /* row_group.border.bottom.color */
+  vertical-align: middle;
 }
 
-#oomhfgucsv .gt_striped tr:nth-child(even) {
+#oilwogexmw .gt_striped {
   background-color: #f2f2f2;
 }
 
-#oomhfgucsv .gt_row {
+#oilwogexmw .gt_from_md > :first-child {
+  margin-top: 0;
+}
+
+#oilwogexmw .gt_from_md > :last-child {
+  margin-bottom: 0;
+}
+
+#oilwogexmw .gt_row {
   padding: 10px;
   /* row.padding */
   margin: 10px;
+  vertical-align: middle;
 }
 
-#oomhfgucsv .gt_stub {
+#oilwogexmw .gt_stub {
   border-right-style: solid;
   border-right-width: 2px;
   border-right-color: #A8A8A8;
-  text-indent: 5px;
+  padding-left: 12px;
 }
 
-#oomhfgucsv .gt_stub.gt_row {
+#oilwogexmw .gt_stub.gt_row {
   background-color: #FFFFFF;
 }
 
-#oomhfgucsv .gt_summary_row {
+#oilwogexmw .gt_summary_row {
   background-color: #FFFFFF;
   /* summary_row.background.color */
   padding: 6px;
@@ -1552,89 +1565,89 @@ A simple checklist:<br />
   /* summary_row.text_transform */
 }
 
-#oomhfgucsv .gt_first_summary_row {
+#oilwogexmw .gt_first_summary_row {
   border-top-style: solid;
   border-top-width: 2px;
   border-top-color: #A8A8A8;
 }
 
-#oomhfgucsv .gt_table_body {
+#oilwogexmw .gt_table_body {
   border-top-style: solid;
-  /* field.border.top.style */
+  /* table_body.border.top.style */
   border-top-width: 2px;
-  /* field.border.top.width */
+  /* table_body.border.top.width */
   border-top-color: #A8A8A8;
-  /* field.border.top.color */
+  /* table_body.border.top.color */
   border-bottom-style: solid;
-  /* field.border.bottom.style */
+  /* table_body.border.bottom.style */
   border-bottom-width: 2px;
-  /* field.border.bottom.width */
+  /* table_body.border.bottom.width */
   border-bottom-color: #A8A8A8;
-  /* field.border.bottom.color */
+  /* table_body.border.bottom.color */
 }
 
-#oomhfgucsv .gt_footnote {
+#oilwogexmw .gt_footnote {
   font-size: 90%;
   /* footnote.font.size */
   padding: 4px;
   /* footnote.padding */
 }
 
-#oomhfgucsv .gt_sourcenote {
+#oilwogexmw .gt_sourcenote {
   font-size: 90%;
   /* sourcenote.font.size */
   padding: 4px;
   /* sourcenote.padding */
 }
 
-#oomhfgucsv .gt_center {
+#oilwogexmw .gt_center {
   text-align: center;
 }
 
-#oomhfgucsv .gt_left {
+#oilwogexmw .gt_left {
   text-align: left;
 }
 
-#oomhfgucsv .gt_right {
+#oilwogexmw .gt_right {
   text-align: right;
   font-variant-numeric: tabular-nums;
 }
 
-#oomhfgucsv .gt_font_normal {
+#oilwogexmw .gt_font_normal {
   font-weight: normal;
 }
 
-#oomhfgucsv .gt_font_bold {
+#oilwogexmw .gt_font_bold {
   font-weight: bold;
 }
 
-#oomhfgucsv .gt_font_italic {
+#oilwogexmw .gt_font_italic {
   font-style: italic;
 }
 
-#oomhfgucsv .gt_super {
+#oilwogexmw .gt_super {
   font-size: 65%;
 }
 
-#oomhfgucsv .gt_footnote_glyph {
+#oilwogexmw .gt_footnote_glyph {
   font-style: italic;
   font-size: 65%;
 }
 </style>
-<div id="oomhfgucsv"><!--gt table start-->
+<div id="oilwogexmw" style="overflow-x:auto;"><!--gt table start-->
 <table class='gt_table'>
 <tr>
 <th class='gt_col_heading gt_left' rowspan='1' colspan='1'></th>
 <th class='gt_col_heading gt_left' rowspan='1' colspan='1'>RStudio Connect Implementation</th>
 </tr>
-<tbody class='gt_table_body gt_striped'>
+<tbody class='gt_table_body'>
 <tr>
 <td class='gt_row gt_stub gt_left'>Snapshot</td>
-<td class='gt_row gt_left'>Manifest file is created during publication                                   </td>
+<td class='gt_row gt_left'>Manifest file is created during publication</td>
 </tr>
 <tr>
 <td class='gt_row gt_stub gt_left'>Isolate</td>
-<td class='gt_row gt_left'>RStudio Connect creates an isolated package library for each piece of content </td>
+<td class='gt_row gt_left gt_striped'>RStudio Connect creates an isolated package library for each piece of content</td>
 </tr>
 <tr>
 <td class='gt_row gt_stub gt_left'>Restore</td>
@@ -1647,7 +1660,7 @@ A simple checklist:<br />
 </div>
 <p><a href="https://rstudio.com/products/connect">RStudio Connect</a> is a publishing platform for data products, that <em>automatically implements the snapshot and restore strategy</em> when users publish content. If you’re using RStudio Connect, you don’t need to manually manage this process. Here is what happens when a data product is deployed:</p>
 <ol type="1">
-<li>The version of R in use, the current <a href="./repositories.html">repository</a>, and the list of R packages are recorded in a manifest file. Users typically don’t see this file, but if you’d like to explore it, run <code>rsconnect::writeManifest()</code> from within your project’s working directory on the development environment. Here is a sample from a manifest file:</li>
+<li>The version of R in use, the current <a href="./repositories.html">repository</a>, and the list of R packages are recorded in a manifest file. Users typically don’t see this file, but if you’d like to explore it, run <code>rsconnect::writeManifest()</code> from within your project’s working directory in the development environment. Here is a sample from a manifest file:</li>
 </ol>
 <pre><code>
 {
@@ -1682,10 +1695,11 @@ A simple checklist:<br />
 <p>In this example, a Docker container is used to isolate the data product, and <code>renv</code> is used to snapshot and restore the appropriate package environment. More details are available for using <a href="./docker.html">R with Docker here</a>.</p>
 <div class="layout-chunk" data-layout="l-body">
 <style>html {
-  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Fira Sans', 'Droid Sans', 'Helvetica Neue', Arial, sans-serif;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Helvetica Neue', 'Fira Sans', 'Droid Sans', Arial, sans-serif;
 }
 
-#bmgbqlsfhf .gt_table {
+#mlsvkxmrtb .gt_table {
+  display: table;
   border-collapse: collapse;
   margin-left: auto;
   margin-right: auto;
@@ -1703,13 +1717,13 @@ A simple checklist:<br />
   /* table.border.top.color */
 }
 
-#bmgbqlsfhf .gt_heading {
+#mlsvkxmrtb .gt_heading {
   background-color: #FFFFFF;
   /* heading.background.color */
   border-bottom-color: #FFFFFF;
 }
 
-#bmgbqlsfhf .gt_title {
+#mlsvkxmrtb .gt_title {
   color: #000000;
   font-size: 125%;
   /* heading.title.font.size */
@@ -1720,7 +1734,7 @@ A simple checklist:<br />
   border-bottom-width: 0;
 }
 
-#bmgbqlsfhf .gt_subtitle {
+#mlsvkxmrtb .gt_subtitle {
   color: #000000;
   font-size: 85%;
   /* heading.subtitle.font.size */
@@ -1731,7 +1745,7 @@ A simple checklist:<br />
   border-top-width: 0;
 }
 
-#bmgbqlsfhf .gt_bottom_border {
+#mlsvkxmrtb .gt_bottom_border {
   border-bottom-style: solid;
   /* heading.border.bottom.style */
   border-bottom-width: 2px;
@@ -1740,7 +1754,7 @@ A simple checklist:<br />
   /* heading.border.bottom.color */
 }
 
-#bmgbqlsfhf .gt_column_spanner {
+#mlsvkxmrtb .gt_column_spanner {
   border-bottom-style: solid;
   border-bottom-width: 2px;
   border-bottom-color: #A8A8A8;
@@ -1748,90 +1762,102 @@ A simple checklist:<br />
   padding-bottom: 4px;
 }
 
-#bmgbqlsfhf .gt_col_heading {
+#mlsvkxmrtb .gt_col_heading {
   color: #000000;
   background-color: #FFFFFF;
-  /* boxhead.background.color */
+  /* column_labels.background.color */
   font-size: 16px;
-  /* boxhead.font.size */
+  /* column_labels.font.size */
   font-weight: initial;
-  /* boxhead.font.weight */
+  /* column_labels.font.weight */
+  vertical-align: middle;
   padding: 10px;
   margin: 10px;
 }
 
-#bmgbqlsfhf .gt_sep_right {
+#mlsvkxmrtb .gt_sep_right {
   border-right: 5px solid #FFFFFF;
 }
 
-#bmgbqlsfhf .gt_group_heading {
+#mlsvkxmrtb .gt_group_heading {
   padding: 8px;
   color: #000000;
   background-color: #FFFFFF;
-  /* stub_group.background.color */
+  /* row_group.background.color */
   font-size: 16px;
-  /* stub_group.font.size */
+  /* row_group.font.size */
   font-weight: initial;
-  /* stub_group.font.weight */
+  /* row_group.font.weight */
   border-top-style: solid;
-  /* stub_group.border.top.style */
+  /* row_group.border.top.style */
   border-top-width: 2px;
-  /* stub_group.border.top.width */
+  /* row_group.border.top.width */
   border-top-color: #A8A8A8;
-  /* stub_group.border.top.color */
+  /* row_group.border.top.color */
   border-bottom-style: solid;
-  /* stub_group.border.bottom  .style */
+  /* row_group.border.bottom.style */
   border-bottom-width: 2px;
-  /* stub_group.border.bottom  .width */
+  /* row_group.border.bottom.width */
   border-bottom-color: #A8A8A8;
-  /* stub_group.border.bottom  .color */
+  /* row_group.border.bottom.color */
+  vertical-align: middle;
 }
 
-#bmgbqlsfhf .gt_empty_group_heading {
+#mlsvkxmrtb .gt_empty_group_heading {
   padding: 0.5px;
   color: #000000;
   background-color: #FFFFFF;
-  /* stub_group.background.color */
+  /* row_group.background.color */
   font-size: 16px;
-  /* stub_group.font.size */
+  /* row_group.font.size */
   font-weight: initial;
-  /* stub_group.font.weight */
+  /* row_group.font.weight */
   border-top-style: solid;
-  /* stub_group.border.top.style */
+  /* row_group.border.top.style */
   border-top-width: 2px;
-  /* stub_group.border.top.width */
+  /* row_group.border.top.width */
   border-top-color: #A8A8A8;
-  /* stub_group.border.top.color */
+  /* row_group.border.top.color */
   border-bottom-style: solid;
-  /* stub_group.border.bottom  .style */
+  /* row_group.border.bottom.style */
   border-bottom-width: 2px;
-  /* stub_group.border.bottom  .width */
+  /* row_group.border.bottom.width */
   border-bottom-color: #A8A8A8;
-  /* stub_group.border.bottom  .color */
+  /* row_group.border.bottom.color */
+  vertical-align: middle;
 }
 
-#bmgbqlsfhf .gt_striped tr:nth-child(even) {
+#mlsvkxmrtb .gt_striped {
   background-color: #f2f2f2;
 }
 
-#bmgbqlsfhf .gt_row {
+#mlsvkxmrtb .gt_from_md > :first-child {
+  margin-top: 0;
+}
+
+#mlsvkxmrtb .gt_from_md > :last-child {
+  margin-bottom: 0;
+}
+
+#mlsvkxmrtb .gt_row {
   padding: 10px;
   /* row.padding */
   margin: 10px;
+  vertical-align: middle;
 }
 
-#bmgbqlsfhf .gt_stub {
+#mlsvkxmrtb .gt_stub {
   border-right-style: solid;
   border-right-width: 2px;
   border-right-color: #A8A8A8;
-  text-indent: 5px;
+  padding-left: 12px;
 }
 
-#bmgbqlsfhf .gt_stub.gt_row {
+#mlsvkxmrtb .gt_stub.gt_row {
   background-color: #FFFFFF;
 }
 
-#bmgbqlsfhf .gt_summary_row {
+#mlsvkxmrtb .gt_summary_row {
   background-color: #FFFFFF;
   /* summary_row.background.color */
   padding: 6px;
@@ -1840,89 +1866,89 @@ A simple checklist:<br />
   /* summary_row.text_transform */
 }
 
-#bmgbqlsfhf .gt_first_summary_row {
+#mlsvkxmrtb .gt_first_summary_row {
   border-top-style: solid;
   border-top-width: 2px;
   border-top-color: #A8A8A8;
 }
 
-#bmgbqlsfhf .gt_table_body {
+#mlsvkxmrtb .gt_table_body {
   border-top-style: solid;
-  /* field.border.top.style */
+  /* table_body.border.top.style */
   border-top-width: 2px;
-  /* field.border.top.width */
+  /* table_body.border.top.width */
   border-top-color: #A8A8A8;
-  /* field.border.top.color */
+  /* table_body.border.top.color */
   border-bottom-style: solid;
-  /* field.border.bottom.style */
+  /* table_body.border.bottom.style */
   border-bottom-width: 2px;
-  /* field.border.bottom.width */
+  /* table_body.border.bottom.width */
   border-bottom-color: #A8A8A8;
-  /* field.border.bottom.color */
+  /* table_body.border.bottom.color */
 }
 
-#bmgbqlsfhf .gt_footnote {
+#mlsvkxmrtb .gt_footnote {
   font-size: 90%;
   /* footnote.font.size */
   padding: 4px;
   /* footnote.padding */
 }
 
-#bmgbqlsfhf .gt_sourcenote {
+#mlsvkxmrtb .gt_sourcenote {
   font-size: 90%;
   /* sourcenote.font.size */
   padding: 4px;
   /* sourcenote.padding */
 }
 
-#bmgbqlsfhf .gt_center {
+#mlsvkxmrtb .gt_center {
   text-align: center;
 }
 
-#bmgbqlsfhf .gt_left {
+#mlsvkxmrtb .gt_left {
   text-align: left;
 }
 
-#bmgbqlsfhf .gt_right {
+#mlsvkxmrtb .gt_right {
   text-align: right;
   font-variant-numeric: tabular-nums;
 }
 
-#bmgbqlsfhf .gt_font_normal {
+#mlsvkxmrtb .gt_font_normal {
   font-weight: normal;
 }
 
-#bmgbqlsfhf .gt_font_bold {
+#mlsvkxmrtb .gt_font_bold {
   font-weight: bold;
 }
 
-#bmgbqlsfhf .gt_font_italic {
+#mlsvkxmrtb .gt_font_italic {
   font-style: italic;
 }
 
-#bmgbqlsfhf .gt_super {
+#mlsvkxmrtb .gt_super {
   font-size: 65%;
 }
 
-#bmgbqlsfhf .gt_footnote_glyph {
+#mlsvkxmrtb .gt_footnote_glyph {
   font-style: italic;
   font-size: 65%;
 }
 </style>
-<div id="bmgbqlsfhf"><!--gt table start-->
+<div id="mlsvkxmrtb" style="overflow-x:auto;"><!--gt table start-->
 <table class='gt_table'>
 <tr>
 <th class='gt_col_heading gt_left' rowspan='1' colspan='1'></th>
 <th class='gt_col_heading gt_left' rowspan='1' colspan='1'>Docker + renv Implementation</th>
 </tr>
-<tbody class='gt_table_body gt_striped'>
+<tbody class='gt_table_body'>
 <tr>
 <td class='gt_row gt_stub gt_left'>Snapshot</td>
-<td class='gt_row gt_left'>renv::snapshot() creates a lock file from the development environment             </td>
+<td class='gt_row gt_left'>renv::snapshot() creates a lock file from the development environment</td>
 </tr>
 <tr>
 <td class='gt_row gt_stub gt_left'>Isolate</td>
-<td class='gt_row gt_left'>The Docker container creates an isolated environment for the data product         </td>
+<td class='gt_row gt_left gt_striped'>The Docker container creates an isolated environment for the data product</td>
 </tr>
 <tr>
 <td class='gt_row gt_stub gt_left'>Restore</td>
@@ -1969,8 +1995,8 @@ cat renv.lock | grep -A1 &quot;\[R\]&quot; | sed -En &quot;s/Version=(.*)$/\1/p&
 <li>If everything works as expected, re-run the steps to deploy the data product into production.</li>
 </ol>
 <div class="layout-chunk" data-layout="l-body">
-<div id="htmlwidget-92064042afaf426c9623" style="width:624px;height:384px;" class="grViz html-widget"></div>
-<script type="application/json" data-for="htmlwidget-92064042afaf426c9623">{"x":{"diagram":"\ndigraph repos {\n  graph [layout = dot\n        rankdir = LR]\n  \n  \n  node[shape = box]\n  \"Dev\"\n  \n  node[fillcolor = grey, style = filled]\n  \"Staging\"; \"Prod\"\n  \n  Dev -> Staging\n  Staging -> Prod\n}      \n","config":{"engine":"dot","options":null}},"evals":[],"jsHooks":[]}</script>
+<div id="htmlwidget-cecf10abcb042723208b" style="width:624px;height:384px;" class="grViz html-widget"></div>
+<script type="application/json" data-for="htmlwidget-cecf10abcb042723208b">{"x":{"diagram":"\ndigraph repos {\n  graph [layout = dot\n        rankdir = LR]\n  \n  \n  node[shape = box]\n  \"Dev\"\n  \n  node[fillcolor = grey, style = filled]\n  \"Staging\"; \"Prod\"\n  \n  Dev -> Staging\n  Staging -> Prod\n}      \n","config":{"engine":"dot","options":null}},"evals":[],"jsHooks":[]}</script>
 </div>
 <aside>
 Staging and Production should be identical clones!
@@ -1992,8 +2018,8 @@ Staging and Production should be identical clones!
 <li><p>The user or admin can merge the staging branch into the master branch. This merge triggers a deployment to the production server.</p></li>
 </ol>
 <div class="layout-chunk" data-layout="l-page">
-<div id="htmlwidget-c2d108dcdbfde56bfb3e" style="width:624px;height:384px;" class="grViz html-widget"></div>
-<script type="application/json" data-for="htmlwidget-c2d108dcdbfde56bfb3e">{"x":{"diagram":"\ndigraph repos {\n  graph [layout = dot\n        rankdir = LR]\n  \n  \n  node[shape = box]\n  \"Dev\"; \"Git Branch\"; \"Jenkins\"; \"Connect Staging\"; \"Git Master\"; \"Connect Prod\"; \"Jenkins \"\n  \n  node[fillcolor = grey, style = filled]\n  \"Dependency Manifest\"; \"Code\"\n  \n  node[fillcolor = grey, style = filled, shape = oval]\n  Approval\n  \n  Dev -> \"Dependency Manifest\"\n  Dev -> \"Code\"\n  \"Code\" -> \"Git Branch\"\n  \"Dependency Manifest\" -> \"Git Branch\"\n  \"Git Branch\" -> \"Jenkins\"\n  \"Jenkins\" -> \"Connect Staging\"\n  \"Connect Staging\" -> Approval\n  Approval -> \"Git Master\"\n  \"Git Master\" -> \"Jenkins \"\n  \"Jenkins \" -> \"Connect Prod\" \n}      \n","config":{"engine":"dot","options":null}},"evals":[],"jsHooks":[]}</script>
+<div id="htmlwidget-48e37d1246517d5189a0" style="width:624px;height:384px;" class="grViz html-widget"></div>
+<script type="application/json" data-for="htmlwidget-48e37d1246517d5189a0">{"x":{"diagram":"\ndigraph repos {\n  graph [layout = dot\n        rankdir = LR]\n  \n  \n  node[shape = box]\n  \"Dev\"; \"Git Branch\"; \"Jenkins\"; \"Connect Staging\"; \"Git Master\"; \"Connect Prod\"; \"Jenkins \"\n  \n  node[fillcolor = grey, style = filled]\n  \"Dependency Manifest\"; \"Code\"\n  \n  node[fillcolor = grey, style = filled, shape = oval]\n  Approval\n  \n  Dev -> \"Dependency Manifest\"\n  Dev -> \"Code\"\n  \"Code\" -> \"Git Branch\"\n  \"Dependency Manifest\" -> \"Git Branch\"\n  \"Git Branch\" -> \"Jenkins\"\n  \"Jenkins\" -> \"Connect Staging\"\n  \"Connect Staging\" -> Approval\n  Approval -> \"Git Master\"\n  \"Git Master\" -> \"Jenkins \"\n  \"Jenkins \" -> \"Connect Prod\" \n}      \n","config":{"engine":"dot","options":null}},"evals":[],"jsHooks":[]}</script>
 </div>
 <p>More details are available <a href="https://solutions.rstudio.com/deploy/deploy">here</a>.</p>
 <h1 id="acceptable-differences">Acceptable Differences</h1>
@@ -2003,7 +2029,7 @@ Staging and Production should be identical clones!
 - Major version: 3<br />
 - Minor version: 5<br />
 - Patch version: 2</p>
-<p>Major versions are release rarely. Minor versions are released once a year in the spring. Patch versions are released on a regular, as-needed basis. <em>R packages are compatible across patch versions, but not major or minor versions</em>!. As an example, a package built on version 3.5.1 will work on 3.5.2, but is not guaranteed to work on 3.6.0.</p>
+<p>Major versions are released rarely. Minor versions are released once a year in the spring. Patch versions are released on a regular, as-needed basis. <em>R packages are compatible across patch versions, but not major or minor versions</em>!. As an example, a package built on version 3.5.1 will work on 3.5.2, but is not guaranteed to work on 3.6.0.</p>
 <p>For the reason above, we recommend that development and production systems have the same available major.minor version, but the patch version could vary. For example, content created in the development environment using R version 3.5.1 could be deployed to a production environment using 3.5.2.</p>
 <p><strong>R packages do not follow these same rules, and package versions should match exactly!</strong></p>
 <h2 id="r-package-source">R Package Source</h2>
