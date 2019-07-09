@@ -1260,7 +1260,7 @@
   <script src="site_libs/htmlwidgets-1.3/htmlwidgets.js"></script>
   <script src="site_libs/viz-0.3/viz.js"></script>
   <link href="site_libs/DiagrammeR-styles-0.2/styles.css" rel="stylesheet" />
-  <script src="site_libs/grViz-binding-1.0.0/grViz.js"></script>
+  <script src="site_libs/grViz-binding-1.0.1/grViz.js"></script>
   <script src="site_libs/jquery-1.11.3/jquery.min.js"></script>
   <script src="site_libs/bowser-1.9.3/bowser.min.js"></script>
   <script src="site_libs/webcomponents-2.0.0/webcomponents.js"></script>
@@ -1380,9 +1380,8 @@ Tools
 <p>A potential drawback of this strategy is the involvement required from the R user. For new users, these steps can create an energy barrier that prevents them from being successful. Often organizations will start new users (e.g. Excel converts) with a different strategy, and allow power R users the flexibility and responsibility of this strategy.</p>
 <div class="layout-chunk" data-layout="l-body">
 <div class="figure"><span id="fig:unnamed-chunk-1"></span>
-<div id="htmlwidget-e6f441c1427b71d28873" style="width:624px;height:384px;" class="grViz html-widget"></div>
-<script type="application/json" data-for="htmlwidget-e6f441c1427b71d28873">{"x":{"diagram":"\ndigraph renv {\n  graph [layout = dot\n         rankdir = LR]\n  node [shape = box]\n  \"1. Create a Project\"; \"Write Code\"; \"2. Install Packages\"; \"3. Snapshot\"; \"4. Restore\"\n  \n  \"1. Create a Project\"->\"Write Code\"\n  \"Write Code\"->\"2. Install Packages\" \n  \"2. Install Packages\" -> \"Write Code\"\n  \"Write Code\"->\"3. Snapshot\"\n  \"3. Snapshot\"->\"4. Restore\"\n  \n}      \n","config":{"engine":"dot","options":null}},"evals":[],"jsHooks":[]}</script>
-
+<div id="htmlwidget-87a9d6de301d4736cdfa" style="width:624px;height:384px;" class="grViz html-widget"></div>
+<script type="application/json" data-for="htmlwidget-87a9d6de301d4736cdfa">{"x":{"diagram":"\ndigraph renv {\n  graph [layout = dot\n         rankdir = LR]\n  node [shape = box]\n  \"1. Create a Project\"; \"Write Code\"; \"2. Install Packages\"; \"3. Snapshot\"; \"4. Restore\"\n  \n  \"1. Create a Project\"->\"Write Code\"\n  \"Write Code\"->\"2. Install Packages\" \n  \"2. Install Packages\" -> \"Write Code\"\n  \"Write Code\"->\"3. Snapshot\"\n  \"3. Snapshot\"->\"4. Restore\"\n  \n}      \n","config":{"engine":"dot","options":null}},"evals":[],"jsHooks":[]}</script>
 <p class="caption">
 Figure 1: Simple Workflow for Reproducible Environments
 </p>
@@ -1404,7 +1403,8 @@ Figure 1: Simple Workflow for Reproducible Environments
 <h3 id="step-1-initalize-a-project">Step 1: Initalize a Project</h3>
 <p>A <em>key</em> to package management is to isolate projects from one another. This allows you to upgrade or add packages for one project without breaking other work. Whether you are in an existing project or starting a new project, use:</p>
 <div class="layout-chunk" data-layout="l-body">
-
+<pre class="r"><code>
+renv::init()</code></pre>
 </div>
 <p>Behind the scenes, <code>renv</code> works by creating a <a href="./libraries.html">new library</a>. A library stores installed packages.</p>
 <h3 id="step-2-install-and-use-packages">Step 2: Install and Use Packages</h3>
@@ -1415,23 +1415,36 @@ Figure 1: Simple Workflow for Reproducible Environments
 <li>Use <code>install.packages</code> as a fall back option.</li>
 </ol>
 <div class="layout-chunk" data-layout="l-body">
+<pre class="r"><code>
+# You can use install.packages
+install.packages(&#39;ggplot2&#39;)
 
+# But we recommend using pak in interactive settings
+pak::pkg_install(&#39;ggplot2&#39;)
+
+# Or use remotes if you&#39;re working on an automated script or 
+# in a lightweight environment like Docker
+remotes::install_cran(&#39;ggplot2&#39;)</code></pre>
 </div>
 <p>Use packages just how you normally would!</p>
 <div class="layout-chunk" data-layout="l-body">
-
+<pre class="r"><code>
+library(ggplot2)</code></pre>
 </div>
 <h3 id="step-3-snapshot-the-environment">Step 3: Snapshot the Environment</h3>
 <p>Once you are ready to share your work, or you are finished with a project, you’ll want to make a record of the current environment.</p>
 <div class="layout-chunk" data-layout="l-body">
-
+<pre class="r"><code>
+renv::snapshot()</code></pre>
 </div>
 <p>This step creates a new file in your project titled <code>renv.lock</code>. The file contains all the information you need to communicate your project’s dependencies <em>at the moment you call <code>snapshot</code></em>. The next time you call <code>snapshot</code>, the file will be updated.</p>
 <p>If you are familiar with version control for your code, we recommend calling <code>snapshot</code> anytime you push or check-in changes to your code. The <code>renv::history</code> and <code>renv::revert</code> commands make it easy to navigate and restore prior versions of the lock file.</p>
 <h3 id="step-4-recreate-the-environment">Step 4: Recreate the Environment</h3>
 <p>This step is where the work above pays off! If you need to share your work with others, or need to roll back changes to get back to a working library, cash in by using restore:</p>
 <div class="layout-chunk" data-layout="l-body">
-
+<pre class="r"><code>
+# open the project, and use
+renv::restore()</code></pre>
 </div>
 <p><code>renv</code> will recreate the package environment for you, and you’ll be back to working on R code instead of troubleshooting problems!</p>
 <h3 id="watch-a-video-demo-of-snapshot-and-restore-with-renv">Watch a video demo of Snapshot and Restore with <code>renv</code></h3>
