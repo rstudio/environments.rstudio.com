@@ -1260,7 +1260,7 @@
   <script src="site_libs/htmlwidgets-1.3/htmlwidgets.js"></script>
   <script src="site_libs/viz-0.3/viz.js"></script>
   <link href="site_libs/DiagrammeR-styles-0.2/styles.css" rel="stylesheet" />
-  <script src="site_libs/grViz-binding-1.0.1/grViz.js"></script>
+  <script src="site_libs/grViz-binding-1.0.0/grViz.js"></script>
   <script src="site_libs/jquery-1.11.3/jquery.min.js"></script>
   <script src="site_libs/bowser-1.9.3/bowser.min.js"></script>
   <script src="site_libs/webcomponents-2.0.0/webcomponents.js"></script>
@@ -1380,8 +1380,8 @@ Tools
 <p>A potential drawback of this strategy is the involvement required from the R user. For new users, these steps can create an energy barrier that prevents them from being successful. Often organizations will start new users (e.g. Excel converts) with a different strategy, and allow power R users the flexibility and responsibility of this strategy.</p>
 <div class="layout-chunk" data-layout="l-body">
 <div class="figure"><span id="fig:unnamed-chunk-1"></span>
-<div id="htmlwidget-87a9d6de301d4736cdfa" style="width:624px;height:384px;" class="grViz html-widget"></div>
-<script type="application/json" data-for="htmlwidget-87a9d6de301d4736cdfa">{"x":{"diagram":"\ndigraph renv {\n  graph [layout = dot\n         rankdir = LR]\n  node [shape = box]\n  \"1. Create a Project\"; \"Write Code\"; \"2. Install Packages\"; \"3. Snapshot\"; \"4. Restore\"\n  \n  \"1. Create a Project\"->\"Write Code\"\n  \"Write Code\"->\"2. Install Packages\" \n  \"2. Install Packages\" -> \"Write Code\"\n  \"Write Code\"->\"3. Snapshot\"\n  \"3. Snapshot\"->\"4. Restore\"\n  \n}      \n","config":{"engine":"dot","options":null}},"evals":[],"jsHooks":[]}</script>
+<div id="htmlwidget-c687909b30728d5d6314" style="width:624px;height:384px;" class="grViz html-widget"></div>
+<script type="application/json" data-for="htmlwidget-c687909b30728d5d6314">{"x":{"diagram":"\ndigraph renv {\n  graph [layout = dot\n         rankdir = LR]\n  node [shape = box]\n  \"1. Create a Project\"; \"Write Code\"; \"2. Install Packages\"; \"3. Snapshot\"; \"4. Restore\"\n  \n  \"1. Create a Project\"->\"Write Code\"\n  \"Write Code\"->\"2. Install Packages\" \n  \"2. Install Packages\" -> \"Write Code\"\n  \"Write Code\"->\"3. Snapshot\"\n  \"3. Snapshot\"->\"4. Restore\"\n  \n}      \n","config":{"engine":"dot","options":null}},"evals":[],"jsHooks":[]}</script>
 <p class="caption">
 Figure 1: Simple Workflow for Reproducible Environments
 </p>

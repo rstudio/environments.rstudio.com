@@ -1260,7 +1260,7 @@
   <script src="site_libs/htmlwidgets-1.3/htmlwidgets.js"></script>
   <script src="site_libs/viz-0.3/viz.js"></script>
   <link href="site_libs/DiagrammeR-styles-0.2/styles.css" rel="stylesheet" />
-  <script src="site_libs/grViz-binding-1.0.1/grViz.js"></script>
+  <script src="site_libs/grViz-binding-1.0.0/grViz.js"></script>
   <script src="site_libs/jquery-1.11.3/jquery.min.js"></script>
   <script src="site_libs/bowser-1.9.3/bowser.min.js"></script>
   <script src="site_libs/webcomponents-2.0.0/webcomponents.js"></script>
@@ -1384,7 +1384,7 @@ Figure 1: Strategies for reproducibility fall on a spectrum. One side is not bet
 <p>There are three main strategies covered in this site.</p>
 <ol type="1">
 <li><p>The <a href="./snapshot.html">Snapshot and Restore</a> strategy is used when individual data scientists are responsible for managing a project and have full access to install packages. The strategy uses tools like <a href="https://rstudio.github.io/renv">renv</a><a href="#fn1" class="footnote-ref" id="fnref1"><sup>1</sup></a> to record a project’s dependencies and restore them.</p></li>
-<li><p>The <a href="./shared.html">Shared Baseline</a> strategy helps administrators co-ordinate the work of many data scientists, by providing common sets of packages to use across projects. The key to this strategy is determining a consistent set of packages that work together.</p></li>
+<li><p>The <a href="./shared.html">Shared Baseline</a> strategy helps administrators coordinate the work of many data scientists by providing common sets of packages to use across projects. The key to this strategy is determining a consistent set of packages that work together.</p></li>
 <li><p>The <a href="./validated.html">Validated</a> strategy is used when packages must be controlled and meet specific organization standards.</p></li>
 </ol>
 <p>The <a href="./reproduce.html">strategy map</a> will help you pick between the different strategies.</p>
@@ -1392,8 +1392,8 @@ Figure 1: Strategies for reproducibility fall on a spectrum. One side is not bet
 <p>Data science environments are built from a common set of tools.</p>
 <div class="layout-chunk" data-layout="l-body">
 <div class="figure"><span id="fig:unnamed-chunk-1"></span>
-<div id="htmlwidget-a765a6d4c2b255e1aca6" style="width:624px;height:384px;" class="grViz html-widget"></div>
-<script type="application/json" data-for="htmlwidget-a765a6d4c2b255e1aca6">{"x":{"diagram":"digraph env {\n\n graph [layout = dot\n        rankdir = BT]\n node [shape = box]\n \"Operating System\"\n \n node [shape = oval]\n \"R Installation\"; \"System Libraries\"; \"Python Installation\"; \"virtualenv\"; \"Project Library\"\n \n node [shape = egg]\n User\n \n \"Operating System\" -> \"Python Installation\"\n \"Operating System\" -> \"System Libraries\"\n \"Operating System\" -> \"R Installation\"\n \"R Installation\" -> \"Project Library\"\n \"System Libraries\" -> \"Project Library\"\n \"System Libraries\" -> \"virtualenv\"\n virtualenv -> User\n \"Project Library\" -> User\n \"Python Installation\" -> virtualenv\n}\n","config":{"engine":"dot","options":null}},"evals":[],"jsHooks":[]}</script>
+<div id="htmlwidget-4553d97d2c1ddd38426f" style="width:624px;height:384px;" class="grViz html-widget"></div>
+<script type="application/json" data-for="htmlwidget-4553d97d2c1ddd38426f">{"x":{"diagram":"digraph env {\n\n graph [layout = dot\n        rankdir = BT]\n node [shape = box]\n \"Operating System\"\n \n node [shape = oval]\n \"R Installation\"; \"System Libraries\"; \"Python Installation\"; \"virtualenv\"; \"Project Library\"\n \n node [shape = egg]\n User\n \n \"Operating System\" -> \"Python Installation\"\n \"Operating System\" -> \"System Libraries\"\n \"Operating System\" -> \"R Installation\"\n \"R Installation\" -> \"Project Library\"\n \"System Libraries\" -> \"Project Library\"\n \"System Libraries\" -> \"virtualenv\"\n virtualenv -> User\n \"Project Library\" -> User\n \"Python Installation\" -> virtualenv\n}\n","config":{"engine":"dot","options":null}},"evals":[],"jsHooks":[]}</script>
 <p class="caption">
 Figure 2: Components of an Environment
 </p>
@@ -1401,7 +1401,7 @@ Figure 2: Components of an Environment
 </div>
 <p>If you use a shared server, some elements might be shared amongst projects and some elements might exist more than once; e.g. your server might have multiple versions of R installed. If your organization uses Docker containers, you might have a base image with some of these components, and runtime installation of others. Understanding these tools will help you create reproducible environments.</p>
 <ul>
-<li><p><strong>R Packages</strong> Managing and recording R packages makes up the bulk of the website, specifically learn about <a href="./repositories.html">repositories</a>, <a href="./installation.html">installing packages</a>, and <a href="./libraries">managing libraries</a>.</p></li>
+<li><p><strong>R Packages</strong> Managing and recording R packages makes up the bulk of this website. Specifically learn about <a href="./repositories.html">repositories</a>, <a href="./installation.html">installing packages</a>, and <a href="./libraries">managing libraries</a>.</p></li>
 <li><p><strong>R Installation</strong> Packages like <code>renv</code> will normally document the version of R used by the project. On shared servers, it is common to install multiple versions of R. Organizations using Docker will typically include R in a base image. Learn more <a href="./R-installation.html">best practices for R installations</a>.</p></li>
 <li><p><strong>Other Languages</strong> Often data science projects are multi-lingual. Combining R and Python is the most common use case, and tools like <code>renv</code> have affordances for recording <a href="./python.html">Python</a> dependencies.</p></li>
 <li><p><strong>System Dependencies</strong> R, Python, and their packages can depend on underlying software that needs to be installed on the system. For example, the <code>xml2</code> R package depends on the <code>libxml</code> system package. Learn more about how <a href="./installation.html#system-dependencies">system dependencies are documented and managed</a>.</p></li>
