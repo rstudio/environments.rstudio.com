@@ -54,7 +54,7 @@ digraph renv {
 
 ### Pre-requisite Steps:
 
-1. (Administrators) Install each desired version of [R from source](./R-installation.html).
+1. (Administrators) Install each desired version of [R](./R-installation.html).
 2. (Users) Install the `renv` package: `remotes::install_github('rstudio/renv')`
 
 
@@ -180,6 +180,8 @@ If your project uses more than R, you'll need to capture the project's other dep
 2. Use a `virutalenv` to isolate project Python dependencies
 3. Record the state of the `virtualenv` using  `pip freeze > requirements.txt`
 4. On restore, recreate the Python `virtualenv` and then use `renv::restore()`
+
+To automate some of these steps, take advantage of the `renv::use_python` function.
 
 #### Performance
 

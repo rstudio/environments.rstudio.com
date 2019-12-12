@@ -10,8 +10,6 @@ knitr::opts_chunk$set(echo = TRUE)
 library(DiagrammeR)
 ```
 
-> This site, like your environment, is useful even while it is in progress.
-
 Great data science work should be reproducible. Being able to repeat experiments
 is the foundation of all science. Reproducing work is also critical for business
 applications: scheduled reporting, team collaboration, project validation. 
@@ -32,6 +30,8 @@ If you're an individual data scientist, there are two things you should do
 **before you continue any further** with environment management: [learn about
 RStudio Projects](https://r4ds.had.co.nz/workflow-projects.html#rstudio-projects) and
 [use version control](https://happygitwithr.com/).
+
+If you prefer videos to reading, checkout [this webinar](https://resources.rstudio.com/webinars/time-travel-r).
 
 ## Use Cases
 

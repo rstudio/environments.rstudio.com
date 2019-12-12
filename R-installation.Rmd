@@ -1,28 +1,101 @@
 ---
 title: "R Installations"
 description: |
-  Installing and Managing R [In Progress]
+  Installing and Managing R 
 ---
 
-This page isn't quite ready, but the focus will be installing and managing R on
-Unix servers. For reproducible environments, **the most critical step is
-installing R into a versioned directory!**. By doing so, your system can support
+For reproducible environments, **the most critical step is
+installing R into a version specific directory**. By doing so, your system can support
 multiple versions of R and avoid unintentional R upgrades.
 
-Instructions for building R from source and supporting multiple versions of R
-are [available
-here](https://support.rstudio.com/hc/en-us/articles/218004217-Building-R-from-source).
+### Installing R
 
-This page also discusses the ways to customize R's behavior through:  
+RStudio provides pre-compiled packages that make it easy to install different
+versions of R side by side in Linux environments. To get started, visit [**these
+instructions**](https://docs.rstudio.com/resources/install-r) or explore the [open
+source repository](https://github.com/rstudio/r-builds).
 
-- Renviron.site  
-- Rprofile.site  
-- System Library  
-- User Libraries  
+In addition to the default R installation, there are a few options that
+customize R's behavior:
 
-Current details are [outlined
-here](https://rviews.rstudio.com/2017/04/19/r-for-enterprise-understanding-r-s-startup/).
-Information on the system library is elaborated on the [libraries
-page](./libraries.html) as well as [this
-article](https://rviews.rstudio.com/2017/04/19/r-for-enterprise-understanding-r-s-startup/).
+### `Renviron.site`
+
+This file lets you specify environment variables that should be available to any
+R session. The file is located at `R_HOME/bin/R/etc`, and has the format:
+
+```
+VARIABLE=value
+```
+
+The system file is useful for specifying environment variables that should be
+available for all users accessing this version of R. For example, you might
+specify the PATH or set common ODBC settings.
+
+User's can create their own files, labelled `.Renviron`, that have the same
+format and place them in either their home directory (to apply to all projects)
+or their project directory (to apply to only a specific project). Often user's
+will take advantage of these files to specify secrets such as passwords or API
+keys.
+
+### `Rprofile.site`
+
+Similar to the environment file, the site-wide R profile allows you to supply R
+code that will be executed prior to the R session starting for any user
+accessing this version of R. The file is located at `R_HOME/bin/R/etc`, and has
+the format:
+
+```r
+local({
+  options(repos = c(CRAN = "https://r-pkgs.example.com/cran"))
+})
+```
+
+User's can create their own default profile by creating a file called
+`.Rprofile` and saving it in their home directory (to apply to all projects) or
+their project directory (to apply to only a specific project).
+
+The R profile is an easy way to set R specific options that can apply for all
+users.
+
+### System Library  
+
+Every R installation includes a system library. Packages installed into the
+system library will be available to every user accessing that version of R. By
+default, the library is located at:
+
+```
+R_HOME/lib/R/library
+```
+Note that the library path should include a version number.
+
+The easiest way to make a package available to all users is to install the
+package as a privileged user - R will automatically install the package into the
+system library in this case:
+
+```
+sudo /opt/R/3.6.1/bin/R -e 'install.packages("ggplot2")'
+```
+
+**Warning: This is an easy but dangerous option. If you want to make packages
+available to all users, we highly recommend the [shared baseline
+strategy](./shared.html)**.
+
+In addition to the system library, users will also have a default user library.
+This library is normally created in their home directory, and is also version specific..
+When a user installs a package it is placed in this library and is not available
+to other users.
+
+To see where R is looking for packages, run this command in R:
+
+```r
+.libPaths()
+# [1] "/usr/home/sean/R/x86_64-pc-linux-gnu-library/3.6"
+# [2] "/opt/R/3.6.0/lib/R/library"
+```
+
+### Resources
+
+More information is available on the [R project
+homepage](https://www.r-project.org/) and this article on [R's start up
+behavior](https://rviews.rstudio.com/2017/04/19/r-for-enterprise-understanding-r-s-startup/).
 

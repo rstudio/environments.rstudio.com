@@ -21,27 +21,27 @@
   <!--radix_placeholder_meta_tags-->
   <title>Environments: R Installations</title>
   
-  <meta property="description" itemprop="description" content="Installing and Managing R [In Progress]"/>
+  <meta property="description" itemprop="description" content="Installing and Managing R"/>
   
   
   
   <!--  https://developers.facebook.com/docs/sharing/webmasters#markup -->
   <meta property="og:title" content="Environments: R Installations"/>
   <meta property="og:type" content="article"/>
-  <meta property="og:description" content="Installing and Managing R [In Progress]"/>
+  <meta property="og:description" content="Installing and Managing R"/>
   <meta property="og:locale" content="en_US"/>
   <meta property="og:site_name" content="Environments"/>
   
   <!--  https://dev.twitter.com/cards/types/summary -->
   <meta property="twitter:card" content="summary"/>
   <meta property="twitter:title" content="Environments: R Installations"/>
-  <meta property="twitter:description" content="Installing and Managing R [In Progress]"/>
+  <meta property="twitter:description" content="Installing and Managing R"/>
   
   <!--/radix_placeholder_meta_tags-->
   <!--radix_placeholder_rmarkdown_metadata-->
   
   <script type="text/json" id="radix-rmarkdown-metadata">
-  {"type":"list","attributes":{"names":{"type":"character","attributes":{},"value":["title","description"]}},"value":[{"type":"character","attributes":{},"value":["R Installations"]},{"type":"character","attributes":{},"value":["Installing and Managing R [In Progress]"]}]}
+  {"type":"list","attributes":{"names":{"type":"character","attributes":{},"value":["title","description"]}},"value":[{"type":"character","attributes":{},"value":["R Installations"]},{"type":"character","attributes":{},"value":["Installing and Managing R "]}]}
   </script>
   <!--/radix_placeholder_rmarkdown_metadata-->
   <!--radix_placeholder_navigation_in_header-->
@@ -1279,7 +1279,7 @@
 <!--radix_placeholder_front_matter-->
 
 <script id="distill-front-matter" type="text/json">
-{"title":"R Installations","description":"Installing and Managing R [In Progress]","authors":[]}
+{"title":"R Installations","description":"Installing and Managing R","authors":[]}
 </script>
 
 <!--/radix_placeholder_front_matter-->
@@ -1328,7 +1328,7 @@ Tools
 <a href="libraries.html">Libraries - renv</a>
 <a href="R-installation.html">R Versions</a>
 <a href="Docker.html">Docker</a>
-<a href="Python.html">Python</a>
+<a href="python.html">Python</a>
 </div>
 </div>
 <a href="javascript:void(0);" class="nav-toggle">&#9776;</a>
@@ -1341,24 +1341,46 @@ Tools
 
 <div class="d-title">
 <h1>R Installations</h1>
-<p>Installing and Managing R [In Progress]</p>
+<p>Installing and Managing R</p>
 </div>
 
 
 <div class="d-article">
-<p>This page isn’t quite ready, but the focus will be installing and managing R on Unix servers. For reproducible environments, <strong>the most critical step is installing R into a versioned directory!</strong>. By doing so, your system can support multiple versions of R and avoid unintentional R upgrades.</p>
-<p>Instructions for building R from source and supporting multiple versions of R are <a href="https://support.rstudio.com/hc/en-us/articles/218004217-Building-R-from-source">available here</a>.</p>
-<p>This page also discusses the ways to customize R’s behavior through:</p>
-<ul>
-<li>Renviron.site<br />
-</li>
-<li>Rprofile.site<br />
-</li>
-<li>System Library<br />
-</li>
-<li>User Libraries</li>
-</ul>
-<p>Current details are <a href="https://rviews.rstudio.com/2017/04/19/r-for-enterprise-understanding-r-s-startup/">outlined here</a>. Information on the system library is elaborated on the <a href="./libraries.html">libraries page</a> as well as <a href="https://rviews.rstudio.com/2017/04/19/r-for-enterprise-understanding-r-s-startup/">this article</a>.</p>
+<p>For reproducible environments, <strong>the most critical step is installing R into a version specific directory</strong>. By doing so, your system can support multiple versions of R and avoid unintentional R upgrades.</p>
+<h3 id="installing-r">Installing R</h3>
+<p>RStudio provides pre-compiled packages that make it easy to install different versions of R side by side in Linux environments. To get started, visit <a href="https://docs.rstudio.com/resources/install-r"><strong>these instructions</strong></a> or explore the <a href="https://github.com/rstudio/r-builds">open source repository</a>.</p>
+<p>In addition to the default R installation, there are a few options that customize R’s behavior:</p>
+<h3 id="renviron.site"><code>Renviron.site</code></h3>
+<p>This file lets you specify environment variables that should be available to any R session. The file is located at <code>R_HOME/bin/R/etc</code>, and has the format:</p>
+<pre><code>
+VARIABLE=value</code></pre>
+<p>The system file is useful for specifying environment variables that should be available for all users accessing this version of R. For example, you might specify the PATH or set common ODBC settings.</p>
+<p>User’s can create their own files, labelled <code>.Renviron</code>, that have the same format and place them in either their home directory (to apply to all projects) or their project directory (to apply to only a specific project). Often user’s will take advantage of these files to specify secrets such as passwords or API keys.</p>
+<h3 id="rprofile.site"><code>Rprofile.site</code></h3>
+<p>Similar to the environment file, the site-wide R profile allows you to supply R code that will be executed prior to the R session starting for any user accessing this version of R. The file is located at <code>R_HOME/bin/R/etc</code>, and has the format:</p>
+<pre class="r"><code>
+local({
+  options(repos = c(CRAN = &quot;https://r-pkgs.example.com/cran&quot;))
+})</code></pre>
+<p>User’s can create their own default profile by creating a file called <code>.Rprofile</code> and saving it in their home directory (to apply to all projects) or their project directory (to apply to only a specific project).</p>
+<p>The R profile is an easy way to set R specific options that can apply for all users.</p>
+<h3 id="system-library">System Library</h3>
+<p>Every R installation includes a system library. Packages installed into the system library will be available to every user accessing that version of R. By default, the library is located at:</p>
+<pre><code>
+R_HOME/lib/R/library</code></pre>
+<p>Note that the library path should include a version number.</p>
+<p>The easiest way to make a package available to all users is to install the package as a privileged user - R will automatically install the package into the system library in this case:</p>
+<pre><code>
+sudo /opt/R/3.6.1/bin/R -e &#39;install.packages(&quot;ggplot2&quot;)&#39;</code></pre>
+<p><strong>Warning: This is an easy but dangerous option. If you want to make packages available to all users, we highly recommend the <a href="./shared.html">shared baseline strategy</a></strong>.</p>
+<p>In addition to the system library, users will also have a default user library. This library is normally created in their home directory, and is also version specific.. When a user installs a package it is placed in this library and is not available to other users.</p>
+<p>To see where R is looking for packages, run this command in R:</p>
+<pre class="r"><code>
+.libPaths()
+# [1] &quot;/usr/home/sean/R/x86_64-pc-linux-gnu-library/3.6&quot;
+# [2] &quot;/opt/R/3.6.0/lib/R/library&quot;</code></pre>
+<h3 id="resources">Resources</h3>
+<p>More information is available on the <a href="https://www.r-project.org/">R project homepage</a> and this article on <a href="https://rviews.rstudio.com/2017/04/19/r-for-enterprise-understanding-r-s-startup/">R’s start up behavior</a>.</p>
 <!--radix_placeholder_article_footer-->
 <!--/radix_placeholder_article_footer-->
 </div>

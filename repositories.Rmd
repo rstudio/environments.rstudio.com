@@ -147,6 +147,13 @@ source, or install an older, binary version of the package that was built with
 the appropriate version of R. Additional details are available in the [package
 installation](./installation.html) section.
 
+RStudio Package Manager supplements the binaries available from CRAN and
+provides binary packages for a variety of Linux distributions. More information
+is available
+here](https://blog.rstudio.com/2019/11/07/package-manager-v1-1-no-interruptions/).
+These pre-compiled packages can make package installation much faster for those
+using R on Linux, such as RStudio Server users or anyone running R in Docker.
+
 ## Characteristics Specific to CRAN
 
 CRAN-like repositories share many of the structural attributes described above,
@@ -219,7 +226,7 @@ source option is the [miniCRAN](https://cran.r-project.org/web/packages/miniCRAN
 - browsing packages  
 - automatically building internal packages from Git  
 - serving subsets of CRAN  
-
+- pre-compiled packages for Linux  
 
 
 

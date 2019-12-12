@@ -172,7 +172,7 @@ RUN R -e 'options(repos = c(CRAN = "https://r-pkgs.example.com/validated")); ins
 2. If you are creating a shared environment for **multiple users**, then set the repo option in the `Rprofile.site` to point at the internal repository, and optionally install the available packages. For more details, refer to the [shared baseline](./shared.html) strategy, replacing the generic frozen repository with your validated internal repository.
 
 ```{bash eval=FALSE, echo=TRUE}
-# after installing R from source
+# after installing R 
 # set the repo option in Rprofile.site
 sudo echo 'options(repos = c(CRAN = "https://r-pkgs.example.com/validated"))' > R_HOME/etc/Rprofile.site
 

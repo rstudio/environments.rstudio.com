@@ -39,5 +39,5 @@ navbar:
       - text: "Docker"
         href: Docker.html
       - text: "Python"
-        href: Python.html
+        href: python.html
 output: distill::distill_article

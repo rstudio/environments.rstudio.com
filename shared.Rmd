@@ -170,7 +170,7 @@ can create frozen repositories manually, tie into
 [MRAN](https://mran.microsoft.com/), or use [RStudio Package
 Manager](https://docs.rstudio.com/rspm/admin/repositories.html#repo-versions). 
 
-1. Install a [version of R from source](./R-installation.html). This results in a versioned system library:
+1. Install a [version of R](./R-installation.html). This results in a versioned system library:
 
 ```
 /opt/R/3.4.4/lib/R/library

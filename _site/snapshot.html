@@ -1260,7 +1260,7 @@
   <script src="site_libs/htmlwidgets-1.3/htmlwidgets.js"></script>
   <script src="site_libs/viz-0.3/viz.js"></script>
   <link href="site_libs/DiagrammeR-styles-0.2/styles.css" rel="stylesheet" />
-  <script src="site_libs/grViz-binding-1.0.0/grViz.js"></script>
+  <script src="site_libs/grViz-binding-1.0.1/grViz.js"></script>
   <script src="site_libs/jquery-1.11.3/jquery.min.js"></script>
   <script src="site_libs/bowser-1.9.3/bowser.min.js"></script>
   <script src="site_libs/webcomponents-2.0.0/webcomponents.js"></script>
@@ -1332,7 +1332,7 @@ Tools
 <a href="libraries.html">Libraries - renv</a>
 <a href="R-installation.html">R Versions</a>
 <a href="Docker.html">Docker</a>
-<a href="Python.html">Python</a>
+<a href="python.html">Python</a>
 </div>
 </div>
 <a href="javascript:void(0);" class="nav-toggle">&#9776;</a>
@@ -1380,8 +1380,8 @@ Tools
 <p>A potential drawback of this strategy is the involvement required from the R user. For new users, these steps can create an energy barrier that prevents them from being successful. Often organizations will start new users (e.g. Excel converts) with a different strategy, and allow power R users the flexibility and responsibility of this strategy.</p>
 <div class="layout-chunk" data-layout="l-body">
 <div class="figure"><span id="fig:unnamed-chunk-1"></span>
-<div id="htmlwidget-c687909b30728d5d6314" style="width:624px;height:384px;" class="grViz html-widget"></div>
-<script type="application/json" data-for="htmlwidget-c687909b30728d5d6314">{"x":{"diagram":"\ndigraph renv {\n  graph [layout = dot\n         rankdir = LR]\n  node [shape = box]\n  \"1. Create a Project\"; \"Write Code\"; \"2. Install Packages\"; \"3. Snapshot\"; \"4. Restore\"\n  \n  \"1. Create a Project\"->\"Write Code\"\n  \"Write Code\"->\"2. Install Packages\" \n  \"2. Install Packages\" -> \"Write Code\"\n  \"Write Code\"->\"3. Snapshot\"\n  \"3. Snapshot\"->\"4. Restore\"\n  \n}      \n","config":{"engine":"dot","options":null}},"evals":[],"jsHooks":[]}</script>
+<div id="htmlwidget-fb7d2e577dce518b1f06" style="width:624px;height:384px;" class="grViz html-widget"></div>
+<script type="application/json" data-for="htmlwidget-fb7d2e577dce518b1f06">{"x":{"diagram":"\ndigraph renv {\n  graph [layout = dot\n         rankdir = LR]\n  node [shape = box]\n  \"1. Create a Project\"; \"Write Code\"; \"2. Install Packages\"; \"3. Snapshot\"; \"4. Restore\"\n  \n  \"1. Create a Project\"->\"Write Code\"\n  \"Write Code\"->\"2. Install Packages\" \n  \"2. Install Packages\" -> \"Write Code\"\n  \"Write Code\"->\"3. Snapshot\"\n  \"3. Snapshot\"->\"4. Restore\"\n  \n}      \n","config":{"engine":"dot","options":null}},"evals":[],"jsHooks":[]}</script>
 <p class="caption">
 Figure 1: Simple Workflow for Reproducible Environments
 </p>
@@ -1397,7 +1397,7 @@ Figure 1: Simple Workflow for Reproducible Environments
 </aside>
 <h3 id="pre-requisite-steps">Pre-requisite Steps:</h3>
 <ol type="1">
-<li>(Administrators) Install each desired version of <a href="./R-installation.html">R from source</a>.</li>
+<li>(Administrators) Install each desired version of <a href="./R-installation.html">R</a>.</li>
 <li>(Users) Install the <code>renv</code> package: <code>remotes::install_github('rstudio/renv')</code></li>
 </ol>
 <h3 id="step-1-initalize-a-project">Step 1: Initalize a Project</h3>
@@ -1484,6 +1484,7 @@ renv::restore()</code></pre>
 <li>Record the state of the <code>virtualenv</code> using <code>pip freeze &gt; requirements.txt</code></li>
 <li>On restore, recreate the Python <code>virtualenv</code> and then use <code>renv::restore()</code></li>
 </ol>
+<p>To automate some of these steps, take advantage of the <code>renv::use_python</code> function.</p>
 <h4 id="performance">Performance</h4>
 <p>A common challenge in the snapshot and restore approach is that each project relies on an isolated library. Naively, this would mean each project library would start empty and users would have to re-install their desired packages. In practice, this naive approach is slow - especially on systems where packages must be compiled.</p>
 <p>To solve this problem, implementations of the snapshot and restore strategy should rely on a <a href="./installation.html">package cache</a> or a <a href="./repositories.html#binary-packages">repository that serves binaries</a> for the operating systems in-use. By default, <code>renv</code> creates a cache for each user. This means if two projects rely on <code>ggplot2</code> version 3.1.0, the user will only need to install <code>ggplot2</code> 3.1.0 once. A repository that serves binaries accomplishes the same result, effectively caching installed packages for all users!</p>

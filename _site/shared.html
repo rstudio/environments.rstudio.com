@@ -1260,7 +1260,7 @@
   <script src="site_libs/htmlwidgets-1.3/htmlwidgets.js"></script>
   <script src="site_libs/viz-0.3/viz.js"></script>
   <link href="site_libs/DiagrammeR-styles-0.2/styles.css" rel="stylesheet" />
-  <script src="site_libs/grViz-binding-1.0.0/grViz.js"></script>
+  <script src="site_libs/grViz-binding-1.0.1/grViz.js"></script>
   <script src="site_libs/jquery-1.11.3/jquery.min.js"></script>
   <script src="site_libs/bowser-1.9.3/bowser.min.js"></script>
   <script src="site_libs/webcomponents-2.0.0/webcomponents.js"></script>
@@ -1332,7 +1332,7 @@ Tools
 <a href="libraries.html">Libraries - renv</a>
 <a href="R-installation.html">R Versions</a>
 <a href="Docker.html">Docker</a>
-<a href="Python.html">Python</a>
+<a href="python.html">Python</a>
 </div>
 </div>
 <a href="javascript:void(0);" class="nav-toggle">&#9776;</a>
@@ -1372,8 +1372,8 @@ Tools
 </ol>
 <div class="layout-chunk" data-layout="l-body">
 <div class="figure"><span id="fig:unnamed-chunk-1"></span>
-<div id="htmlwidget-98eca2b4cf6579c7ae10" style="width:624px;height:384px;" class="grViz html-widget"></div>
-<script type="application/json" data-for="htmlwidget-98eca2b4cf6579c7ae10">{"x":{"diagram":"\ndigraph first {\n  node [shape = oval]\n  rlang; cli; crayon;\n  \n  node [shape = box]\n  tibble\n  \n  tibble->rlang\n  tibble->cli\n  tibble->crayon\n}\n","config":{"engine":"dot","options":null}},"evals":[],"jsHooks":[]}</script>
+<div id="htmlwidget-26b66353ec24cf0e0bbf" style="width:624px;height:384px;" class="grViz html-widget"></div>
+<script type="application/json" data-for="htmlwidget-26b66353ec24cf0e0bbf">{"x":{"diagram":"\ndigraph first {\n  node [shape = oval]\n  rlang; cli; crayon;\n  \n  node [shape = box]\n  tibble\n  \n  tibble->rlang\n  tibble->cli\n  tibble->crayon\n}\n","config":{"engine":"dot","options":null}},"evals":[],"jsHooks":[]}</script>
 <p class="caption">
 Figure 1: Partial Dependency Graph for tibble
 </p>
@@ -1384,8 +1384,8 @@ Figure 1: Partial Dependency Graph for tibble
 </ol>
 <div class="layout-chunk" data-layout="l-body">
 <div class="figure"><span id="fig:unnamed-chunk-2"></span>
-<div id="htmlwidget-4b7efeb4aeb475518733" style="width:624px;height:384px;" class="grViz html-widget"></div>
-<script type="application/json" data-for="htmlwidget-4b7efeb4aeb475518733">{"x":{"diagram":"\ndigraph first {\n  node [shape = oval\n        style = filled\n        fillcolor = grey]\n  rlang; cli; crayon\n  \n  node [shape = box\n        style = filled\n        fillcolor = grey]\n  pkgdown\n  \n  node [shape = box\n        style = filled\n        fillcolor = white]\n  tibble\n  \n  tibble->rlang\n  tibble->cli\n  tibble->crayon\n  pkgdown->rlang\n  pkgdown->cli\n  pkgdown->crayon\n}\n","config":{"engine":"dot","options":null}},"evals":[],"jsHooks":[]}</script>
+<div id="htmlwidget-5d6207a9ed99b2b8a042" style="width:624px;height:384px;" class="grViz html-widget"></div>
+<script type="application/json" data-for="htmlwidget-5d6207a9ed99b2b8a042">{"x":{"diagram":"\ndigraph first {\n  node [shape = oval\n        style = filled\n        fillcolor = grey]\n  rlang; cli; crayon\n  \n  node [shape = box\n        style = filled\n        fillcolor = grey]\n  pkgdown\n  \n  node [shape = box\n        style = filled\n        fillcolor = white]\n  tibble\n  \n  tibble->rlang\n  tibble->cli\n  tibble->crayon\n  pkgdown->rlang\n  pkgdown->cli\n  pkgdown->crayon\n}\n","config":{"engine":"dot","options":null}},"evals":[],"jsHooks":[]}</script>
 <p class="caption">
 Figure 2: A dangerous situation, resulting from a partial upgrade
 </p>
@@ -1413,7 +1413,7 @@ Figure 3: Shared Basline Strategy
 <h3 id="implementation-steps">Implementation Steps</h3>
 <p>This strategy requires a “frozen repository”, as described above. Organizations can create frozen repositories manually, tie into <a href="https://mran.microsoft.com/">MRAN</a>, or use <a href="https://docs.rstudio.com/rspm/admin/repositories.html#repo-versions">RStudio Package Manager</a>.</p>
 <ol type="1">
-<li>Install a <a href="./R-installation.html">version of R from source</a>. This results in a versioned system library:</li>
+<li>Install a <a href="./R-installation.html">version of R</a>. This results in a versioned system library:</li>
 </ol>
 <pre><code>
 /opt/R/3.4.4/lib/R/library</code></pre>

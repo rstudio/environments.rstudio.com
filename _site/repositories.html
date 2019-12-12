@@ -1328,7 +1328,7 @@ Tools
 <a href="libraries.html">Libraries - renv</a>
 <a href="R-installation.html">R Versions</a>
 <a href="Docker.html">Docker</a>
-<a href="Python.html">Python</a>
+<a href="python.html">Python</a>
 </div>
 </div>
 <a href="javascript:void(0);" class="nav-toggle">&#9776;</a>
@@ -1417,6 +1417,7 @@ getOption(&quot;repos&quot;)</code></pre>
 <p>The <code>/bin</code> directory contains binary versions of R packages along with appropriate metadata. The binaries are organized by distribution. A binary package is an R package that has been installed onto a specific operating system. The installation process can include compiling code as well as package documentation and metadata. Binaries can be reused on similar operating systems, and are <strong>important because they allow users who want access to a package to install it much faster</strong>. For example, if you use R on a Windows desktop, and want access to ggplot2, you have two options. You could use <code>install.packages('ggplot2', type = 'source')</code>, in which case R would request the latest ggplot2 source bundle, e.g. <code>/src/contrib/ggplot2_1.0.tar.gz</code>. After downloading the bundle, R would unpack the source code and compile it. This process can take significant time. In contrast, the second and default option, <code>install.packages('ggplot2')</code>, instructs R to first try and download a binary, e.g. <code>/bin/windows/contrib/ggplot2_1.0.zip</code>. If the binary is available, R can download and use the code as-is, with no installation necessary. You can think of CRAN binaries as being a global cache, the work of compiling is done once (per operating system), and all users benefit!</p>
 <p>More detailed information on <a href="./installation.html">package installation</a> is available as well as information on the <a href="http://r-pkgs.had.co.nz/package.html#package">different states</a> of an R package.</p>
 <p>CRAN provides binaries for Windows and Mac. In addition to being distribution-specific, binaries are also specific to the version of R that created them. A repository serving binary packages indexes them by both attributes. Typically if a binary is not available for the version of R in-use, R will provide the user with an option to install the latest version from source, or install an older, binary version of the package that was built with the appropriate version of R. Additional details are available in the <a href="./installation.html">package installation</a> section.</p>
+<p>RStudio Package Manager supplements the binaries available from CRAN and provides binary packages for a variety of Linux distributions. More information is available here](<a href="https://blog.rstudio.com/2019/11/07/package-manager-v1-1-no-interruptions/" class="uri">https://blog.rstudio.com/2019/11/07/package-manager-v1-1-no-interruptions/</a>). These pre-compiled packages can make package installation much faster for those using R on Linux, such as RStudio Server users or anyone running R in Docker.</p>
 <h2 id="characteristics-specific-to-cran">Characteristics Specific to CRAN</h2>
 <p>CRAN-like repositories share many of the structural attributes described above, but there are specific features of CRAN that make it unique and remarkably successful. Two notable features include a distribution network of CRAN mirrors and testing of submitted packages. CRAN documents these policies and all of its policies <a href="https://cran.r-project.org/web/packages/policies.html">here</a>.</p>
 <h3 id="cran-mirrors">CRAN Mirrors</h3>
@@ -1456,7 +1457,9 @@ getOption(&quot;repos&quot;)</code></pre>
 </li>
 <li>automatically building internal packages from Git<br />
 </li>
-<li>serving subsets of CRAN</li>
+<li>serving subsets of CRAN<br />
+</li>
+<li>pre-compiled packages for Linux</li>
 </ul>
 <!--radix_placeholder_article_footer-->
 <!--/radix_placeholder_article_footer-->

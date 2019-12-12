@@ -143,7 +143,7 @@ RUN R -e 'setwd("./project"); renv::restore()'
 CMD ...
 ```
 
-In this example, the version of R is controlled by the base image, using an image provided by RStudio that includes R. Other alternatives also work, such as building R from source. You can determine the R version from the `renv` lock file: 
+In this example, the version of R is controlled by the base image, using an image provided by RStudio that includes R. Other alternatives also work, such as including the commands to [install R](./R-installation.html). You can determine the R version from the `renv` lock file: 
 
 ```bash
 cat renv.lock | grep -A1 "\[R\]" | sed -En "s/Version=(.*)$/\1/p"

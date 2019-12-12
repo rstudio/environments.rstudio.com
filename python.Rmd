@@ -1,16 +1,27 @@
 ---
 title: "Python"
 description: |
- Environments with R and Python [In Progress]
+ Environments with R and Python 
 ---
 
-This page isn't quite ready yet, but the focus will be on the intersection of
-the [`reticulate`](https://rstudio.github.io/reticulate) and
-[`renv`](https://github.com/rstudio/renv) packages.
+Python is not the focus of this site, but it is a critical tool for many data scientists. Unfortunately managing Python environments can be challenging:
 
-For current information on environment management, see the [`reticulate::use_*`
-functions](https://rstudio.github.io/reticulate/articles/versions.html).
+![Figure from https://xkcd.com/1987/](https://imgs.xkcd.com/comics/python_environment.png){width=100% .external}
+
+At RStudio, we firmly believe in open source tools, and know that most data
+scientists and teams use both R and Python together. We continue to make this
+process easier. To learn more, visit: https://rstudio.com/python. Or if you like videos, this
+[webinar](https://resources.rstudio.com/webinars/r-python-in-rstudio-1-2-with-reticulate)
+demonstrates how to combine R and Python in a variety of ways.
+
+For information on **installing Python**, especially on Linux servers, take advantage of these resources: 
+
+- [Single shared Python installation](https://docs.rstudio.com/resources/install-python/)
+- [Multiple versions of Python, or multiple Jupyter Kernels]( https://docs.rstudio.com/rsp/integration/jupyter-multiple-python-versions/)  
+
+For current information on **managing mixed R and Python projects**, see the [`reticulate::use_*`
+functions](https://rstudio.github.io/reticulate/articles/versions.html) and the [`renv::use_python` options](https://rstudio.github.io/renv/articles/python.html).
 
 These resources describe [best
-practices](https://solutions.rstudio.com/python/overview/) for using Python in
-RStudio's commercial products.
+practices](https://solutions.rstudio.com/python/overview/) for **using Python in
+RStudio's commercial products**.

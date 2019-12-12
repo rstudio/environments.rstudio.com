@@ -1,11 +1,8 @@
 ---
 title: "Libraries"
 description: |
-   Managing Installed Packages in Libraries [In Progress]
+   Managing Installed Packages in Libraries 
 ---
-
-This page isn't quite ready, but the focus will be describing what a library is,
-the constraints associated with libraries, and how to manage them.
 
 > In short, a library is just a directory containing installed packages 
 
