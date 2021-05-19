@@ -2,6 +2,10 @@
 title: "Validation"
 description: |
   Using R for Validated Work
+output:
+  distill::distill_article:
+    toc: true
+    toc_depth: 3
 ---
 
 Validating an environmnent consists of 2 elements:
@@ -26,6 +30,8 @@ Not what you were expecting? Before continuing, here are some quick links to oth
 - [Base R Validation Document for FDA](https://www.r-project.org/doc/R-FDA.pdf)  
 - [RStudio Professional Product Validation](https://www.rstudio.com/wp-content/uploads/2019/06/rstudio_compliance_validation.pdf)  
 - [R in Pharma Validation Hub](https://www.pharmar.org/)  
+- [Validation Guidance for the tidyverse, tidymodels, r-lib, and gt packages](https://www.rstudio.com/assets/img/validation-tidy.pdf)
+- [Validation Guidance for shiny and rmarkdown](https://www.rstudio.com/assets/img/validation-shiny-rmd.pdf)
 
 
 # Package Characteristics
