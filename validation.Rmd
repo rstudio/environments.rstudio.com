@@ -32,6 +32,7 @@ Not what you were expecting? Before continuing, here are some quick links to oth
 - [R in Pharma Validation Hub](https://www.pharmar.org/)  
 - [Validation Guidance for the tidyverse, tidymodels, r-lib, and gt packages](https://www.rstudio.com/assets/img/validation-tidy.pdf)
 - [Validation Guidance for shiny and rmarkdown](https://www.rstudio.com/assets/img/validation-shiny-rmd.pdf)
+- Install Verification for [RStudio Connect](https://docs.rstudio.com/rsc/post-setup-assistant/#verification-tasks), [RStudio Workbench](https://docs.rstudio.com/rsw/installation/#step-4-verify-installation), and [RStudio Package Manager](https://docs.rstudio.com/rpm/installation/#step-3-verify-installation)
 
 
 # Package Characteristics
