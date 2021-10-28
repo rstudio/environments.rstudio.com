@@ -6,6 +6,7 @@ output:
   distill::distill_article:
     toc: true
     toc_depth: 3
+canonical_url: https://environments.rstudio.com/validation
 ---
 
 Validating an environmnent consists of 2 elements:

@@ -3,6 +3,7 @@ title: "Reproducible Environments"
 description: |
   Manage environments for data science.
 site: distill::distill_website
+canonical_url: https://environments.rstudio.com/
 ---
 
 ```{r setup, include=FALSE}
@@ -107,7 +108,7 @@ Data science environments are built from a common set of tools.
 
 ```{r fig.cap="Components of an Environment", echo=FALSE}
 grViz(
-"digraph env {
+  "digraph env {
 
  graph [layout = dot
         rankdir = BT]
@@ -131,6 +132,36 @@ grViz(
  'Python Installation' -> virtualenv
 }
 ")
+
+# 
+# nodes <- create_node_df(
+#   n = 7,
+#   type = "a",
+#   label = c(
+#     "Operating System",
+#     "R Installation", 
+#     "System Libraries", 
+#     "Python Installation",
+#     "virtualenv", 
+#     "Project Library",
+#     "User"
+#   ), 
+#   shape = c("box", rep("oval", 5), "egg"), 
+#   fillcolor = rep("white", 7)
+# )
+# 
+# edges <- create_edge_df(
+#   from = c(rep(1, 3), 2, rep(3, 2), 5, 6, 4),
+#   to = c(4, 3, 2, 6, 6, 5, 7, 7, 5)
+# )
+# 
+# create_graph(
+#   nodes_df = nodes, 
+#   edges_df = edges, 
+#   attr_theme = "bt"
+# ) %>%
+#   add_global_graph_attrs("fixedsize", "false", "node") %>%
+#   render_graph()
 
 ```
 
