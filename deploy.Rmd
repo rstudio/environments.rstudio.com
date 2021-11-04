@@ -9,7 +9,7 @@ output:
 canonical_url: https://environments.rstudio.com/deploy
 ---
 
-Data products built in R, such as dashboards, web applications, reports, and APIs, are increasingly deployed to production. While specific definitions of production can vary, everyone agrees that production content should be stable. Most production systems use a variation of the [Snapshot and Restore](./snapshot.html) strategy. Here, we focuse on examples of production systems that apply the snapshot and restore strategy. This page also describes [staging environments](./deloy.html#testing-and-staging), [acceptable differences](./acceptable-differences) between development and production environments, and [strategies for upgrading](./environment-upgrades) production environments.
+Data products built in R, such as dashboards, web applications, reports, and APIs, are increasingly deployed to production. While specific definitions of production can vary, everyone agrees that production content should be stable. Most production systems use a variation of the [Snapshot and Restore](./snapshot.html) strategy. Here, we focus on examples of production systems that apply the snapshot and restore strategy. This page also describes [staging environments](./deloy.html#testing-and-staging), [acceptable differences](./acceptable-differences) between development and production environments, and [strategies for upgrading](./environment-upgrades) production environments.
 
 This page focuses on reproducible environments for production content. There are other important concerns for placing R code in production:  
 
