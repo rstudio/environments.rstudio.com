@@ -3,6 +3,7 @@ title: "Reproducible Environments"
 description: |
   Manage environments for data science.
 site: distill::distill_website
+canonical_url: https://environments.rstudio.com/
 ---
 
 ```{r setup, include=FALSE}

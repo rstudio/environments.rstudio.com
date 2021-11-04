@@ -2,6 +2,7 @@
 title: "Installation"
 description: |
   Installing Packages [In Progress]
+canonical_url: https://environments.rstudio.com/installation
 ---
 
 This page isn't quite ready, but it will describe what a package is, what

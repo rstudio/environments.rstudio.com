@@ -6,6 +6,7 @@ output:
   distill::distill_article:
     toc: true
     toc_depth: 3
+canonical_url: https://environments.rstudio.com/docker
 ---
 
 Docker is a large topic. This site focuses on how Docker relates to reproducible

@@ -1,7 +1,8 @@
 ---
 title: "Libraries"
 description: |
-   Managing Installed Packages in Libraries 
+   Managing Installed Packages in Libraries
+canonical_url: https://environments.rstudio.com/libraries
 ---
 
 > In short, a library is just a directory containing installed packages 

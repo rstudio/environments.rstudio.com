@@ -2,6 +2,7 @@
 title: "Team Collaboration"
 description: |
   Easily Work Together
+canonical_url: https://environments.rstudio.com/collaborate
 ---
 
 A common challenge on teams is sharing and running code. If you've sat down to run a colleague's code, only to spend hours installing and updating packages, you're familiar with the pain points. Luckily, adopting any of the [strategies](./reproduce.html) for creating a reproducible environment will result in easier team collaboration. 
