@@ -6,6 +6,7 @@ output:
   distill::distill_article:
     toc: true
     toc_depth: 3
+canonical_url: https://environments.rstudio.com/validation
 ---
 
 Validating an environmnent consists of 2 elements:
@@ -57,12 +58,12 @@ More information on CRAN tests can be reviewed
 <aside>
 Many packages include a badge to quickly indicate their current CRAN status. For example, this is the CRAN status badge for ggplot2:
 
-[![CRAN_Status_Badge](http://www.r-pkg.org/badges/version/ggplot2)](https://cran.r-project.org/package=ggplot2)
+[![CRAN_Status_Badge](https://www.r-pkg.org/badges/version/ggplot2)](https://cran.r-project.org/package=ggplot2)
 </aside>
 
 ## Tests
 
-In addition to documentation, a critical indicator that a package is ready for prime time is checking to see whether the [package has tests](http://r-pkgs.had.co.nz/tests.html). Normally, package authors include tests in a directory [alongside their package code](https://github.com/tidyverse/ggplot2/tree/master/tests). Tests help authors check their code for accuracy and prevent them from accidentally breaking code. 
+In addition to documentation, a critical indicator that a package is ready for prime time is checking to see whether the [package has tests](https://r-pkgs.had.co.nz/tests.html). Normally, package authors include tests in a directory [alongside their package code](https://github.com/tidyverse/ggplot2/tree/master/tests). Tests help authors check their code for accuracy and prevent them from accidentally breaking code. 
 
 Many packages will go a step further and report [test coverage](https://covr.r-lib.org/). This metric indicates how much of the package code is currently tested. Often package authors  will automatically run tests using a continuous integration service and report test status and code coverage through public badges.
 
