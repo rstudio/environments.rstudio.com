@@ -53,17 +53,17 @@ through these checks ensures the package is stable, and also indicates the
 package author is serious and motivated. While not every package on CRAN is
 perfect, a package on CRAN indicates a minimal level of effort and stability.
 More information on CRAN tests can be reviewed
-[here](http://r-pkgs.had.co.nz/tests.html#test-cran).
+[here](https://r-pkgs.had.co.nz/tests.html#test-cran).
 
 <aside>
 Many packages include a badge to quickly indicate their current CRAN status. For example, this is the CRAN status badge for ggplot2:
 
-[![CRAN_Status_Badge](http://www.r-pkg.org/badges/version/ggplot2)](https://cran.r-project.org/package=ggplot2)
+[![CRAN_Status_Badge](https://www.r-pkg.org/badges/version/ggplot2)](https://cran.r-project.org/package=ggplot2)
 </aside>
 
 ## Tests
 
-In addition to documentation, a critical indicator that a package is ready for prime time is checking to see whether the [package has tests](http://r-pkgs.had.co.nz/tests.html). Normally, package authors include tests in a directory [alongside their package code](https://github.com/tidyverse/ggplot2/tree/master/tests). Tests help authors check their code for accuracy and prevent them from accidentally breaking code. 
+In addition to documentation, a critical indicator that a package is ready for prime time is checking to see whether the [package has tests](https://r-pkgs.had.co.nz/tests.html). Normally, package authors include tests in a directory [alongside their package code](https://github.com/tidyverse/ggplot2/tree/master/tests). Tests help authors check their code for accuracy and prevent them from accidentally breaking code. 
 
 Many packages will go a step further and report [test coverage](https://covr.r-lib.org/). This metric indicates how much of the package code is currently tested. Often package authors  will automatically run tests using a continuous integration service and report test status and code coverage through public badges.
 
@@ -82,7 +82,7 @@ A critical indicator of a package's health and usefulness is the level of docume
 -[Package Vignettes](https://tidymodels.github.io/parsnip/articles/articles/Regression.html)  
 -[Function References and Help Files](https://cran.r-project.org/web/packages/plumber/plumber.pdf)  
 -[Websites](https://spark.rstudio.com/)  
--[Books](http://www.cookbook-r.com/Graphs/)  
+-[Books](https://www.cookbook-r.com/Graphs/)  
 -[Journal Papers](https://www.jstatsoft.org/article/view/v077i01)  
 -[Presentations](https://resources.rstudio.com/rstudio-conf-2019/3d-mapping-plotting-and-printing-with-rayshader)    
 -[Cheatsheets](https://resources.rstudio.com/the-essentials-of-data-science/lubridate-cheat-sheet)    
@@ -126,7 +126,7 @@ and the related [itdepends](https://github.com/jimhester/itdepends) tool. A few
 quick tips:
 
 
-- Package dependencies can be viewed in the package's Description file and come in a [few flavors](http://r-pkgs.had.co.nz/description.html#dependencies): Suggests, Depends, Imports, and LinkingTo.  
+- Package dependencies can be viewed in the package's Description file and come in a [few flavors](https://r-pkgs.had.co.nz/description.html#dependencies): Suggests, Depends, Imports, and LinkingTo.  
 - Package dependencies describe what a package relies on. For example ggplot2 imports rlang, which means ggplot2 requires rlang in order to work. Reverse dependencies indicate the opposite, so ggplot2 is a reverse dependency for rlang.  
 - You should understand how [package inter-dependencies impact reproducibility](./reproduce.html#the-big-risk).    
 - In addition to depending on other R packages, a package can have system requirements. For example, the rJava package requires a Java installation. You can view system dependencies for a package in the Description file, though a more complete listing is available [here](https://sysreqs.r-hub.io/) or in [RStudio Package Manager](https://demo.rstudiopm.com/client/#/repos/4/packages/curl).  
