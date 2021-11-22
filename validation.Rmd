@@ -9,7 +9,7 @@ output:
 canonical_url: https://environments.rstudio.com/validation
 ---
 
-Validating an environmnent consists of 2 elements:
+Validating an environment consists of 2 elements:
 
 1. Confidently recreating the same environment
 2. Trusting what is in the environment
