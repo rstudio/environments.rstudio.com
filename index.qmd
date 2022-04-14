@@ -1,13 +1,12 @@
 ---
 title: "Reproducible Environments"
-description: |
-  Manage environments for data science.
-site: distill::distill_website
-canonical_url: https://environments.rstudio.com/
+execute:
+  include: false
+  echo: false
+  warning: false
 ---
 
-```{r setup, include=FALSE}
-knitr::opts_chunk$set(echo = TRUE)
+```{r setup}
 library(DiagrammeR)
 ```
 
@@ -16,9 +15,9 @@ is the foundation of all science. Reproducing work is also critical for business
 applications: scheduled reporting, team collaboration, project validation. 
 
 The purpose of this site is to help you understand the key [**use
-cases**](./index.html#use-cases) for reproducible environments, the
-[**strategies**](./index.html#strategies) you can use to create them, and the
-[**tools**](./index.html#tools) you'll need to master.
+cases**](index.qmd#use-cases) for reproducible environments, the
+[**strategies**](index.qmd#strategies) you can use to create them, and the
+[**tools**](index.qmd#tools) you'll need to master.
 
 While everyone should have a plan for reproducible environments, here are a few signs to suggest environment management has gone wrong:
 
@@ -38,17 +37,22 @@ If you prefer videos to reading, checkout [this webinar](https://resources.rstud
 
 Environment management takes work. Here are some cases where the reward is worth the effort:
 
-- When you are working on a long-term project, and need to [safely upgrade packages](./upgrades.html).  
-- In cases where you and your team [need to collaborate](./collaborate.html) on the same project, using a common source of truth.
-- If you need to [validate](./validation.html) and control the packages you're using.
-- When you are ready to [deploy a data product to production](./deploy.html), such as a Shiny app, R Markdown document, or plumber API.
+- When you are working on a long-term project, and need to [safely upgrade packages](upgrades.qmd).  
+- In cases where you and your team [need to collaborate](collaborate.qmd) on the same project, using a common source of truth.
+- If you need to [validate](validation.qmd) and control the packages you're using.
+- When you are ready to [deploy a data product to production](deploy.qmd), such as a Shiny app, R Markdown document, or plumber API.
 
 ## Strategies
 
 Use cases provide the "why" for reproducible environments, but not the "how". There are a variety of strategies for creating reproducible environments. It is important to recognize that not everyone needs the same approach to reproducibility. If you're a student reporting an error to your professor, capturing your `sessionInfo()` may be all you need. In contrast, a statistician working on a clinical trial will need a robust framework for recreating their environment. **Reproducibility is not binary!**
 
 
-```{r spectrum, echo = FALSE, layout="l-page", fig.cap="Strategies for reproducibility fall on a spectrum. One side is not better than the other. Pick based on your goals.", fig.height=5, fig.width=8}
+```{r spectrum}
+#| echo: false
+#| fig.caption: Strategies for reproducibility fall on a spectrum. One side is not better than the other. Pick based on your goals.
+#| fig.height: 5
+#| fig.width: 8
+#| include: true
 library(ggplot2)
 library(tibble)
 timeline <- tribble(
@@ -93,13 +97,13 @@ ggplot() +
 
 There are three main strategies covered in this site.
 
-1. The [Snapshot and Restore](./snapshot.html) strategy is used when individual data scientists are responsible for managing a project and have full access to install packages. The strategy uses tools like [renv](https://rstudio.github.io/renv)^[renv is packrat 2.0] to record a project's dependencies and restore them. 
+1. The [Snapshot and Restore](snapshot.qmd) strategy is used when individual data scientists are responsible for managing a project and have full access to install packages. The strategy uses tools like [renv](https://rstudio.github.io/renv)^[renv is packrat 2.0] to record a project's dependencies and restore them. 
 
-2. The [Shared Baseline](./shared.html) strategy helps administrators coordinate the work of many data scientists by providing common sets of packages to use across projects. The key to this strategy is determining a consistent set of packages that work together.
+2. The [Shared Baseline](shared.qmd) strategy helps administrators coordinate the work of many data scientists by providing common sets of packages to use across projects. The key to this strategy is determining a consistent set of packages that work together.
 
-3. The [Validated](./validated.html) strategy is used when packages must be controlled and meet specific organization standards.
+3. The [Validated](validated.qmd) strategy is used when packages must be controlled and meet specific organization standards.
 
-The [strategy map](./reproduce.html) will help you pick between the different strategies.
+The [strategy map](reproduce.qmd) will help you pick between the different strategies.
 
 
 ## Tools
@@ -141,12 +145,12 @@ versions of R installed. If your organization uses Docker containers, you might
 have a base image with some of these components, and runtime installation of
 others. Understanding these tools will help you create reproducible environments.
 
-- **R Packages** Managing and recording R packages makes up the bulk of this website. Specifically learn about [repositories](./repositories.html), [installing packages](./installation.html), and [managing libraries](./libraries).
+- **R Packages** Managing and recording R packages makes up the bulk of this website. Specifically learn about [repositories](repositories.qmd), [installing packages](installation.qmd), and [managing libraries](libraries.qmd).
 
-- **R Installation** Packages like `renv` will normally document the version of R used by the project. On shared servers, it is common to install multiple versions of R. Organizations using Docker will typically include R in a base image. Learn more [best practices for R installations](./R-installation.html).
+- **R Installation** Packages like `renv` will normally document the version of R used by the project. On shared servers, it is common to install multiple versions of R. Organizations using Docker will typically include R in a base image. Learn more [best practices for R installations](R-installation.qmd).
 
-- **Other Languages** Often data science projects are multi-lingual. Combining R and Python is the most common use case, and tools like `renv` have affordances for recording [Python](./python.html) dependencies.
+- **Other Languages** Often data science projects are multi-lingual. Combining R and Python is the most common use case, and tools like `renv` have affordances for recording [Python](python.qmd) dependencies.
 
-- **System Dependencies** R, Python, and their packages can depend on underlying software that needs to be installed on the system. For example, the `xml2` R package depends on the `libxml` system package. Learn more about how [system dependencies are documented and managed](./installation.html#system-dependencies).
+- **System Dependencies** R, Python, and their packages can depend on underlying software that needs to be installed on the system. For example, the `xml2` R package depends on the `libxml` system package. Learn more about how [system dependencies are documented and managed](installation.qmd#system-dependencies).
 
-- **Operating System** Operating system configurations can be documented with tools like Docker or through Infrastructure-as-code solutions like Chef and Puppet. Often this step is managed outside of the data science team. Learn more about [best practices for Docker](./docker.html).
+- **Operating System** Operating system configurations can be documented with tools like Docker or through Infrastructure-as-code solutions like Chef and Puppet. Often this step is managed outside of the data science team. Learn more about [best practices for Docker](docker.qmd).
