@@ -1,12 +1,8 @@
 ---
 title: "Strategy Maps"
-description: |
-  Strategies to Reproduce Environments Over Time
-output:
-  distill::distill_article:
-    toc: true
-    toc_depth: 3
-canonical_url: https://environments.rstudio.com/reproduce
+execute:
+  echo: false
+  warning: false
 ---
 
 Reproducing data science work is the main objective of environment management. This site details three strategies for reproducing R environments over time. To select a strategy, you will need to answer two questions:  
@@ -20,7 +16,7 @@ zones as well as three successful strategies. Use the map and the two questions
 above to determine where your organization currently operates and identify which
 strategy to move towards. 
 
-```{r mental-map, layout="l-body-outset"}
+```{r mental-map}
 library(ggplot2)
 library(tibble)
 library(ggrepel)
@@ -85,12 +81,15 @@ p <- ggplot(mm, aes(x, y)) +
     title = "Reproducing Environments: Strategies and Danger Zones"
   ) # + 
   # theme(axis.line = element_line(linetype = 'solid', arrow = grid::arrow(length = grid::unit(1, units = 'mm'))))
+```
+
+```{r}
 ggplotly(p, tooltip = c('text')) %>% 
   config(displayModeBar = FALSE) %>% 
   style(hoverinfo = 'skip', traces = 1:5) %>% 
   hide_legend()
-
 ```
+
 
 The three strategies are outlined in detail:  
 
