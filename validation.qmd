@@ -1,24 +1,32 @@
 ---
 title: "Validation"
-description: |
-  Using R for Validated Work
-output:
-  distill::distill_article:
-    toc: true
-    toc_depth: 3
-canonical_url: https://environments.rstudio.com/validation
 ---
+
+```{r}
+#| include: false
+library(tibble)
+library(ggplot2)
+library(dplyr)
+library(ggrepel)
+library(lubridate)
+library(cranlogs)
+```
 
 Validating an environmnent consists of 2 elements:
 
 1. Confidently recreating the same environment
 2. Trusting what is in the environment
   
-The first concern, reproducing environments, is covered at length by the different [strategies](./reproducible.html) for environment management. The [validated](./validated.html) strategy is particularly useful for creating sets of approved packages, though other strategies can be used depending on the context.
+The first concern, reproducing environments, is covered at length by the different
+[strategies](reproduce.qmd) for environment management. The [validated](validated.qmd) 
+strategy is particularly useful for creating sets of approved packages, though
+other strategies can be used depending on the context.
 
 The second concern forces us to answer the question: "Can we trust our
 environment?". To trust an environment, we must have confidence that the
-packages are accurate in their stated purpose. Unfortunately, with `r nrow(available.packages(repo="https://cran.rstudio.com"))`^[Run on `r Sys.Date()`] R packages on CRAN, and more added each day, it is impossible to
+packages are accurate in their stated purpose. Unfortunately, with
+`r nrow(available.packages(repo="https://cran.rstudio.com"))`^[Run on `r Sys.Date()`]
+R packages on CRAN, and more added each day, it is impossible to
 provide a single list of trusted packages. Every organization, or industry, will
 need to apply their own judgement in determining whether or not to approve a
 package. This page presents a set of metrics to help organizations make these
@@ -26,7 +34,8 @@ determinations.
 
 # Quick Links
 
-Not what you were expecting? Before continuing, here are some quick links to other resources specific to validation in the clinical pharma space:  
+Not what you were expecting? Before continuing, here are some quick links to other
+resources specific to validation in the clinical pharma space:  
 
 - [Base R Validation Document for FDA](https://www.r-project.org/doc/R-FDA.pdf)  
 - [RStudio Professional Product Validation](https://www.rstudio.com/wp-content/uploads/2019/06/rstudio_compliance_validation.pdf)  
@@ -56,16 +65,24 @@ More information on CRAN tests can be reviewed
 [here](http://r-pkgs.had.co.nz/tests.html#test-cran).
 
 <aside>
-Many packages include a badge to quickly indicate their current CRAN status. For example, this is the CRAN status badge for ggplot2:
+Many packages include a badge to quickly indicate their current CRAN status.
+For example, this is the CRAN status badge for ggplot2:
 
 [![CRAN_Status_Badge](https://www.r-pkg.org/badges/version/ggplot2)](https://cran.r-project.org/package=ggplot2)
 </aside>
 
 ## Tests
 
-In addition to documentation, a critical indicator that a package is ready for prime time is checking to see whether the [package has tests](https://r-pkgs.had.co.nz/tests.html). Normally, package authors include tests in a directory [alongside their package code](https://github.com/tidyverse/ggplot2/tree/master/tests). Tests help authors check their code for accuracy and prevent them from accidentally breaking code. 
+In addition to documentation, a critical indicator that a package is ready for
+prime time is checking to see whether the [package has tests](https://r-pkgs.had.co.nz/tests.html).
+Normally, package authors include tests in a directory
+[alongside their package code](https://github.com/tidyverse/ggplot2/tree/master/tests).
+Tests help authors check their code for accuracy and prevent them from accidentally breaking code. 
 
-Many packages will go a step further and report [test coverage](https://covr.r-lib.org/). This metric indicates how much of the package code is currently tested. Often package authors  will automatically run tests using a continuous integration service and report test status and code coverage through public badges.
+Many packages will go a step further and report [test coverage](https://covr.r-lib.org/).
+This metric indicates how much of the package code is currently tested.
+Often package authors  will automatically run tests using a continuous integration
+service and report test status and code coverage through public badges.
 
 <aside>
 The following badges show the current test coverage and status for ggplot2:
@@ -76,7 +93,8 @@ The following badges show the current test coverage and status for ggplot2:
 
 ## Documentation
 
-A critical indicator of a package's health and usefulness is the level of documentation. R packages provide documentation in a number of formats:  
+A critical indicator of a package's health and usefulness is the level of documentation.
+R packages provide documentation in a number of formats:  
 
 -[Package READMEs](https://github.com/juliasilge/tidytext/blob/master/README.md)  
 -[Package Vignettes](https://tidymodels.github.io/parsnip/articles/articles/Regression.html)  
@@ -96,16 +114,13 @@ package with fewer downloads may be a newer alternative to a package that has
 many downloads but is nearing end of life.
 
 RStudio provides download logs for the popular [CRAN
-mirror](./repositories.html#cran-mirrors) https://cran.rstudio.com. The easiest
+mirror](repositories.qmd#cran-mirrors) https://cran.rstudio.com. The easiest
 way to access these logs is through the [cranlogs](https://cranlogs.r-pkg.org/)  R
 package and API, or by visiting this [shiny
 app](https://hadley.shinyapps.io/cran-downloads/).
 
 ```{r}
-library(cranlogs)
-library(lubridate)
-library(ggplot2)
-downloads <- cranlogs::cran_downloads("ggplot2", from = "2019-01-01", to = today()-ddays(1))
+downloads <- cranlogs::cran_downloads("ggplot2", from = "2019-01-01", to = today() - ddays(2))
 ggplot(downloads, aes(date, count)) + 
   geom_line() + 
   theme_minimal() + 
@@ -122,14 +137,21 @@ When you consider bringing a package into your environment, it is important to
 evaluate the package's dependencies. Evaluating the risk of package dependencies
 is a complex process. A great place to start is reviewing [this
 talk](https://resources.rstudio.com/rstudio-conf-2019/it-depends-a-dialog-about-dependencies)
-and the related [itdepends](https://github.com/jimhester/itdepends) tool. A few
+and the related [itdepends](https://github.com/r-lib/itdepends) tool. A few
 quick tips:
 
 
-- Package dependencies can be viewed in the package's Description file and come in a [few flavors](http://r-pkgs.had.co.nz/description.html#dependencies): Suggests, Depends, Imports, and LinkingTo.  
-- Package dependencies describe what a package relies on. For example ggplot2 imports rlang, which means ggplot2 requires rlang in order to work. Reverse dependencies indicate the opposite, so ggplot2 is a reverse dependency for rlang.  
-- You should understand how [package inter-dependencies impact reproducibility](./reproduce.html#the-big-risk).    
-- In addition to depending on other R packages, a package can have system requirements. For example, the rJava package requires a Java installation. You can view system dependencies for a package in the Description file, though a more complete listing is available [here](https://sysreqs.r-hub.io/) or in [RStudio Package Manager](https://demo.rstudiopm.com/client/#/repos/4/packages/curl).  
+- Package dependencies can be viewed in the package's Description file and come
+in a [few flavors](http://r-pkgs.had.co.nz/description.html#dependencies):
+`Suggests`, `Depends`, `Imports`, and `LinkingTo`.
+- Package dependencies describe what a package relies on. For example ggplot2 imports
+rlang, which means ggplot2 requires rlang in order to work. Reverse dependencies
+indicate the opposite, so ggplot2 is a reverse dependency for rlang.
+- You should understand how [package inter-dependencies impact reproducibility](reproduce.qmd#the-big-risk).    
+- In addition to depending on other R packages, a package can have system requirements.
+For example, the rJava package requires a Java installation. You can view system dependencies
+for a package in the Description file, though a more complete listing is available
+[here](https://sysreqs.r-hub.io/) or in [RStudio Package Manager](https://packagemanager.rstudio.com/client/#/repos/1/packages/curl).  
 
 ## Authors
 
@@ -146,19 +168,25 @@ responsive to questions and feedback? Are issues addressed in a timely manner?
 
 ## News, Releases, and Life Cycle
 
-Another indicator of a package's stability is the package's release history. For packages on GitHub, this [release history](https://github.com/tidyverse/ggplot2/releases) is often visible directly. You can also look for the package's [NEWS](https://github.com/tidyverse/ggplot2/blob/master/NEWS) file.
+Another indicator of a package's stability is the package's release history.
+For packages on GitHub, this [release history](https://github.com/tidyverse/ggplot2/releases)
+is often visible directly. You can also look for the package's
+[NEWS](https://github.com/tidyverse/ggplot2/blob/main/NEWS) file.
 
-Unfortunately, just looking at the number of releases or the date of the last release does not paint the whole picture. Some packages will have lots of recent releases because they are rapidly changing. Other packages might not have had a release for quite some time - is this because the package has been abandoned? Or is it because the package is really stable? Considering the package’s [state of life](https://www.tidyverse.org/lifecycle/) can help answer these questions.
+Unfortunately, just looking at the number of releases or the date of the last
+release does not paint the whole picture. Some packages will have lots of recent
+releases because they are rapidly changing. Other packages might not have had a
+release for quite some time - is this because the package has been abandoned?
+Or is it because the package is really stable? Considering the package’s
+[state of life](https://www.tidyverse.org/lifecycle/) can help answer these questions.
 
 [![lifecycle](https://img.shields.io/badge/lifecycle-stable-brightgreen.svg)](https://www.tidyverse.org/lifecycle/#stable)
 
 
-```{r eval=TRUE, echo=FALSE}
-library(tibble)
-library(ggplot2)
-library(dplyr)
-library(ggrepel)
-library(lubridate)
+```{r eval=FALSE, echo=FALSE}
+#| eval: false
+# temp turn this off
+
 releases <- tribble(
   ~version, ~date,
   "0.5", "Dec 31, 2006 5:00 PM",
@@ -194,7 +222,7 @@ releases <- tribble(
 "3.0.0",  "Jul 3, 2018 11:20 AM"
 )
 timeline <- tibble(
-  x = c(ymd_hm("2007-05-01 12:00"), now()),
+  x = c(ymd_hm("2007-05-01 12:00"), ymd("2019-01-01")),
   y = c(0.5,0.5)
 )
 
@@ -226,11 +254,11 @@ Finally, when picking a package, you should consider if your organization has
 any licensing restrictions. Licenses for R packages can be found in their
 Description file, and many R packages include an additional license file.
 Organizations with strict licensing requirements might consider an [internal
-repository](./repositories.html#internal -repositories) to [track and audit
+repository](repositories.qmd#internal-repositories) to [track and audit
 license usage](https://demo.rstudiopm.com/client/#/stats).
 
 ```{r}
-ap <- available.packages()
+ap <- available.packages(repos = c("CRAN" = "https://cran.rstudio.com"))
 licences <-tibble(type = ap[,"License"])
 licences %>% 
   group_by(type) %>% 
@@ -252,7 +280,7 @@ licences %>%
 # Related Work and Advice
 
 A group of pharmaceutical companies has formed a working group aimed at tackling
-the question of package validation. Take a look at their [preliminary work](https://www.pharmar.org/packages/).
+the question of package validation. Take a look at their [work](https://www.pharmar.org/overview/).
 
 The [ROpenSci](https://ropensci.org) project has created a repository of
 packages that undergo significant peer review. Additionally, they also sponsor a
