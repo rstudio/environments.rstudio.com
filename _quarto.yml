@@ -30,6 +30,26 @@ website:
           href: shared.qmd
         - text: "Validated"
           href: validated.qmd
+      - text: "R"
+        menu:
+        - text: "Introduction"
+          href: "#"
+        - text: "renv"
+          href: "#"
+        - text: "Comparison of tools"
+          href: "comparison-of-tools.qmd"
+      - text: "Python"
+        menu:
+        - text: "Introduction"
+          href: "python/introduction.qmd"
+        - text: "venv"
+          href: "python/venv.qmd"
+        - text: "poetry"
+          href: "python/poetry.qmd"
+        - text: "conda"
+          href: "python/conda.qmd"
+        - text: "Comparison of tools"
+          href: "comparison-of-tools.qmd"
       - text: "Tools"
         menu:
         - text: "Installing - pak / remotes"

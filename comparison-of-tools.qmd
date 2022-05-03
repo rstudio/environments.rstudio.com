@@ -1,0 +1,14 @@
+---
+title: "Comparison of tools"
+table-of-contents: true
+---
+
+|                                    | *renv*                            | *venv*                                        | *poetry*                                                   | *conda*                                          |
+| ---------------------------------- | --------------------------------- | --------------------------------------------- | ---------------------------------------------------------- | ------------------------------------------------ |
+| Language                           | R                                 | Python                                        | Python                                                     | Python, R, and system dependencies               |
+| Docs                               | <https://rstudio.github.io/renv/> | <https://docs.python.org/3/library/venv.html> | <https://python-poetry.org>                                | <https://docs.conda.io/en/latest/miniconda.html> |
+| Included in standard library?      | No                                | Yes                                           | No                                                         | No                                               |
+| Start a new project                | `renv::init()`                    | `python -m venv .vev`                         | `poetry init`                                              | `conda create --name new_env python=3.9`         |
+| Activate a n existing environment  | `renv::activate()`                | `source .venv/bin/activate`                   | `poetry run <COMMAND>`                                     | `conda activate new_env`                         |
+| Create a snapshot of project state | `renv::snapshot()`                | `pip freeze >> requirements.txt`              | `poetry export --without-hashes --output requirements.txt` | `conda env export >> conda_env.yaml`             |
+

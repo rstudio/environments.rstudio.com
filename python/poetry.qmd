@@ -1,0 +1,512 @@
+---
+title: "poetry"
+table-of-contents: true
+---
+
+:::{.callout-warning}
+Under development
+:::
+
+*poetry* is a Python tool for Python packaging and dependency management Check out the *poetry* docs here: <https://python-poetry.org>. A few of the most important features are:
+
+- Command line interface for declaring dependencies.
+- The ability to document development only dependiencies in addition to production depdencies.
+- A lock file to maximize reproducaiblity.
+
+## Usage
+
+### Installation
+
+To install poetry run the following command:
+
+```bash
+curl -sSL https://install.python-poetry.org | python3 -
+```
+
+Follow the instructions from the terminal output to configure *poetry*. For example, if you are using *bash* you will need to add the following to your *~/.bashrc* file:
+
+```bash
+export PATH="$HOME/.poetry/bin:$PATH"
+```
+
+Restart your shell, and verify that *poetry* is working by checking the version:
+
+```bash
+poetry --version
+```
+
+### Create a new project
+
+Create a new empty directory to store you new project in.
+
+```bash
+mkdir ~/my_streamlit_app
+cd ~/my_streamlit_app 
+```
+
+Then, use the *poetry* command to create a new project:
+
+```bash
+poetry init \
+    --no-interaction \
+    --name my_streamlit_app \
+    --description "A simple hello world streamlit app"
+```
+
+The `poetry init` commands does two major things:
+
+1. Creates a *pyproject.toml* file.
+2. Creates a virtual environment for the project.
+
+After running the above command your project structure will look like this:
+
+```bash
+.
+└── pyproject.toml
+```
+
+:::{.callout-note}
+## pyproject.toml
+
+```yaml
+[tool.poetry]
+name = "my_streamlit_app"
+version = "0.1.0"
+description = "A simple hello world streamlit app"
+authors = ["SamEdwardes <edwardes.s@gmail.com>"]
+
+[tool.poetry.dependencies]
+python = "^3.10"
+
+[tool.poetry.dev-dependencies]
+
+[build-system]
+requires = ["poetry-core>=1.0.0"]
+build-backend = "poetry.core.masonry.api"
+```
+:::
+
+*pyproject.toml* is a special file that you can use to store project configuration option. It is not specific to *poetry*, other tools can also store information in *pyproject.toml* (read [PEP 621](https://peps.python.org/pep-0621/) to learn more). The `tool.poetry` section of the *pyproject.toml* is where the poetry specific meta-data is stored (<https://python-poetry.org/docs/pyproject/>). As you will learn in the upcoming sections *pyproject.toml* will automatically be updated by *poetry* as we add and remove dependencies.
+
+Lastly - lets create our [streamlit](https://github.com/streamlit/streamlit) app. You can copy and paste this code into a a file named *app.py*.
+
+:::{.callout-note collapse="true"}
+## app.py
+
+```{.python code-line-numbers="."}
+import streamlit as st
+import pandas as pd
+import altair as alt
+
+url = "https://github.com/allisonhorst/palmerpenguins/raw/master/inst/extdata/penguins.csv"
+data = pd.read_csv(url)
+
+st.write("# Meeting the penguins!")
+
+col_text, col_image = st.columns([8, 4])
+
+with col_text:
+    st.write("""
+    Data were collected and made available by Dr. Kristen Gorman and the Palmer 
+    Station, Antarctica LTER, a member of the Long Term Ecological Research Network.
+    """)
+
+with col_image:
+    st.image(
+        "https://allisonhorst.github.io/palmerpenguins/reference/figures/lter_penguins.png",
+        width=150
+    )
+
+scatter_plot = alt.Chart(data).mark_circle(size=60).encode(
+    alt.X("flipper_length_mm:Q"),
+    alt.Y("bill_length_mm:Q"),
+    alt.Color("species:N", legend=None),
+    tooltip=["flipper_length_mm", "bill_length_mm", "species"]
+).interactive()
+
+histogram = alt.Chart(data).mark_bar().encode(
+    alt.X("flipper_length_mm:Q", bin=alt.Bin(maxbins=100)),
+    alt.Y("count()", stack=None),
+    alt.Color("species:N"),
+).interactive()
+
+chart_col1, chart_col2 = st.columns(2)
+
+with chart_col1:
+    st.write("#### Bill Length vs. Flipper Length")
+    st.altair_chart(scatter_plot)
+
+with chart_col2:
+    st.write("#### Distribution of Flipper Length")
+    st.altair_chart(histogram)
+
+```
+:::
+
+### Manage dependencies
+
+*poetry* comes with a suite of commands that you can use to manage your dependencies without ever touching *pyproject.toml* by hand. The main commands include:
+
+- `poetry add`: delcare a new dependency.
+- `poetry remove`: remove a depedency.
+- `poetry run`: run a command inside the poetry virtual environment.
+
+#### Add a dependency
+
+Since we are creating a streamlit app, we will need to use the streamlit library. Lets start by declaring streamlit as a dependency:
+
+```bash
+poetry add streamlit
+```
+
+streamlit has a lot of dependencies, so this may take minute... As you wait, you will see that poetry has identified all of the packages that *streamlit* depends on and is installing them into the virtual environment.
+
+:::{.callout-tip}
+You can think of `poetry add <PACKAGE_NAME>` as being equivalent to `pip install <PACKAGE_NAME>`. One of the many benefits of using `poetry add <PACKAGE_NAME>` is that the requirement will be documented in our `pyproject.toml`, where as with *pip* the requirement is not documented in any configuration file.
+:::
+
+We also want to use a code formatter to ensure that our code looks good and that the development team does not waste time aruging about *tabs* vs *spaces*. So lets install *black*!
+
+```bash
+poetry add --dev black
+```
+
+The output will look very similar, but note the use of the `--dev` flag. This tells poetry that this is a "development only" depedency. This means that the app does not need *black* to work, but we want all of the developers who are working on the app to have *black* installed so that they can format the code before commiting anything into version control.
+
+We have no installed two packages: *streamlit* and *black*. Lets take a look and see how *poetry* has updated our configuration files. You will see that we now have two files:
+
+```bash
+.
+├── poetry.lock
+└── pyproject.toml
+```
+
+:::{.callout-note}
+## pyproject.toml
+
+*pyproject.toml* has been updated:
+
+- Line 7 now reference a depedency to `streamlit = "^1.8.1"`
+- Line 12 references a development depedency to `black = "^22.3.0"`
+
+```{.yaml code-line-numbers="2,4"}
+[tool.poetry]
+name = "my_streamlit_app"
+version = "0.1.0"
+description = "A simple hello world streamlit app"
+authors = ["SamEdwardes <edwardes.s@gmail.com>"]
+
+[tool.poetry.dependencies]
+python = "^3.10"
+streamlit = "^1.8.1"
+
+[tool.poetry.dev-dependencies]
+black = "^22.3.0"
+
+[build-system]
+requires = ["poetry-core>=1.0.0"]
+```
+
+:::
+
+:::{.callout-note}
+## poetry.lock
+
+*poetry.lock* was created after we installed *streamlit*. The lock file includes the depedencies we have declared via the CLI, **plus** all of the depedencies of those packages. The file can be large, so below we only show a small example of what the file looks like
+
+```{.yaml code-line-numbers="."}
+[[package]]
+name = "altair"
+version = "4.2.0"
+description = "Altair: A declarative statistical visualization library for Python."
+category = "main"
+optional = false
+python-versions = ">=3.7"
+
+[package.dependencies]
+entrypoints = "*"
+
+...
+
+zipp = [
+    {file = "zipp-3.8.0-py3-none-any.whl", hash = "sha256:c4f6e5bbf48e74f7a38e7cc5b0480ff42b0ae5178957d564d18932525d5cf099"},
+    {file = "zipp-3.8.0.tar.gz", hash = "sha256:56bf8aadb83c24db6c4b577e13de374ccfb67da2078beba1d037c17980bf43ad"},
+]
+```
+
+:::
+
+#### Remove a dependency
+
+After a few weeks of development the team has decided that they do not want to use the *black* code formatter anymore. Instead, everyone has agreed on [autopep8]("https://github.com/hhatto/autopep8").
+
+First we need to remove *black*:
+
+```bash
+poetry remove --dev black
+```
+
+This command will remove *black*, **and** it will also remove all of *black*'s' depedencies that we no longer need. Then, lets add *autopep8* as a depedency.
+
+```bash
+poetry add --dev autopep8
+```
+
+*pyproject.toml* has been updated. *black* is no longer a dev depedency and *autopep8* is.
+
+:::{.callout-note}
+## poetry.lock
+```{.yaml code-line-numbers="."}
+[tool.poetry]
+name = "my_streamlit_app"
+version = "0.1.0"
+description = "A simple hello world streamlit app"
+authors = ["SamEdwardes <edwardes.s@gmail.com>"]
+
+[tool.poetry.dependencies]
+python = "^3.10"
+streamlit = "^1.8.1"
+
+[tool.poetry.dev-dependencies]
+autopep8 = "^1.6.0"
+
+[build-system]
+requires = ["poetry-core>=1.0.0"]
+build-backend = "poetry.core.masonry.api"
+```
+:::
+
+### Run your code
+
+In the [create a new project](#create-a-new-project) section we mentioned that *poetry* created a new virtual environment. Everytime we call `poetry add` or `poetry remove` we are modifying that virtual environment. In order to run a command **inside** the virtual environment we use the command `poetry run`. Lets take a look:
+
+```bash
+❯ which python
+/Users/samedwardes/.pyenv/shims/python
+```
+
+```bash
+❯ poetry run which python
+/Users/samedwardes/Library/Caches/pypoetry/virtualenvs/my-streamlit-app-SAojqYOg-py3.10/bin/python
+```
+
+Note the difference above. When we prefix our command with `poetry run` we run our command inside the virtual environment. When we do not prefix the command with `poetry run` the virtual environment is not used. Lets take a look at one more example.
+
+```bash
+❯ streamlit run app.py
+zsh: command not found: streamlit
+```
+
+```bash
+❯ poetry run streamlit run app.py
+
+  You can now view your Streamlit app in your browser.
+
+  Local URL: http://localhost:8501
+  Network URL: http://192.168.1.65:8501
+```
+
+Again, you need to be *inside* the virtual environment for the command to work. Your *streamlit* app should now be up and running!
+
+![Screenshot of the running streamlit app](../imgs/streamlit-screenshot.png)
+
+### Publishing to RStudio Connect
+
+This section will dicuss how to publish your code to [RStudio Connect](https://www.rstudio.com/products/connect/) when you are using *poetry* for depedency management. One of the ways *RStudio Connect* disocveries an apps depdencies is by inspecing a projects *requirements.txt*. *RStudio Connect* does not know how to inspect *pyproject.toml* or *poetry.lock*.
+
+Luckily for us there is a simple workaround. We can use the `poetry export` command to document all of the depdencies in a *requirements.txt* format.
+
+```bash
+poetry export --without-hashes --output requirements.txt
+```
+
+:::{.callout-note collapse="true"}
+## requirements.txt
+
+*requirements.txt* includes all of the depdencies you specified via the command line, and all of their depdencies. Each package is also locked into a specific version.
+
+```{.pip-requirements code-line-numbers="."}
+altair==4.2.0; python_version >= "3.7"
+appnope==0.1.3; platform_system == "Darwin" and python_version >= "3.8" and sys_platform == "darwin"
+argon2-cffi-bindings==21.2.0; python_version >= "3.7"
+argon2-cffi==21.3.0; python_version >= "3.7"
+asttokens==2.0.5; python_version >= "3.8"
+attrs==21.4.0; python_version >= "3.7" and python_full_version < "3.0.0" or python_full_version >= "3.5.0" and python_version >= "3.7"
+backcall==0.2.0; python_version >= "3.8"
+beautifulsoup4==4.11.1; python_full_version >= "3.6.0" and python_version >= "3.7"
+bleach==5.0.0; python_version >= "3.7"
+blinker==1.4; python_version >= "3.6"
+cachetools==5.0.0; python_version >= "3.7" and python_version < "4.0"
+certifi==2021.10.8; python_version >= "3.6" and python_full_version < "3.0.0" or python_full_version >= "3.6.0" and python_version >= "3.6"
+cffi==1.15.0; implementation_name == "pypy" and python_version >= "3.7"
+charset-normalizer==2.0.12; python_full_version >= "3.6.0" and python_version >= "3.6"
+click==8.0.4; python_version >= "3.6"
+colorama==0.4.4; python_version >= "3.8" and python_full_version < "3.0.0" and platform_system == "Windows" and sys_platform == "win32" or platform_system == "Windows" and python_version >= "3.8" and python_full_version >= "3.5.0" and sys_platform == "win32"
+debugpy==1.6.0; python_version >= "3.7"
+decorator==5.1.1; python_version >= "3.8"
+defusedxml==0.7.1; python_version >= "3.7" and python_full_version < "3.0.0" or python_full_version >= "3.5.0" and python_version >= "3.7"
+entrypoints==0.4; python_version >= "3.7"
+executing==0.8.3; python_version >= "3.8"
+fastjsonschema==2.15.3; python_version >= "3.7"
+gitdb==4.0.9; python_version >= "3.7"
+gitpython==3.1.27; python_version >= "3.7"
+idna==3.3; python_version >= "3.6" and python_full_version < "3.0.0" or python_full_version >= "3.6.0" and python_version >= "3.6"
+importlib-metadata==4.11.3; python_version >= "3.7"
+ipykernel==6.13.0; python_version >= "3.7"
+ipython-genutils==0.2.0; python_version >= "3.7"
+ipython==8.3.0; python_version >= "3.8"
+ipywidgets==7.7.0; python_version >= "3.7"
+jedi==0.18.1; python_version >= "3.8"
+jinja2==3.1.2; python_version >= "3.7"
+jsonschema==4.4.0; python_version >= "3.7"
+jupyter-client==7.3.0; python_full_version >= "3.7.0" and python_version >= "3.7"
+jupyter-core==4.10.0; python_version >= "3.7"
+jupyterlab-pygments==0.2.2; python_version >= "3.7"
+jupyterlab-widgets==1.1.0; python_version >= "3.7"
+markupsafe==2.1.1; python_version >= "3.7"
+matplotlib-inline==0.1.3; python_version >= "3.8"
+mistune==0.8.4; python_version >= "3.7"
+nbclient==0.6.0; python_full_version >= "3.7.0" and python_version >= "3.7"
+nbconvert==6.5.0; python_version >= "3.7"
+nbformat==5.3.0; python_full_version >= "3.7.0" and python_version >= "3.7"
+nest-asyncio==1.5.5; python_full_version >= "3.7.0" and python_version >= "3.7"
+notebook==6.4.11; python_version >= "3.7"
+numpy==1.22.3; python_version >= "3.10"
+packaging==21.3; python_version >= "3.7"
+pandas==1.4.2; python_version >= "3.8"
+pandocfilters==1.5.0; python_version >= "3.7" and python_full_version < "3.0.0" or python_full_version >= "3.4.0" and python_version >= "3.7"
+parso==0.8.3; python_version >= "3.8"
+pexpect==4.8.0; sys_platform != "win32" and python_version >= "3.8"
+pickleshare==0.7.5; python_version >= "3.8"
+pillow==9.1.0; python_version >= "3.7"
+prometheus-client==0.14.1; python_version >= "3.7"
+prompt-toolkit==3.0.29; python_full_version >= "3.6.2" and python_version >= "3.8"
+protobuf==3.20.1; python_version >= "3.7"
+psutil==5.9.0; python_version >= "3.7" and python_full_version < "3.0.0" or python_full_version >= "3.4.0" and python_version >= "3.7"
+ptyprocess==0.7.0; sys_platform != "win32" and python_version >= "3.8" and os_name != "nt"
+pure-eval==0.2.2; python_version >= "3.8"
+py==1.11.0; python_version >= "3.7" and python_full_version < "3.0.0" and implementation_name == "pypy" or implementation_name == "pypy" and python_version >= "3.7" and python_full_version >= "3.5.0"
+pyarrow==7.0.0; python_version >= "3.7"
+pycparser==2.21; python_version >= "3.7" and python_full_version < "3.0.0" and implementation_name == "pypy" or implementation_name == "pypy" and python_version >= "3.7" and python_full_version >= "3.4.0"
+pydeck==0.7.1; python_version >= "3.7"
+pygments==2.12.0; python_version >= "3.8"
+pympler==1.0.1; python_version >= "3.6"
+pyparsing==3.0.8; python_full_version >= "3.6.8" and python_version >= "3.6"
+pyrsistent==0.18.1; python_version >= "3.7"
+python-dateutil==2.8.2; python_version >= "3.8" and python_full_version < "3.0.0" or python_full_version >= "3.3.0" and python_version >= "3.8"
+pytz-deprecation-shim==0.1.0.post0; python_version >= "3.6" and python_full_version < "3.0.0" or python_full_version >= "3.6.0" and python_version >= "3.6"
+pytz==2022.1; python_version >= "3.8"
+pywin32==304; sys_platform == "win32" and platform_python_implementation != "PyPy" and python_version >= "3.7"
+pywinpty==2.0.5; os_name == "nt" and python_version >= "3.7"
+pyzmq==22.3.0; python_version >= "3.7"
+requests==2.27.1; python_version >= "3.6" and python_full_version < "3.0.0" or python_full_version >= "3.6.0" and python_version >= "3.6"
+semver==2.13.0; python_version >= "3.6" and python_full_version < "3.0.0" or python_full_version >= "3.4.0" and python_version >= "3.6"
+send2trash==1.8.0; python_version >= "3.7"
+six==1.16.0; python_version >= "3.8" and python_full_version < "3.0.0" or python_full_version >= "3.3.0" and python_version >= "3.8"
+smmap==5.0.0; python_version >= "3.7"
+soupsieve==2.3.2.post1; python_full_version >= "3.6.0" and python_version >= "3.7"
+stack-data==0.2.0; python_version >= "3.8"
+streamlit==1.8.1; python_version >= "3.6"
+terminado==0.13.3; python_version >= "3.7"
+tinycss2==1.1.1; python_version >= "3.7"
+toml==0.10.2; python_version >= "3.6" and python_full_version < "3.0.0" or python_full_version >= "3.3.0" and python_version >= "3.6"
+toolz==0.11.2; python_version >= "3.7"
+tornado==6.1; python_version >= "3.7"
+traitlets==5.1.1; python_full_version >= "3.7.0" and python_version >= "3.8"
+tzdata==2022.1; platform_system == "Windows" and python_version >= "3.6" and (python_version >= "3.6" and python_full_version < "3.0.0" or python_full_version >= "3.6.0" and python_version >= "3.6")
+tzlocal==4.2; python_version >= "3.6"
+urllib3==1.26.9; python_version >= "3.6" and python_full_version < "3.0.0" or python_full_version >= "3.6.0" and python_version < "4" and python_version >= "3.6"
+validators==0.18.2; python_version >= "3.6"
+watchdog==2.1.7; platform_system != "Darwin" and python_version >= "3.6"
+wcwidth==0.2.5; python_full_version >= "3.6.2" and python_version >= "3.8"
+webencodings==0.5.1; python_version >= "3.7"
+widgetsnbextension==3.6.0; python_version >= "3.7"
+zipp==3.8.0; python_version >= "3.7"
+```
+:::
+
+Now you can publish to *RStudio Connect* as you normally would. First lets install *rsconnect-python* as a development depdency:
+
+```bash
+poetry add --dev rsconnect-python
+```
+
+Then, we can publish our content!
+
+```bash
+poetry run rsconnect deploy streamlit \
+  --python $(poetry run which python) \
+  --exclude "poetry.lock" \
+  --exclude "pyproject.toml" \
+  --entrypoint app \
+  --new \
+  .
+```
+
+## Collaboration
+
+So far you have created a new project, used *poetry* to document your dependencies, and then published your app to RStudio Connect. Your app is getting a lot of traction and you want to implement some new features. To help with the backlog you will need to onboard a new colleague. 
+
+**How can you ensure that you and your colleague are using identical environments?**
+
+There are two key things your colleage will need:
+
+- *poetry.lock*
+- *pyproject.toml*
+
+With these two files anyone will be able to reproduce your environment. With this in mind,
+
+:::{.callout-tip}
+Both *poetry.lock* and *pyrpoject.toml* should be checked into version control (e.g. GitHub).
+:::
+
+When your colleague is ready to start working on the project here is what they will need to do:
+
+1. Obtain the source code. Assuming you are using git based version control this would be done with `git clone`.
+2. Install poetry (see the [installation](#installation) section).
+3. Install the depdencies using `poetry install`.
+
+That is it 🎉! Your colleageu will now be able to run the code using the `poetry run` command. They can also make changes to the environment with `poetry add` and `poetry remove`!
+
+## How it works
+
+The objective of this section is not to explain the ins and outs of *poetry*. Rather it is to give you the absolute minimum amount of information you need to know about *poetry* to use it effectively.
+
+## FAQ
+
+### How do I specify the source of my packages?
+
+:::{.callout-warning}
+Under development
+:::
+
+### How do I update depdencies?
+
+:::{.callout-warning}
+Under development
+:::
+
+### How do I specify which version of a package I want to use?
+
+:::{.callout-warning}
+Under development
+:::
+
+### How do I specify which version of Python I want to use?
+
+:::{.callout-warning}
+Under development
+:::
+
+### How do I switch version of Python I want to use?
+
+:::{.callout-warning}
+Under development
+:::
+
+### What should I check into version control?
+
+There are two files you should check into version control:
+
+- *poetry.lock*
+- *pyproject.toml*
