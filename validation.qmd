@@ -230,23 +230,22 @@ repository](./repositories.html#internal -repositories) to [track and audit
 license usage](https://demo.rstudiopm.com/client/#/stats).
 
 ```{r}
-ap <- available.packages()
-licences <-tibble(type = ap[,"License"])
-licences %>% 
-  group_by(type) %>% 
-  count() %>%
-  arrange(desc(n)) %>% 
-  head(10) %>% 
-  ggplot() + 
-  geom_bar(aes(reorder(type, n), n),stat = "identity") +
-  coord_flip() + 
-  theme_minimal() + 
-  labs(
-    title = "Top 10 CRAN License Types",
-    x = 'License Type',
-    y = '# of Packages'
-  )
-
+# ap <- available.packages()
+# licences <- tibble(type = ap[,"License"])
+# licences %>% 
+#   group_by(type) %>% 
+#   count() %>%
+#   arrange(desc(n)) %>% 
+#   head(10) %>% 
+#   ggplot() + 
+#   geom_bar(aes(reorder(type, n), n),stat = "identity") +
+#   coord_flip() + 
+#   theme_minimal() + 
+#   labs(
+#     title = "Top 10 CRAN License Types",
+#     x = 'License Type',
+#     y = '# of Packages'
+#   )
 ```
 
 # Related Work and Advice

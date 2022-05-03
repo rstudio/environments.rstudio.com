@@ -8,10 +8,20 @@ website:
   repo-url: https://github.com/rstudio/environments.rstudio.com
   repo-actions: [edit, issue]
   page-navigation: true
+
   navbar:
     right:
-      - text: "Use Cases"
-        menu:
+      - sidebar:use-cases
+      - sidebar:strategies
+      - sidebar:tools
+
+  sidebar:
+
+    - id: use-cases
+      title: "Use Cases"
+      style: "docked"
+      collapse-level: 1
+      contents:
         - text: "Safely Upgrade Packages"
           href: upgrades.qmd
         - text: "Validate your Environment"
@@ -20,8 +30,12 @@ website:
           href: deploy.qmd
         - text: "Collaborate within a Team"
           href: collaborate.qmd
-      - text: "Strategies"
-        menu:
+    
+    - id: strategies
+      title: "Strategies"
+      collapse-level: 1
+      style: "docked"
+      contents:
         - text: "Strategy Map"
           href: reproduce.qmd
         - text: "Snapshot and Restore"
@@ -30,37 +44,44 @@ website:
           href: shared.qmd
         - text: "Validated"
           href: validated.qmd
-      - text: "R"
-        menu:
-        - text: "Introduction"
-          href: "#"
-        - text: "renv"
-          href: "#"
+    
+    - id: tools
+      title: "Tools"
+      style: "docked"
+      collapse-level: 1
+      contents:
         - text: "Comparison of tools"
           href: "comparison-of-tools.qmd"
-      - text: "Python"
-        menu:
-        - text: "Introduction"
-          href: "python/introduction.qmd"
-        - text: "venv"
-          href: "python/venv.qmd"
-        - text: "poetry"
-          href: "python/poetry.qmd"
-        - text: "conda"
-          href: "python/conda.qmd"
-        - text: "Comparison of tools"
-          href: "comparison-of-tools.qmd"
-      - text: "Tools"
-        menu:
-        - text: "Installing - pak / remotes"
-          href: installation.qmd
-        - text: "Repositories - RStudio Package Manager"
-          href: repositories.qmd
-        - text: "Libraries - renv"
-          href: libraries.qmd
-        - text: "R Versions"
-          href: R-installation.qmd
-        - text: "Docker"
-          href: Docker.qmd
-        - text: "Python"
-          href: python.qmd
+
+        - section: "R"
+          contents:
+            - text: "Introduction"
+              href: "r/introduction.qmd"
+            - text: "renv"
+              href: "r/renv.qmd"
+
+        - section: "Python"
+          contents:
+            - text: "Introduction"
+              href: "python/introduction.qmd"
+            - text: "venv"
+              href: "python/venv.qmd"
+            - text: "poetry"
+              href: "python/poetry.qmd"
+            - text: "conda"
+              href: "python/conda.qmd"
+        
+        - section: "Old stuff"
+          contents:
+            - text: "Installing - pak / remotes"
+              href: installation.qmd
+            - text: "Repositories - RStudio Package Manager"
+              href: repositories.qmd
+            - text: "Libraries - renv"
+              href: libraries.qmd
+            - text: "R Versions"
+              href: R-installation.qmd
+            - text: "Docker"
+              href: Docker.qmd
+            - text: "Python"
+              href: python.qmd

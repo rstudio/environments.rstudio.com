@@ -206,7 +206,7 @@ In this example, a DevOps team maintains staging and production servers using Ch
 
 5. The user or admin can merge the staging branch into the master branch. This merge triggers a deployment to the production server.
 
-```{r echo=FALSE, layout="l-page"}
+```{r echo=FALSE}
 library(DiagrammeR) 
 grViz("
 digraph repos {
