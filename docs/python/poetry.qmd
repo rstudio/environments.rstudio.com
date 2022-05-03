@@ -1,6 +1,8 @@
 ---
 title: "poetry"
 table-of-contents: true
+execute: 
+  enabled: false
 ---
 
 :::{.callout-warning}
