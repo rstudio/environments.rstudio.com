@@ -10,8 +10,8 @@ Under development
 *poetry* is a Python tool for Python packaging and dependency management Check out the *poetry* docs here: <https://python-poetry.org>. A few of the most important features are:
 
 - Command line interface for declaring dependencies.
-- The ability to document development only dependiencies in addition to production depdencies.
-- A lock file to maximize reproducaiblity.
+- The ability to document development only dependencies in addition to production dependencies.
+- A lock file to maximize reproducibility.
 
 ## Usage
 
@@ -147,8 +147,8 @@ with chart_col2:
 
 *poetry* comes with a suite of commands that you can use to manage your dependencies without ever touching *pyproject.toml* by hand. The main commands include:
 
-- `poetry add`: delcare a new dependency.
-- `poetry remove`: remove a depedency.
+- `poetry add`: declare a new dependency.
+- `poetry remove`: remove a dependency.
 - `poetry run`: run a command inside the poetry virtual environment.
 
 #### Add a dependency
@@ -165,13 +165,13 @@ streamlit has a lot of dependencies, so this may take minute... As you wait, you
 You can think of `poetry add <PACKAGE_NAME>` as being equivalent to `pip install <PACKAGE_NAME>`. One of the many benefits of using `poetry add <PACKAGE_NAME>` is that the requirement will be documented in our `pyproject.toml`, where as with *pip* the requirement is not documented in any configuration file.
 :::
 
-We also want to use a code formatter to ensure that our code looks good and that the development team does not waste time aruging about *tabs* vs *spaces*. So lets install *black*!
+We also want to use a code formatter to ensure that our code looks good and that the development team does not waste time arguing about *tabs* vs *spaces*. So lets install *black*!
 
 ```bash
 poetry add --dev black
 ```
 
-The output will look very similar, but note the use of the `--dev` flag. This tells poetry that this is a "development only" depedency. This means that the app does not need *black* to work, but we want all of the developers who are working on the app to have *black* installed so that they can format the code before commiting anything into version control.
+The output will look very similar, but note the use of the `--dev` flag. This tells poetry that this is a "development only" dependency. This means that the app does not need *black* to work, but we want all of the developers who are working on the app to have *black* installed so that they can format the code before committing anything into version control.
 
 We have no installed two packages: *streamlit* and *black*. Lets take a look and see how *poetry* has updated our configuration files. You will see that we now have two files:
 
@@ -186,8 +186,8 @@ We have no installed two packages: *streamlit* and *black*. Lets take a look and
 
 *pyproject.toml* has been updated:
 
-- Line 7 now reference a depedency to `streamlit = "^1.8.1"`
-- Line 12 references a development depedency to `black = "^22.3.0"`
+- Line 7 now reference a dependency to `streamlit = "^1.8.1"`
+- Line 12 references a development dependency to `black = "^22.3.0"`
 
 ```{.yaml code-line-numbers="2,4"}
 [tool.poetry]
@@ -212,7 +212,7 @@ requires = ["poetry-core>=1.0.0"]
 :::{.callout-note}
 ## poetry.lock
 
-*poetry.lock* was created after we installed *streamlit*. The lock file includes the depedencies we have declared via the CLI, **plus** all of the depedencies of those packages. The file can be large, so below we only show a small example of what the file looks like
+*poetry.lock* was created after we installed *streamlit*. The lock file includes the dependencies we have declared via the CLI, **plus** all of the dependencies of those packages. The file can be large, so below we only show a small example of what the file looks like
 
 ```{.yaml code-line-numbers="."}
 [[package]]
@@ -246,13 +246,13 @@ First we need to remove *black*:
 poetry remove --dev black
 ```
 
-This command will remove *black*, **and** it will also remove all of *black*'s' depedencies that we no longer need. Then, lets add *autopep8* as a depedency.
+This command will remove *black*, **and** it will also remove all of *black*'s' dependencies that we no longer need. Then, lets add *autopep8* as a dependency.
 
 ```bash
 poetry add --dev autopep8
 ```
 
-*pyproject.toml* has been updated. *black* is no longer a dev depedency and *autopep8* is.
+*pyproject.toml* has been updated. *black* is no longer a dev dependency and *autopep8* is.
 
 :::{.callout-note}
 ## poetry.lock
@@ -278,7 +278,7 @@ build-backend = "poetry.core.masonry.api"
 
 ### Run your code
 
-In the [create a new project](#create-a-new-project) section we mentioned that *poetry* created a new virtual environment. Everytime we call `poetry add` or `poetry remove` we are modifying that virtual environment. In order to run a command **inside** the virtual environment we use the command `poetry run`. Lets take a look:
+In the [create a new project](#create-a-new-project) section we mentioned that *poetry* created a new virtual environment. Every time we call `poetry add` or `poetry remove` we are modifying that virtual environment. In order to run a command **inside** the virtual environment we use the command `poetry run`. Lets take a look:
 
 ```bash
 ❯ which python
@@ -312,9 +312,9 @@ Again, you need to be *inside* the virtual environment for the command to work. 
 
 ### Publishing to RStudio Connect
 
-This section will dicuss how to publish your code to [RStudio Connect](https://www.rstudio.com/products/connect/) when you are using *poetry* for depedency management. One of the ways *RStudio Connect* disocveries an apps depdencies is by inspecing a projects *requirements.txt*. *RStudio Connect* does not know how to inspect *pyproject.toml* or *poetry.lock*.
+This section will discuss how to publish your code to [RStudio Connect](https://www.rstudio.com/products/connect/) when you are using *poetry* for dependency management. One of the ways *RStudio Connect* discovers an apps dependencies is by inspecting a projects *requirements.txt*. *RStudio Connect* does not know how to inspect *pyproject.toml* or *poetry.lock*.
 
-Luckily for us there is a simple workaround. We can use the `poetry export` command to document all of the depdencies in a *requirements.txt* format.
+Luckily for us there is a simple workaround. We can use the `poetry export` command to document all of the dependencies in a *requirements.txt* format.
 
 ```bash
 poetry export --without-hashes --output requirements.txt
@@ -323,7 +323,7 @@ poetry export --without-hashes --output requirements.txt
 :::{.callout-note collapse="true"}
 ## requirements.txt
 
-*requirements.txt* includes all of the depdencies you specified via the command line, and all of their depdencies. Each package is also locked into a specific version.
+*requirements.txt* includes all of the dependencies you specified via the command line, and all of their dependencies. Each package is also locked into a specific version.
 
 ```{.pip-requirements code-line-numbers="."}
 altair==4.2.0; python_version >= "3.7"
@@ -425,7 +425,7 @@ zipp==3.8.0; python_version >= "3.7"
 ```
 :::
 
-Now you can publish to *RStudio Connect* as you normally would. First lets install *rsconnect-python* as a development depdency:
+Now you can publish to *RStudio Connect* as you normally would. First lets install *rsconnect-python* as a development dependency:
 
 ```bash
 poetry add --dev rsconnect-python
@@ -449,7 +449,7 @@ So far you have created a new project, used *poetry* to document your dependenci
 
 **How can you ensure that you and your colleague are using identical environments?**
 
-There are two key things your colleage will need:
+There are two key things your colleague will need:
 
 - *poetry.lock*
 - *pyproject.toml*
@@ -464,9 +464,9 @@ When your colleague is ready to start working on the project here is what they w
 
 1. Obtain the source code. Assuming you are using git based version control this would be done with `git clone`.
 2. Install poetry (see the [installation](#installation) section).
-3. Install the depdencies using `poetry install`.
+3. Install the dependencies using `poetry install`.
 
-That is it 🎉! Your colleageu will now be able to run the code using the `poetry run` command. They can also make changes to the environment with `poetry add` and `poetry remove`!
+That is it 🎉! Your colleague will now be able to run the code using the `poetry run` command. They can also make changes to the environment with `poetry add` and `poetry remove`!
 
 ## How it works
 
@@ -480,7 +480,7 @@ The objective of this section is not to explain the ins and outs of *poetry*. Ra
 Under development
 :::
 
-### How do I update depdencies?
+### How do I update dependencies?
 
 :::{.callout-warning}
 Under development
