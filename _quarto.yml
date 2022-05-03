@@ -1,6 +1,12 @@
 project:
   type: website
   output-dir: _site
+
+format:
+  html:
+    toc: true
+    # theme: cosmo
+
 website:
   title: "Environments"
   google-analytics: "UA-20375833-3"
@@ -11,9 +17,12 @@ website:
 
   navbar:
     right:
-      - sidebar:use-cases
-      - sidebar:strategies
-      - sidebar:tools
+      - text: "Use cases"
+        href: "upgrades.qmd"
+      - text: "Strategies"
+        href: "reproduce.qmd"
+      - text: "Tools"
+        href: "comparison-of-tools.qmd"
 
   sidebar:
 
