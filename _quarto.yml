@@ -18,11 +18,11 @@ website:
   navbar:
     right:
       - text: "Use cases"
-        href: docs/"docs/upgrades.qmd"
+        href: docs/upgrades.qmd
       - text: "Strategies"
-        href: docs/"docs/reproduce.qmd"
+        href: docs/reproduce.qmd
       - text: "Tools"
-        href: docs/"docs/comparison-of-tools.qmd"
+        href: docs/comparison-of-tools.qmd
 
   sidebar:
 
@@ -60,25 +60,25 @@ website:
       collapse-level: 1
       contents:
         - text: "Comparison of tools"
-          href: docs/"docs/comparison-of-tools.qmd"
+          href: docs/comparison-of-tools.qmd
 
         - section: "R"
           contents:
             - text: "Introduction"
-              href: docs/"docs/r/introduction.qmd"
+              href: docs/r/introduction.qmd
             - text: "renv"
-              href: docs/"docs/r/renv.qmd"
+              href: docs/r/renv.qmd
 
         - section: "Python"
           contents:
             - text: "Introduction"
-              href: docs/"docs/python/introduction.qmd"
+              href: docs/python/introduction.qmd
             - text: "venv"
-              href: docs/"docs/python/venv.qmd"
+              href: docs/python/venv.qmd
             - text: "poetry"
-              href: docs/"docs/python/poetry.qmd"
+              href: docs/python/poetry.qmd
             - text: "conda"
-              href: docs/"docs/python/conda.qmd"
+              href: docs/python/conda.qmd
         
         - section: "Old stuff"
           contents:
