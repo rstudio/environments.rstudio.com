@@ -18,11 +18,11 @@ website:
   navbar:
     right:
       - text: "Use cases"
-        href: docs/upgrades.qmd
+        file: docs/upgrades.qmd
       - text: "Strategies"
-        href: docs/reproduce.qmd
+        file: docs/reproduce.qmd
       - text: "Tools"
-        href: docs/comparison-of-tools.qmd
+        file: docs/comparison-of-tools.qmd
 
   sidebar:
 
@@ -32,13 +32,13 @@ website:
       collapse-level: 1
       contents:
         - text: "Safely Upgrade Packages"
-          href: docs/upgrades.qmd
+          file: docs/upgrades.qmd
         - text: "Validate your Environment"
-          href: docs/validation.qmd
+          file: docs/validation.qmd
         - text: "Deploy to Production"
-          href: docs/deploy.qmd
+          file: docs/deploy.qmd
         - text: "Collaborate within a Team"
-          href: docs/collaborate.qmd
+          file: docs/collaborate.qmd
     
     - id: strategies
       title: "Strategies"
@@ -46,13 +46,13 @@ website:
       style: "docked"
       contents:
         - text: "Strategy Map"
-          href: docs/reproduce.qmd
+          file: docs/reproduce.qmd
         - text: "Snapshot and Restore"
-          href: docs/snapshot.qmd
+          file: docs/snapshot.qmd
         - text: "Shared Baseline"
-          href: docs/shared.qmd
+          file: docs/shared.qmd
         - text: "Validated"
-          href: docs/validated.qmd
+          file: docs/validated.qmd
     
     - id: tools
       title: "Tools"
@@ -60,37 +60,37 @@ website:
       collapse-level: 1
       contents:
         - text: "Comparison of tools"
-          href: docs/comparison-of-tools.qmd
+          file: docs/comparison-of-tools.qmd
 
         - section: "R"
           contents:
             - text: "Introduction"
-              href: docs/r/introduction.qmd
+              file: docs/r/introduction.qmd
             - text: "renv"
-              href: docs/r/renv.qmd
+              file: docs/r/renv.qmd
 
         - section: "Python"
           contents:
             - text: "Introduction"
-              href: docs/python/introduction.qmd
+              file: docs/python/introduction.qmd
             - text: "venv"
-              href: docs/python/venv.qmd
+              file: docs/python/venv.qmd
             - text: "poetry"
-              href: docs/python/poetry.qmd
+              file: docs/python/poetry.qmd
             - text: "conda"
-              href: docs/python/conda.qmd
+              file: docs/python/conda.qmd
         
         - section: "Old stuff"
           contents:
             - text: "Installing - pak / remotes"
-              href: docs/installation.qmd
+              file: docs/installation.qmd
             - text: "Repositories - RStudio Package Manager"
-              href: docs/repositories.qmd
+              file: docs/repositories.qmd
             - text: "Libraries - renv"
-              href: docs/libraries.qmd
+              file: docs/libraries.qmd
             - text: "R Versions"
-              href: docs/R-installation.qmd
+              file: docs/R-installation.qmd
             - text: "Docker"
-              href: docs/Docker.qmd
+              file: docs/Docker.qmd
             - text: "Python"
-              href: docs/python.qmd
+              file: docs/python.qmd

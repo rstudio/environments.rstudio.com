@@ -6,4 +6,4 @@ title: "Introduction - Python"
 Under development
 :::
 
-![](../imgs/python-ecosystem.drawio.png)
+![](../../imgs/python-ecosystem.drawio.png)

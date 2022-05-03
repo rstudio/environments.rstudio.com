@@ -37,10 +37,10 @@ If you prefer videos to reading, checkout [this webinar](https://resources.rstud
 
 Environment management takes work. Here are some cases where the reward is worth the effort:
 
-- When you are working on a long-term project, and need to [safely upgrade packages](upgrades.qmd).  
-- In cases where you and your team [need to collaborate](collaborate.qmd) on the same project, using a common source of truth.
-- If you need to [validate](validation.qmd) and control the packages you're using.
-- When you are ready to [deploy a data product to production](deploy.qmd), such as a Shiny app, R Markdown document, or plumber API.
+- When you are working on a long-term project, and need to [safely upgrade packages](docs/upgrades.qmd).  
+- In cases where you and your team [need to collaborate](docs/collaborate.qmd) on the same project, using a common source of truth.
+- If you need to [validate](docs/validation.qmd) and control the packages you're using.
+- When you are ready to [deploy a data product to production](docs/deploy.qmd), such as a Shiny app, R Markdown document, or plumber API.
 
 ## Strategies
 
@@ -97,13 +97,13 @@ ggplot() +
 
 There are three main strategies covered in this site.
 
-1. The [Snapshot and Restore](snapshot.qmd) strategy is used when individual data scientists are responsible for managing a project and have full access to install packages. The strategy uses tools like [renv](https://rstudio.github.io/renv)^[renv is packrat 2.0] to record a project's dependencies and restore them. 
+1. The [Snapshot and Restore](docs/snapshot.qmd) strategy is used when individual data scientists are responsible for managing a project and have full access to install packages. The strategy uses tools like [renv](https://rstudio.github.io/renv)^[renv is packrat 2.0] to record a project's dependencies and restore them. 
 
-2. The [Shared Baseline](shared.qmd) strategy helps administrators coordinate the work of many data scientists by providing common sets of packages to use across projects. The key to this strategy is determining a consistent set of packages that work together.
+2. The [Shared Baseline](docs/shared.qmd) strategy helps administrators coordinate the work of many data scientists by providing common sets of packages to use across projects. The key to this strategy is determining a consistent set of packages that work together.
 
-3. The [Validated](validated.qmd) strategy is used when packages must be controlled and meet specific organization standards.
+3. The [Validated](docs/validated.qmd) strategy is used when packages must be controlled and meet specific organization standards.
 
-The [strategy map](reproduce.qmd) will help you pick between the different strategies.
+The [strategy map](docs/reproduce.qmd) will help you pick between the different strategies.
 
 
 ## Tools
@@ -145,12 +145,12 @@ versions of R installed. If your organization uses Docker containers, you might
 have a base image with some of these components, and runtime installation of
 others. Understanding these tools will help you create reproducible environments.
 
-- **R Packages** Managing and recording R packages makes up the bulk of this website. Specifically learn about [repositories](repositories.qmd), [installing packages](installation.qmd), and [managing libraries](libraries.qmd).
+- **R Packages** Managing and recording R packages makes up the bulk of this website. Specifically learn about [repositories](docs/repositories.qmd), [installing packages](docs/installation.qmd), and [managing libraries](docs/libraries.qmd).
 
-- **R Installation** Packages like `renv` will normally document the version of R used by the project. On shared servers, it is common to install multiple versions of R. Organizations using Docker will typically include R in a base image. Learn more [best practices for R installations](R-installation.qmd).
+- **R Installation** Packages like `renv` will normally document the version of R used by the project. On shared servers, it is common to install multiple versions of R. Organizations using Docker will typically include R in a base image. Learn more [best practices for R installations](docs/R-installation.qmd).
 
-- **Other Languages** Often data science projects are multi-lingual. Combining R and Python is the most common use case, and tools like `renv` have affordances for recording [Python](python.qmd) dependencies.
+- **Other Languages** Often data science projects are multi-lingual. Combining R and Python is the most common use case, and tools like `renv` have affordances for recording [Python](docs/python.qmd) dependencies.
 
-- **System Dependencies** R, Python, and their packages can depend on underlying software that needs to be installed on the system. For example, the `xml2` R package depends on the `libxml` system package. Learn more about how [system dependencies are documented and managed](installation.qmd#system-dependencies).
+- **System Dependencies** R, Python, and their packages can depend on underlying software that needs to be installed on the system. For example, the `xml2` R package depends on the `libxml` system package. Learn more about how [system dependencies are documented and managed](docs/installation.qmd#system-dependencies).
 
-- **Operating System** Operating system configurations can be documented with tools like Docker or through Infrastructure-as-code solutions like Chef and Puppet. Often this step is managed outside of the data science team. Learn more about [best practices for Docker](docker.qmd).
+- **Operating System** Operating system configurations can be documented with tools like Docker or through Infrastructure-as-code solutions like Chef and Puppet. Often this step is managed outside of the data science team. Learn more about [best practices for Docker](docs/docker.qmd).
