@@ -1,19 +1,28 @@
 ---
 title: "Team Collaboration"
-description: |
-  Easily Work Together
-canonical_url: https://environments.rstudio.com/collaborate
 ---
 
-A common challenge on teams is sharing and running code. If you've sat down to run a colleague's code, only to spend hours installing and updating packages, you're familiar with the pain points. Luckily, adopting any of the [strategies](./reproduce.html) for creating a reproducible environment will result in easier team collaboration. 
+A common challenge on teams is sharing and running code. If you've sat down to run
+a colleague's code, only to spend hours installing and updating packages, you're
+familiar with the pain points. Luckily, adopting any of the [strategies](reproduce.qmd)
+for creating a reproducible environment will result in easier team collaboration. 
 
-Here, we'll compare the [Shared Baseline](./shared.html) and the [Snapshot and Restore](./snapshot.html) strategies, with a special emphasis on how the two strategies can be used in collaborative settings. Before diving in to reproducible environments, it is critically important that teams master [version control](https://happygitwithr.com/).
+Here, we'll compare the [Shared Baseline](shared.qmd) and the
+[Snapshot and Restore](snapshot.qmd) strategies, with a special emphasis on how
+the two strategies can be used in collaborative settings. Before diving in to
+reproducible environments, it is critically important that teams master
+[version control](https://happygitwithr.com/).
 
 ## Strategy Recap
 
-- [Shared Baseline:](./shared.html) Administrators manage multiple version of R **on a shared server**. Each version of R is associated with a frozen repository, so that all users accessing the same R installation access the same packages. The frozen repository prevents users or admins from breaking packages when they add new packages, by preventing ["side-affect upgrades"](./shared.html#the-big-risk).
+- [Shared Baseline:](shared.qmd) Administrators manage multiple version of R
+**on a shared server**. Each version of R is associated with a frozen repository,
+so that all users accessing the same R installation access the same packages.
+The frozen repository prevents users or admins from breaking packages when they
+add new packages, by preventing ["side-affect upgrades"](shared.qmd#the-big-risk).
 
-- [Snapshot and Restore:](./snapshot.html) Using a tool like the [`renv` package](https://github.com/rstudio/renv), users maintain an isolated project library and explicitly record the library's content.
+- [Snapshot and Restore:](snapshot.qmd) Using a tool like the [`renv` package](https://github.com/rstudio/renv), users maintain an isolated project
+library and explicitly record the library's content.
 
 Each of these strategies is easily adapted for teams wishing to collaborate on shared code.
 
@@ -22,24 +31,40 @@ Each of these strategies is easily adapted for teams wishing to collaborate on s
 Teams wishing to use the shared baseline strategy for collaboration would follow these steps:
 
 1. Record in your project code the version of R being used for the project.
-2. Share your project code using a version control tool like Git, or using RStudio Workbench's [project sharing](https://support.rstudio.com/hc/en-us/articles/211659737-Sharing-Projects-in-RStudio-Server-Pro). 
-3. When the collaborator clones or opens the shared project, they should start the RStudio session with the noted version of R. If the admin has installed packages into the system library, the collaborator will be ready to run the code immediately. If not, the collaborator can install the necessary packages. The installation will automatically include the correct package versions because the R installation is tied to a frozen repository.
+2. Share your project code using a version control tool like Git, or using RStudioWorkbench's
+[project sharing](https://support.rstudio.com/hc/en-us/articles/211659737-Sharing-Projects-in-RStudio-Server-Pro).
+3. When the collaborator clones or opens the shared project, they should start
+the RStudio session with the noted version of R. If the admin has installed packages
+into the system library, the collaborator will be ready to run the code immediately.
+If not, the collaborator can install the necessary packages. The installation will
+automatically include the correct package versions because the R installation is
+tied to a frozen repository.
 
 ### Snapshot and Restore for Collaboration 
 
-The snapshot and restore strategy is easily adapted for collaboration using a tool like the [`renv` package](https://github.com/rstudio/renv):
+The snapshot and restore strategy is easily adapted for collaboration using a tool
+like the [`renv` package](https://github.com/rstudio/renv):
 
-1. The developer creates a `renv.lock` file using `renv::snapshot()`. The lock file is committed alongside the application code into a version control system like Git.
+1. The developer creates a `renv.lock` file using `renv::snapshot()`.The lock file
+is committed alongside the application code into a version control system like Git.
 2. The collaborator clones the Git repository into a new project. The `renv.lock` file is included.
-3. The collaborator can use `renv::restore()` to recreate the necessary package environment for the project.
+3. The collaborator can use `renv::restore()` to recreate the necessary package
+environment for the project.
 
 For more details, refer to the [`renv` vignette on collaboration](https://rstudio.github.io/renv/articles/collaborating.html).
 
 ## Comparison 
 
-The shared baseline strategy requires initial work to create a shared development server, a frozen repository, and multiple R installations. Once this upfront work is complete, day to day collaboration is straightforward. This strategy is best suited for a team with strong R administrators and can help teams that need to on board new R users rapidly.
+The shared baseline strategy requires initial work to create a shared development
+server, a frozen repository, and multiple R installations. Once this upfront work
+is complete, day to day collaboration is straightforward. This strategy is best
+suited for a team with strong R administrators and can help teams that need to
+on board new R users rapidly.
 
-In contrast, the snapshot and restore strategy has minimal initial work, but requires vigilance during day to day development and collaboration. This strategy is best suited for power R users or cases where a shared development server is not possible.
+In contrast, the snapshot and restore strategy has minimal initial work, but
+requires vigilance during day to day development and collaboration. This strategy
+is best suited for power R users or cases where a shared development server
+is not possible.
 
 
 
