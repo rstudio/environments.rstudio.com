@@ -2,8 +2,45 @@
 title: "Introduction - Python"
 ---
 
-:::{.callout-warning}
+::: callout-warning
 Under development
 :::
 
+The Python version and dependency management can be hard. There is a rich ecosystem of competing tools. The plethora of options is good for innovation, but can also make it challenging to decide which tools you should use.
+
+The diagram below provides a high level overview of the ecosystem:
+
+::: callout-note
+# Python management ecosystem (as of 2022)
+
 ![](../../imgs/python-ecosystem.drawio.png)
+:::
+
+When starting any new Python project you must consider:
+
+1.  What version of Python will I use (Python version management)?
+2.  What dependencies will I use (Python dependency management)?
+
+In the following sections we will dive into each of these questions and discuss the tools available.
+
+## Python version management
+
+The Python language is constantly evolving. New features are being added, as well as performance upgrade and security fixes. For each new project you should make a conscious decision about which version of Python you want to use. Typically you should select the latest version of Python unless you have a specific reason to do otherwise.
+
+In the data science ecosystem there are two primary tools for Python version management:
+
+-   [pyenv](https://github.com/pyenv/pyenv): lets you easily install and switch between multiple versions of Python.
+-   [conda](https://docs.conda.io/en/latest/): open source package management and environment management system.
+-   [pyenv-virtualenv](https://github.com/pyenv/pyenv-virtualenv): a *pyenv* plugin that provides features to manage virtualenvs and *conda* environments for Python on UNIX-like systems.
+
+## Python dependency management
+
+-   [venv](https://docs.python.org/3/library/venv.html): \<\>
+-   [poetry](https://python-poetry.org): \<\>
+-   [pip-tools](https://github.com/jazzband/pip-tools/): \<\>
+-   [pipenv](https://github.com/pypa/pipenv): \<\>
+
+## Python version management with dependency management
+
+-   [conda](https://docs.conda.io/en/latest/): \<\>
+-   [pyenv-virtualenv](https://github.com/pyenv/pyenv-virtualenv): \<\>
