@@ -62,7 +62,7 @@ container and a virtual machine. For R users, the process that is running can
 fall into two buckets:
 
 ```{r}
-#| fig.cap="Two Types of Containers for Data Science"
+#| fig.cap: "Two Types of Containers for Data Science"
 library(gt)
 library(dplyr)
 library(tidyr)
