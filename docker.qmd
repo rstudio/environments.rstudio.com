@@ -1,12 +1,8 @@
 ---
-title: "Docker"
-description: |
-  Environment Management with Docker
-output:
-  distill::distill_article:
-    toc: true
-    toc_depth: 3
-canonical_url: https://environments.rstudio.com/docker
+title: "Environment Management with Docker"
+execute:
+  echo: false
+  warning: false
 ---
 
 Docker is a large topic. This site focuses on how Docker relates to reproducible
@@ -31,6 +27,7 @@ In Docker, we have:
 
 
 ```{r}
+#| echo: false
 library(DiagrammeR)
 grViz("
   digraph repos {
@@ -64,7 +61,8 @@ to a process. This is the key difference in most user's experience between a
 container and a virtual machine. For R users, the process that is running can
 fall into two buckets:
 
-```{r fig.cap="Two Types of Containers for Data Science"}
+```{r}
+#| fig.cap="Two Types of Containers for Data Science"
 library(gt)
 library(dplyr)
 library(tidyr)
@@ -85,12 +83,12 @@ gt(procs, rowname_col = "rowname_col") %>%
 
 A data science container for R will contain six fundamental components:
 
-1. [Base Operating System](./docker.html#base-operating-system)
-2. [System Dependencies](./docker.html#system-dependencies)
-3. [R](./docker.html#R)
-4. [R Packages](./docker.html#r-packages)
-5. [Code](./docker.html#code)
-6. [Data](./docker/html#data)
+1. [Base Operating System](docker.qmd#base-operating-system)
+2. [System Dependencies](docker.qmd#system-dependencies)
+3. [R](docker.qmd#R)
+4. [R Packages](docker.qmd#r-packages)
+5. [Code](docker.qmd#code)
+6. [Data](docker.qmd#data)
 
 Docker images can inherit and build off of one another, allowing these six
 components to be layers together to form a complete image that inherits
@@ -144,7 +142,7 @@ grViz("
 ```
 
 <aside>
-Base images can be saved in a [registry](./docker.html#dockerhub). The name and tags typically convey information about the image's components and versions.
+Base images can be saved in a [registry](docker.qmd#dockerhub). The name and tags typically convey information about the image's components and versions.
 </aside>
 
 Once the base image is saved, additional images could extend the base image by adding the top layers:
@@ -179,7 +177,7 @@ operating system.
 
 R itself requires a number of system libraries in order to run, and a further
 set of system libraries are needed if the image will build R from source. See
-this section for [details](./r-installation.html).
+this section for [details](r-installation.qmd).
 
 In addition to the requirements for R, R packages often depend on system
 libraries. These dependencies can be determined manually by looking at the
@@ -243,7 +241,7 @@ R can be added to a Docker image in one of three ways:
 FROM rstudio/r-base:3.5-xenial
 ```
 
-2. Include the commands to [install R within an image]( ./r-installation.html).
+2. Include the commands to [install R within an image]( r-installation.qmd).
 
 ```bash
 # download a version of R and build from source
@@ -293,7 +291,7 @@ RUN R -e 'renv::restore()'
 ```
 
 <aside>
-Learn more [here](./snapshot.html)
+Learn more [here](snapshot.qmd)
 </aside>
 
 **Using these types of commands ensures the package environment is maintained
