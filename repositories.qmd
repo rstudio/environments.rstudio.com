@@ -1,12 +1,5 @@
 ---
 title: "Repositories"
-description: |
-  R Package Repositories
-output:
-  distill::distill_article:
-    toc: true
-    toc_depth: 3
-canonical_url: https://environments.rstudio.com/repositories
 ---
 
 ```{r echo=FALSE}
@@ -35,8 +28,8 @@ distribute R along with R packages.
 
 CRAN is not the only place where users can access packages. In addition to CRAN,
 there are a number of other CRAN-like repositories, such as
-[R-Forge](./repositories.html#r-forge) and
-[BioConductor](./repositories.html#bioconductor). These CRAN-like repositories
+[R-Forge](repositories.qmd#r-forge) and
+[BioConductor](repositories.qmd#bioconductor). These CRAN-like repositories
 have a similar structure to CRAN, and normally work with `install.packages`.
 Finally, some users access packages from locations such as GitHub. Unlike
  CRAN-like repositories, these locations require a different installation client.
@@ -49,9 +42,9 @@ Finally, some users access packages from locations such as GitHub. Unlike
  
  In RStudio 1.2 and above, users can change their repository by going to `Tools` -> `Global Options` -> `Packages`. RStudio Server administrators have a number of [options](https://docs.rstudio.com/ide/server-pro/r-sessions.html#cran-repositories) for setting a repository for users.
 
-This page outlines the [structure of a CRAN-like repository](./repositories.html#structure-of-a-cran-like-repository), covers
-specific [details about CRAN](./repositories.html#Characteristics-Specific-to-CRAN), and discusses
-options for creating [internal repositories](./repositories.html#internal-repositories).
+This page outlines the [structure of a CRAN-like repository](repositories.qmd#structure-of-a-cran-like-repository), covers
+specific [details about CRAN](repositories.qmd#Characteristics-Specific-to-CRAN), and discusses
+options for creating [internal repositories](repositories.qmd#internal-repositories).
 
 Looking for a way to manage your own repository? Try [RStudio Package Manager](https://rstudio.com/products/package-manager).
 
@@ -96,7 +89,7 @@ The structure of the repository is built around the different ways users might
 access packages. The `/src/contrib` directory contains the package source
 bundles. The `/bin` directory contains compiled packages, built for different
 distributions. More information about binary packages is available
-[below](./repositories.html#binary-packages).
+[below](repositories.qmd#binary-packages).
 
 ### Package Metadata
 
@@ -114,7 +107,7 @@ CRAN, and some CRAN-like repositories, have an Archive directory inside of
 packages that have [been archived](https://cran.r-project.org/web/packages/policies.html). On CRAN, there
 is additional metadata in an archive.rds file with information on the prior
 versions. These copies of prior package versions are critical to many
-[reproducibility strategies](./reproduce.html).
+[reproducibility strategies](reproduce.qmd).
 
 ### Binary Packages
 
@@ -136,7 +129,7 @@ download and use the code as-is, with no installation necessary. You can think
 of CRAN binaries as being a global cache, the work of compiling is done once
 (per operating system), and all users benefit!
 
-More detailed information on [package installation](./installation.html) is
+More detailed information on [package installation](installation.qmd) is
 available as well as information on the [different states](http://r-pkgs.had.co.nz/package.html#package) of an R package.
 
 CRAN provides binaries for Windows and Mac. In addition to being
@@ -145,13 +138,12 @@ created them. A repository serving binary packages indexes them by both
 attributes. Typically if a binary is not available for the version of R in-use,
 R will provide the user with an option to install the latest version from
 source, or install an older, binary version of the package that was built with
-the appropriate version of R. Additional details are available in the [package
-installation](./installation.html) section.
+the appropriate version of R. Additional details are available in the 
+[package installation](installation.qmd) section.
 
 RStudio Package Manager supplements the binaries available from CRAN and
 provides binary packages for a variety of Linux distributions. More information
-is available
-here](https://blog.rstudio.com/2019/11/07/package-manager-v1-1-no-interruptions/).
+is available [here](https://blog.rstudio.com/2019/11/07/package-manager-v1-1-no-interruptions/).
 These pre-compiled packages can make package installation much faster for those
 using R on Linux, such as RStudio Server users or anyone running R in Docker.
 
@@ -180,8 +172,8 @@ packages are accepted into the repository. These checks test to ensure the
 package is correctly formatted, and notably, also check to ensure the package
 does not break any other current packages on CRAN. You can read [details and
 advice on the CRAN checks](http://r-pkgs.had.co.nz/release.html) as well as
-related advice on [how to pick a package](./picking.html) and [how to think
-about using packages in validated environments](./validation.html).
+related advice on how to pick a package and [how to think
+about using packages in validated environments](validation.qmd).
 
 ## Other CRAN-like Repositories
 
@@ -217,8 +209,8 @@ Many organizations find value in hosting their own package repository. Hosting a
 - audit package use  
 
 Internal repositories also play a critical role in many [reproducibility
-strategies](./reproduce.html) and can help teams
-[collaborate](./collaborate.html) on code. There are many ways organizations can create internal repositories. An open
+strategies](reproduce.qmd) and can help teams
+[collaborate](collaborate.qmd) on code. There are many ways organizations can create internal repositories. An open
 source option is the [miniCRAN](https://cran.r-project.org/web/packages/miniCRAN/index.html) package.  A **professional, supported option** is
 [RStudio Package Manager](https://rstudio.com/products/package-manager). In addition to hosting an internal repository, RStudio Package Manager includes support for:  
 
