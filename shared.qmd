@@ -1,12 +1,5 @@
 ---
 title: "Shared Baselines"
-description: |
-  Share a Common Baseline
-output:
-  distill::distill_article:
-    toc: true
-    toc_depth: 3
-canonical_url: https://environments.rstudio.com/shared
 ---
 
 The shared baseline strategy fits when administrators or R champions are responsible for creating an environment where less experienced users can easily share and re-run work. The defining characteristics of the strategy are:
@@ -16,7 +9,7 @@ The shared baseline strategy fits when administrators or R champions are respons
 
 A naive approach to this strategy is for an admin to install packages into a
 system library as users request them. Unfortunately, this approach is not a
-strategy but actually the [Ticket System](./reproduce.html#ticket-system) danger
+strategy but actually the [Ticket System](reproduce.qmd#ticket-system) danger
 zone! Before diving into the implementation steps, we need to understand the problem with this approach.
 
 ### The BIG Risk

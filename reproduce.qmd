@@ -93,9 +93,9 @@ ggplotly(p, tooltip = c('text')) %>%
 
 The three strategies are outlined in detail:  
 
-- [Snapshot and Restore](./snapshot.html)  
-- [Shared Baseline](./shared.html)  
-- [Validated](./validated.html)
+- [Snapshot and Restore](snapshot.qmd)  
+- [Shared Baseline](shared.qmd)  
+- [Validated](validated.qmd)
 
 In addition to these three strategies, the strategy map above details a set of danger zones, areas where "who" is in control and "what" can be installed are mis-aligned to create painful environments that can not be reliably recreated. Identifying if you're in a danger zone can help you identify a "nearby" strategy to move towards.
 
@@ -105,9 +105,9 @@ The wild west scenario occurs when users are given free reign to install package
 
 #### Recommendations:
 
-- If you are a single data scientist, or in a team of experienced data scientists, consider moving to the [snapshot and restore](./snapshot.html) strategy.  
+- If you are a single data scientist, or in a team of experienced data scientists, consider moving to the [snapshot and restore](snapshot.qmd) strategy.  
 
-- If you are working with a group of newer users, consider working with IT to setup the [shared baseline](./shared.html) strategy. Be careful not to slip into the [ticket system](./reproduce.html#ticket-system) scenario, which occurs if you ask IT to restrict the system without teaching them how to manage shared baselines. It might make sense to use the shared baseline strategy by default, and allow experienced users to step into the snapshot strategy.  
+- If you are working with a group of newer users, consider working with IT to setup the [shared baseline](shared.qmd) strategy. Be careful not to slip into the [ticket system](reproduce.qmd#ticket-system) scenario, which occurs if you ask IT to restrict the system without teaching them how to manage shared baselines. It might make sense to use the shared baseline strategy by default, and allow experienced users to step into the snapshot strategy.  
 
 ### Ticket System
 
@@ -116,13 +116,15 @@ The ticket system scenario occurs when administrators are involved in package in
 1. A user wants a new package installed, so they submit a ticket to have the package added
 2. An admin receives the ticket, and manually installs the new package into the system library
 
-This scenario is problematic because it encourages [partial upgrades](./reproduce.html#the-big-risk), is often slow, and still results in broken environments!
+This scenario is problematic because it encourages [partial upgrades](reproduce.qmd#the-big-risk), is often slow, and still results in broken environments!
 
 #### Recommendation
 
-- If your organization requires admin involvement for practical reasons, (e.g. you're working on offline server), consider adopting the [shared baseline](./shared.html) strategy.
+- If your organization requires admin involvement for practical reasons,
+(e.g. you're working on offline server), consider adopting the [shared baseline](shared.qmd) strategy.
 
-- If your organization requires admin involvement for strategic reasons (e.g. you have concerns about package licenses), consider adopting the [validation](./validated.html) strategy.
+- If your organization requires admin involvement for strategic reasons
+(e.g. you have concerns about package licenses), consider adopting the [validation](validated.qmd) strategy.
 
 ### Blocked
 
@@ -133,13 +135,13 @@ packages.
 
 In this scenario, it is important for R users to level-set with IT on why R
 packages are essential to successful data science work. You may need to refer to
-the [validation](./validation.html) section of the site or the section on
-[picking packages](./picking.html), both of which help explain where packages
+the [validation](validation.qmd) section of the site or the section on
+picking packages, both of which help explain where packages
 come from and address issues around trust.
 
 Come to this discussion prepared to advocate for either the [shared
-baseline](./reproduce.html#shared-baselines) or
-[validation](./validated.html) strategy. It may also help your admin
+baseline](reproduce.qmd#shared-baselines) or
+[validation](validated.qmd) strategy. It may also help your admin
 team to know that there are supported products, like [RStudio Package
 Manager](https://rstudio.com/products/package-manager), designed to help them
 help you!

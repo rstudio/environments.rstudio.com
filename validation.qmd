@@ -1,5 +1,8 @@
 ---
 title: "Validation"
+execute:
+  echo: false
+  warning: false
 ---
 
 ```{r}
@@ -76,7 +79,7 @@ For example, this is the CRAN status badge for ggplot2:
 In addition to documentation, a critical indicator that a package is ready for
 prime time is checking to see whether the [package has tests](https://r-pkgs.had.co.nz/tests.html).
 Normally, package authors include tests in a directory
-[alongside their package code](https://github.com/tidyverse/ggplot2/tree/master/tests).
+[alongside their package code](https://github.com/tidyverse/ggplot2/tree/main/tests).
 Tests help authors check their code for accuracy and prevent them from accidentally breaking code. 
 
 Many packages will go a step further and report [test coverage](https://covr.r-lib.org/).
@@ -87,8 +90,8 @@ service and report test status and code coverage through public badges.
 <aside>
 The following badges show the current test coverage and status for ggplot2:
 
-[![Travis Build Status](https://travis-ci.org/tidyverse/ggplot2.svg?branch=master)](https://travis-ci.org/tidyverse/ggplot2)
-[![Coverage Status](https://img.shields.io/codecov/c/github/tidyverse/ggplot2/master.svg)](https://codecov.io/github/tidyverse/ggplot2?branch=master)
+[![Travis Build Status](https://travis-ci.org/tidyverse/ggplot2.svg?branch=main)](https://travis-ci.org/tidyverse/ggplot2)
+[![Coverage Status](https://img.shields.io/codecov/c/github/tidyverse/ggplot2/main.svg)](https://codecov.io/github/tidyverse/ggplot2?branch=main)
 </aside>
 
 ## Documentation
@@ -96,7 +99,7 @@ The following badges show the current test coverage and status for ggplot2:
 A critical indicator of a package's health and usefulness is the level of documentation.
 R packages provide documentation in a number of formats:  
 
--[Package READMEs](https://github.com/juliasilge/tidytext/blob/master/README.md)  
+-[Package READMEs](https://github.com/juliasilge/tidytext/blob/main/README.md)  
 -[Package Vignettes](https://tidymodels.github.io/parsnip/articles/articles/Regression.html)  
 -[Function References and Help Files](https://cran.r-project.org/web/packages/plumber/plumber.pdf)  
 -[Websites](https://spark.rstudio.com/)  
@@ -160,7 +163,7 @@ useful to see the number of authors and their affiliation. For a
 package on GitHub, it is possible to view the [contribution
 activity](https://github.com/tidyverse/ggplot2/graphs/contributors). Some
 packages will include [contribution
-guidelines](https://github.com/tidyverse/ggplot2/blob/master/CONTRIBUTING.md).
+guidelines](https://github.com/tidyverse/ggplot2/blob/main/CONTRIBUTING.md).
 
 For packages developed in a public forum, such as GitHub, it can be useful to
 review the package's open issues and pull requests. Are the package authors
@@ -183,9 +186,7 @@ Or is it because the package is really stable? Considering the package’s
 [![lifecycle](https://img.shields.io/badge/lifecycle-stable-brightgreen.svg)](https://www.tidyverse.org/lifecycle/#stable)
 
 
-```{r eval=FALSE, echo=FALSE}
-#| eval: false
-# temp turn this off
+```{r}
 
 releases <- tribble(
   ~version, ~date,
