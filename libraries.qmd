@@ -1,8 +1,5 @@
 ---
 title: "Libraries"
-description: |
-   Managing Installed Packages in Libraries
-canonical_url: https://environments.rstudio.com/libraries
 ---
 
 > In short, a library is just a directory containing installed packages 
@@ -24,5 +21,5 @@ must be understood to reproduce them:
 3. An R library is tied to a specific version of R.
 4. R can search through multiple libraries, and libraries can be shared across projects and users.
 
-Addressing these constraints is the focus of the reproducible [strategies](./reproduce.html).
+Addressing these constraints is the focus of the reproducible [strategies](reproduce.qmd).
 
