@@ -39,7 +39,7 @@ website:
           file: docs/deploy.qmd
         - text: "Collaborate within a Team"
           file: docs/collaborate.qmd
-    
+
     - id: strategies
       title: "Strategies"
       collapse-level: 1
@@ -53,7 +53,7 @@ website:
           file: docs/shared.qmd
         - text: "Validated"
           file: docs/validated.qmd
-    
+
     - id: tools
       title: "Tools"
       style: "docked"
@@ -75,11 +75,11 @@ website:
               file: docs/python/introduction.qmd
             - text: "venv"
               file: docs/python/venv.qmd
-            - text: "poetry"
+            - text: "Poetry"
               file: docs/python/poetry.qmd
-            - text: "conda"
+            - text: "Conda"
               file: docs/python/conda.qmd
-        
+
         - section: "Old stuff"
           contents:
             - text: "Installing - pak / remotes"

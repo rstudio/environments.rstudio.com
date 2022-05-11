@@ -1,76 +1,72 @@
 ---
-title: "poetry"
+title: "Poetry"
 table-of-contents: true
 execute: 
   enabled: false
 ---
 
-:::{.callout-warning}
-Under development
-:::
+*Poetry* is a tool for Python packaging and dependency management Check out the *Poetry* docs here: [https://python-Poetry.org](https://python-poetry.org){.uri}. As a data scientist you can use *Poetry* to create reproducible python environments for you and your team. The key features are:
 
-*poetry* is a Python tool for Python packaging and dependency management Check out the *poetry* docs here: <https://python-poetry.org>. A few of the most important features are:
-
-- Command line interface for declaring dependencies.
-- The ability to document development only dependencies in addition to production dependencies.
-- A lock file to maximize reproducibility.
+-   A command line interface for declaring dependencies.
+-   The ability to document development only dependencies in addition to production dependencies.
+-   A lock file to record all dependencies and sub-dependencies.
 
 ## Usage
 
-### Installation
+### Installation {#installation}
 
-To install poetry run the following command:
+To install Poetry run the following command:
 
-```bash
+``` bash
 curl -sSL https://install.python-poetry.org | python3 -
 ```
 
-Follow the instructions from the terminal output to configure *poetry*. For example, if you are using *bash* you will need to add the following to your *~/.bashrc* file:
+Follow the instructions from the terminal output to configure *Poetry*. For example, if you are using *bash* you will need to add the following line to your *\~/.bashrc* file:
 
-```bash
+``` bash
 export PATH="$HOME/.poetry/bin:$PATH"
 ```
 
-Restart your shell, and verify that *poetry* is working by checking the version:
+Restart your shell, and verify that *Poetry* is working by checking the version:
 
-```bash
+``` bash
 poetry --version
 ```
 
-### Create a new project
+### Create a new project {#create-a-new-project}
 
-Create a new empty directory to store you new project in.
+Create a new empty directory to store you new project in. In our example we will create a [Streamlit](https://streamlit.io) app:
 
-```bash
+``` bash
 mkdir ~/my_streamlit_app
 cd ~/my_streamlit_app 
 ```
 
-Then, use the *poetry* command to create a new project:
+Then, use the *Poetry* command to create a new project:
 
-```bash
+``` bash
 poetry init \
     --no-interaction \
     --name my_streamlit_app \
     --description "A simple hello world streamlit app"
 ```
 
-The `poetry init` commands does two major things:
+The `poetry init` commands does two primary things:
 
-1. Creates a *pyproject.toml* file.
-2. Creates a virtual environment for the project.
+1.  Creates a *pyproject.toml* file.
+2.  Creates a virtual environment for the project.
 
-After running the above command your project structure will look like this:
+After running the above command your project structure will have only one file and look like this:
 
-```bash
+``` bash
 .
 └── pyproject.toml
 ```
 
-:::{.callout-note}
+::: callout-note
 ## pyproject.toml
 
-```yaml
+``` yaml
 [tool.poetry]
 name = "my_streamlit_app"
 version = "0.1.0"
@@ -88,14 +84,20 @@ build-backend = "poetry.core.masonry.api"
 ```
 :::
 
-*pyproject.toml* is a special file that you can use to store project configuration option. It is not specific to *poetry*, other tools can also store information in *pyproject.toml* (read [PEP 621](https://peps.python.org/pep-0621/) to learn more). The `tool.poetry` section of the *pyproject.toml* is where the poetry specific meta-data is stored (<https://python-poetry.org/docs/pyproject/>). As you will learn in the upcoming sections *pyproject.toml* will automatically be updated by *poetry* as we add and remove dependencies.
+*pyproject.toml* is a special file that *Poetry* uses to store project configuration option. It is not specific to *Poetry*, other tools can also store information in *pyproject.toml* (read [PEP 621](https://peps.python.org/pep-0621/) to learn more). The `tool.poetry` section of the *pyproject.toml* file is where the *Poetry* specific meta-data is stored (<https://python-poetry.org/docs/pyproject/>). As you will learn in the upcoming sections *pyproject.toml* will automatically be updated by *poetry* as we add and remove dependencies.
 
-Lastly - lets create our [streamlit](https://github.com/streamlit/streamlit) app. You can copy and paste this code into a a file named *app.py*.
+Lastly - lets create our *Streamlit* app. Create a new file named *app.py*:
 
-:::{.callout-note collapse="true"}
+``` bash
+touch app.py
+```
+
+Then copy and paste this code into *app.py*.
+
+::: {.callout-note collapse="true"}
 ## app.py
 
-```{.python code-line-numbers="."}
+``` {.python code-line-numbers="."}
 import streamlit as st
 import pandas as pd
 import altair as alt
@@ -141,57 +143,57 @@ with chart_col1:
 with chart_col2:
     st.write("#### Distribution of Flipper Length")
     st.altair_chart(histogram)
-
 ```
 :::
 
 ### Manage dependencies
 
-*poetry* comes with a suite of commands that you can use to manage your dependencies without ever touching *pyproject.toml* by hand. The main commands include:
+*Poetry* comes with a suite of commands that you can use to manage your dependencies without ever touching *pyproject.toml* by hand. The main commands include:
 
-- `poetry add`: declare a new dependency.
-- `poetry remove`: remove a dependency.
-- `poetry run`: run a command inside the poetry virtual environment.
+-   `poetry add`: declare a new dependency.
+-   `poetry remove`: remove a dependency.
+-   `poetry run`: run a command inside the poetry virtual environment.
+-   `poetry export`: export the project dependencies.
 
 #### Add a dependency
 
-Since we are creating a streamlit app, we will need to use the streamlit library. Lets start by declaring streamlit as a dependency:
+Since we are creating a *Streamlit* app, we will need to use the *Streamlit* library. Lets start by declaring *Streamlit* as a dependency:
 
-```bash
+``` bash
 poetry add streamlit
 ```
 
-streamlit has a lot of dependencies, so this may take minute... As you wait, you will see that poetry has identified all of the packages that *streamlit* depends on and is installing them into the virtual environment.
+*Streamlit* has a lot of dependencies, so this may take minute... As you wait, you will see that poetry has identified all of the packages that *Streamlit* depends on and is installing them into the virtual environment.
 
-:::{.callout-tip}
+::: callout-tip
 You can think of `poetry add <PACKAGE_NAME>` as being equivalent to `pip install <PACKAGE_NAME>`. One of the many benefits of using `poetry add <PACKAGE_NAME>` is that the requirement will be documented in our `pyproject.toml`, where as with *pip* the requirement is not documented in any configuration file.
 :::
 
 We also want to use a code formatter to ensure that our code looks good and that the development team does not waste time arguing about *tabs* vs *spaces*. So lets install *black*!
 
-```bash
+``` bash
 poetry add --dev black
 ```
 
-The output will look very similar, but note the use of the `--dev` flag. This tells poetry that this is a "development only" dependency. This means that the app does not need *black* to work, but we want all of the developers who are working on the app to have *black* installed so that they can format the code before committing anything into version control.
+The output will look very similar, but note the use of the `--dev` flag. This tells poetry that this is a "development only" dependency. This means that the app does not need [*black*](https://black.readthedocs.io/en/stable/) to work, but we want all of the developers who are working on the app to have *black* installed so that they can format the code before committing anything into version control.
 
-We have no installed two packages: *streamlit* and *black*. Lets take a look and see how *poetry* has updated our configuration files. You will see that we now have two files:
+We have now installed two packages: *Streamlit* and *black*. Lets take a look and see how *poetry* has updated our configuration files. You will see that our project now have two files:
 
-```bash
+``` bash
 .
 ├── poetry.lock
 └── pyproject.toml
 ```
 
-:::{.callout-note}
+::: callout-note
 ## pyproject.toml
 
 *pyproject.toml* has been updated:
 
-- Line 7 now reference a dependency to `streamlit = "^1.8.1"`
-- Line 12 references a development dependency to `black = "^22.3.0"`
+-   Line 7 now reference a dependency to `streamlit = "^1.8.1"`
+-   Line 12 references a development dependency to `black = "^22.3.0"`
 
-```{.yaml code-line-numbers="2,4"}
+``` {.yaml code-line-numbers="2,4"}
 [tool.poetry]
 name = "my_streamlit_app"
 version = "0.1.0"
@@ -208,15 +210,14 @@ black = "^22.3.0"
 [build-system]
 requires = ["poetry-core>=1.0.0"]
 ```
-
 :::
 
-:::{.callout-note}
+::: callout-note
 ## poetry.lock
 
-*poetry.lock* was created after we installed *streamlit*. The lock file includes the dependencies we have declared via the CLI, **plus** all of the dependencies of those packages. The file can be large, so below we only show a small example of what the file looks like
+*poetry.lock* was created after we installed *Streamlit*. The lock file includes the dependencies we have declared via the CLI, **plus** all of the dependencies of those packages. The file can be large, so below we only show a small example of what the file looks like
 
-```{.yaml code-line-numbers="."}
+``` {.yaml code-line-numbers="."}
 [[package]]
 name = "altair"
 version = "4.2.0"
@@ -235,30 +236,30 @@ zipp = [
     {file = "zipp-3.8.0.tar.gz", hash = "sha256:56bf8aadb83c24db6c4b577e13de374ccfb67da2078beba1d037c17980bf43ad"},
 ]
 ```
-
 :::
 
 #### Remove a dependency
 
-After a few weeks of development the team has decided that they do not want to use the *black* code formatter anymore. Instead, everyone has agreed on [autopep8]("https://github.com/hhatto/autopep8").
+After a few weeks of development the team has decided that they do not want to use the *black* code formatter anymore. Instead, everyone has agreed on [*autopep8*](%22https://github.com/hhatto/autopep8%22).
 
 First we need to remove *black*:
 
-```bash
+``` bash
 poetry remove --dev black
 ```
 
-This command will remove *black*, **and** it will also remove all of *black*'s' dependencies that we no longer need. Then, lets add *autopep8* as a dependency.
+This command will remove *black*, **and** it will also remove all of *black*'s dependencies that we no longer need. Then, lets add *autopep8* as a dependency:
 
-```bash
+``` bash
 poetry add --dev autopep8
 ```
 
 *pyproject.toml* has been updated. *black* is no longer a dev dependency and *autopep8* is.
 
-:::{.callout-note}
+::: callout-note
 ## poetry.lock
-```{.yaml code-line-numbers="."}
+
+``` {.yaml code-line-numbers="."}
 [tool.poetry]
 name = "my_streamlit_app"
 version = "0.1.0"
@@ -280,26 +281,26 @@ build-backend = "poetry.core.masonry.api"
 
 ### Run your code
 
-In the [create a new project](#create-a-new-project) section we mentioned that *poetry* created a new virtual environment. Every time we call `poetry add` or `poetry remove` we are modifying that virtual environment. In order to run a command **inside** the virtual environment we use the command `poetry run`. Lets take a look:
+In the [create a new project](#create-a-new-project) section we mentioned that *Poetry* created a new virtual environment. Every time we call `poetry add` or `poetry remove` we are modifying that virtual environment. In order to run a command **inside** the virtual environment we use the command `poetry run`. Lets take a look:
 
-```bash
+``` bash
 ❯ which python
 /Users/samedwardes/.pyenv/shims/python
 ```
 
-```bash
+``` bash
 ❯ poetry run which python
 /Users/samedwardes/Library/Caches/pypoetry/virtualenvs/my-streamlit-app-SAojqYOg-py3.10/bin/python
 ```
 
 Note the difference above. When we prefix our command with `poetry run` we run our command inside the virtual environment. When we do not prefix the command with `poetry run` the virtual environment is not used. Lets take a look at one more example.
 
-```bash
+``` bash
 ❯ streamlit run app.py
 zsh: command not found: streamlit
 ```
 
-```bash
+``` bash
 ❯ poetry run streamlit run app.py
 
   You can now view your Streamlit app in your browser.
@@ -308,26 +309,26 @@ zsh: command not found: streamlit
   Network URL: http://192.168.1.65:8501
 ```
 
-Again, you need to be *inside* the virtual environment for the command to work. Your *streamlit* app should now be up and running!
+Again, you need to be *inside* the virtual environment for the command to work. Your *Streamlit* app should now be up and running!
 
-![Screenshot of the running streamlit app](../imgs/streamlit-screenshot.png)
+![Screenshot of the running streamlit app](../../imgs/streamlit-screenshot.png)
 
 ### Publishing to RStudio Connect
 
-This section will discuss how to publish your code to [RStudio Connect](https://www.rstudio.com/products/connect/) when you are using *poetry* for dependency management. One of the ways *RStudio Connect* discovers an apps dependencies is by inspecting a projects *requirements.txt*. *RStudio Connect* does not know how to inspect *pyproject.toml* or *poetry.lock*.
+This section will discuss how to publish your code to [*RStudio Connect*](https://www.rstudio.com/products/connect/) when you are using *poetry* for dependency management. One of the ways *RStudio Connect* discovers an apps dependencies is by inspecting a projects *requirements.txt*. *RStudio Connect* does not know how to inspect *pyproject.toml* or *poetry.lock*.
 
 Luckily for us there is a simple workaround. We can use the `poetry export` command to document all of the dependencies in a *requirements.txt* format.
 
-```bash
+``` bash
 poetry export --without-hashes --output requirements.txt
 ```
 
-:::{.callout-note collapse="true"}
+::: {.callout-note collapse="true"}
 ## requirements.txt
 
 *requirements.txt* includes all of the dependencies you specified via the command line, and all of their dependencies. Each package is also locked into a specific version.
 
-```{.pip-requirements code-line-numbers="."}
+``` {.pip-requirements code-line-numbers="."}
 altair==4.2.0; python_version >= "3.7"
 appnope==0.1.3; platform_system == "Darwin" and python_version >= "3.8" and sys_platform == "darwin"
 argon2-cffi-bindings==21.2.0; python_version >= "3.7"
@@ -429,13 +430,17 @@ zipp==3.8.0; python_version >= "3.7"
 
 Now you can publish to *RStudio Connect* as you normally would. First lets install *rsconnect-python* as a development dependency:
 
-```bash
+``` bash
 poetry add --dev rsconnect-python
 ```
 
+::: callout-note
+You do not need to rerun `poetry export --without-hashes --output requirements.txt` after adding *rsconnect-python*. This is because we added it as a development dependency. `poetry export` only includes non-development dependencies unless we add the `--dev` flag.
+:::
+
 Then, we can publish our content!
 
-```bash
+``` bash
 poetry run rsconnect deploy streamlit \
   --python $(poetry run which python) \
   --exclude "poetry.lock" \
@@ -447,68 +452,119 @@ poetry run rsconnect deploy streamlit \
 
 ## Collaboration
 
-So far you have created a new project, used *poetry* to document your dependencies, and then published your app to RStudio Connect. Your app is getting a lot of traction and you want to implement some new features. To help with the backlog you will need to onboard a new colleague. 
+So far you have created a new project, used *Poetry* to document your dependencies, and then published your app to RStudio Connect. Your app is getting a lot of traction and you want to implement some new features. To help with the backlog you will need to on-board a new colleague.
 
 **How can you ensure that you and your colleague are using identical environments?**
 
 There are two key things your colleague will need:
 
-- *poetry.lock*
-- *pyproject.toml*
+-   *poetry.lock*
+-   *pyproject.toml*
 
-With these two files anyone will be able to reproduce your environment. With this in mind,
+With these two files anyone will be able to reproduce your environment.
 
-:::{.callout-tip}
+::: callout-tip
 Both *poetry.lock* and *pyrpoject.toml* should be checked into version control (e.g. GitHub).
 :::
 
 When your colleague is ready to start working on the project here is what they will need to do:
 
-1. Obtain the source code. Assuming you are using git based version control this would be done with `git clone`.
-2. Install poetry (see the [installation](#installation) section).
-3. Install the dependencies using `poetry install`.
+1.  Obtain the source code. Assuming you are using git based version control this would be done with `git clone`.
+2.  Install *Poetry* (see the [installation](#installation) section).
+3.  Install the project dependencies using `poetry install`.
 
 That is it 🎉! Your colleague will now be able to run the code using the `poetry run` command. They can also make changes to the environment with `poetry add` and `poetry remove`!
-
-## How it works
-
-The objective of this section is not to explain the ins and outs of *poetry*. Rather it is to give you the absolute minimum amount of information you need to know about *poetry* to use it effectively.
 
 ## FAQ
 
 ### How do I specify the source of my packages?
 
-:::{.callout-warning}
-Under development
+By default *Poetry* is configured to use the *PyPI* repository (<https://pypi.org>). However, *Poetry* does support the use of alternate repositories as well. Lets add [*RStudio Package Manager*](https://www.rstudio.com/products/package-manager/) as an alternate. To do this you need to update *pyproject.toml* by hand:
+
+``` toml
+[[tool.poetry.source]]
+name = "rspm"
+url = "https://colorado.rstudio.com/rspm/pypi/latest/simple"
+```
+
+Now when you run `poetry add` or `poetry install` *Poetry* will check both *Rstudio Package Manager* and *PyPi*.
+
+::: callout-note
+Any custom repository will have precedence over *PyPI*.
+
+If you still want PyPI to be your primary source for your packages you can declare custom repositories as secondary.
+
+``` toml
+[[tool.poetry.source]]
+name = "rspm"
+url = "https://colorado.rstudio.com/rspm/pypi/latest/simple"
+secondary = true
+```
+
+If you want to disable *PyPi* so that only *RStudio Package Manager* is used you can use the `default` keyword.
+
+``` toml
+[[tool.poetry.source]]
+name = "rspm"
+url = "https://colorado.rstudio.com/rspm/pypi/latest/simple"
+default = true
+```
 :::
 
 ### How do I update dependencies?
 
-:::{.callout-warning}
-Under development
-:::
+Overtime you may want to update your dependencies. For example one day [*pandas*](https://pandas.pydata.org) version 2.0 may come out and you will want to update to the latest and greatest.
+
+To update *pandas* only run:
+
+``` bash
+poetry update pandas
+```
+
+To update all dependencies in your project run:
+
+``` bash
+poetry update
+```
 
 ### How do I specify which version of a package I want to use?
 
-:::{.callout-warning}
-Under development
-:::
+You can specify a specific package version in `poetry add` by using the `==` operator. For example:
 
-### How do I specify which version of Python I want to use?
+``` bash
+poetry add urllib3==1.26.0
+```
 
-:::{.callout-warning}
-Under development
-:::
+Read more about constraining package versions here: <https://python-poetry.org/docs/cli/#add>.
 
 ### How do I switch version of Python I want to use?
 
-:::{.callout-warning}
-Under development
-:::
+By default *Poetry* will create a virtual environment using your current *python* environment. You can change which version of *python* *Poetry* is using with the `poetry env use` command.
+
+Here is an example of how I would use *Python* version *3.10.2*:
+
+``` bash
+poetry env use ~/.pyenv/versions/3.10.1/bin/python
+```
+
+We can validate that this worked by checking the python version:
+
+``` bash
+> poetry run python --version
+Python 3.10.2
+```
+
+I can always change my *Python* version later by running the command again. For example lets downgrade to *Python 3.9.10*:
+
+``` bash
+> poetry env use ~/.pyenv/versions/3.9.10/bin/python
+> poetry run python --version
+Python 3.9.10
+```
 
 ### What should I check into version control?
 
 There are two files you should check into version control:
 
-- *poetry.lock*
-- *pyproject.toml*
+-   *poetry.lock*
+-   *pyproject.toml*
