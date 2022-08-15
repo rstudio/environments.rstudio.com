@@ -2,6 +2,7 @@
 title: "Python"
 description: |
  Environments with R and Python 
+canonical_url: https://environments.rstudio.com/python
 ---
 
 Python is not the focus of this site, but it is a critical tool for many data scientists. Unfortunately managing Python environments can be challenging:

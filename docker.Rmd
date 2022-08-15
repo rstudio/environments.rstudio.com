@@ -6,6 +6,7 @@ output:
   distill::distill_article:
     toc: true
     toc_depth: 3
+canonical_url: https://environments.rstudio.com/docker
 ---
 
 Docker is a large topic. This site focuses on how Docker relates to reproducible
@@ -101,12 +102,12 @@ grViz("
   graph [layout = dot
          rankdir = BT]
   node[shape = box]
-  'Base OS (ubunty xenial)'; 'System Dependency (libssl)'; 'R Version (3.5.2)'; 'R Packages (xgboost)'; 'Code (report.Rmd)'
+  'Base OS (ubuntu xenial)'; 'System Dependency (libssl)'; 'R Version (3.5.2)'; 'R Packages (xgboost)'; 'Code (report.Rmd)'
   
   node[shape=oval color=grey style=filled]
   'Command \n (R -e rmarkdown::render)'
   
-  'Base OS (ubunty xenial)'->'System Dependency (libssl)'
+  'Base OS (ubuntu xenial)'->'System Dependency (libssl)'
   'System Dependency (libssl)'->'R Version (3.5.2)'
   'R Version (3.5.2)'->'R Packages (xgboost)'
   'R Packages (xgboost)'->'Code (report.Rmd)'
@@ -130,12 +131,12 @@ grViz("
   graph [layout = dot
          rankdir = BT]
   node[shape = box]
-  'Base OS (ubunty xenial)'; 'System Dependency (libssl)'; 'R Version (3.5.2)'; 
+  'Base OS (ubuntu xenial)'; 'System Dependency (libssl)'; 'R Version (3.5.2)'; 
   
   node[shape=box color=grey style=filled]
   'Save as new base image \n (company/base-r-image:3.5.2-xenial)'
   
-  'Base OS (ubunty xenial)'->'System Dependency (libssl)'
+  'Base OS (ubuntu xenial)'->'System Dependency (libssl)'
   'System Dependency (libssl)'->'R Version (3.5.2)'
   'R Version (3.5.2)'->'Save as new base image \n (company/base-r-image:3.5.2-xenial)'
 }         

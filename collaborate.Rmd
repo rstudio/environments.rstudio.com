@@ -2,6 +2,7 @@
 title: "Team Collaboration"
 description: |
   Easily Work Together
+canonical_url: https://environments.rstudio.com/collaborate
 ---
 
 A common challenge on teams is sharing and running code. If you've sat down to run a colleague's code, only to spend hours installing and updating packages, you're familiar with the pain points. Luckily, adopting any of the [strategies](./reproduce.html) for creating a reproducible environment will result in easier team collaboration. 
@@ -21,7 +22,7 @@ Each of these strategies is easily adapted for teams wishing to collaborate on s
 Teams wishing to use the shared baseline strategy for collaboration would follow these steps:
 
 1. Record in your project code the version of R being used for the project.
-2. Share your project code using a version control tool like Git, or using RStudio Server Pro's [project sharing](https://support.rstudio.com/hc/en-us/articles/211659737-Sharing-Projects-in-RStudio-Server-Pro). 
+2. Share your project code using a version control tool like Git, or using RStudio Workbench's [project sharing](https://support.rstudio.com/hc/en-us/articles/211659737-Sharing-Projects-in-RStudio-Server-Pro). 
 3. When the collaborator clones or opens the shared project, they should start the RStudio session with the noted version of R. If the admin has installed packages into the system library, the collaborator will be ready to run the code immediately. If not, the collaborator can install the necessary packages. The installation will automatically include the correct package versions because the R installation is tied to a frozen repository.
 
 ### Snapshot and Restore for Collaboration 

@@ -6,6 +6,7 @@ output:
   distill::distill_article:
     toc: true
     toc_depth: 3
+canonical_url: https://environments.rstudio.com/validated
 ---
 
 The validated strategy is similar to the [shared

@@ -2,6 +2,7 @@
 title: "Upgrading Packages"
 description: |
   How to Safely Upgrade Packages 
+canonical_url: https://environments.rstudio.com/upgrades
 ---
 
 Upgrading packages can be a risky affair. Most R users have been in a situation

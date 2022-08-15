@@ -2,6 +2,7 @@
 title: "R Installations"
 description: |
   Installing and Managing R 
+canonical_url: https://environments.rstudio.com/r-installation
 ---
 
 For reproducible environments, **the most critical step is

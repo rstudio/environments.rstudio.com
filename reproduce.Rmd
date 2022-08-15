@@ -6,6 +6,7 @@ output:
   distill::distill_article:
     toc: true
     toc_depth: 3
+canonical_url: https://environments.rstudio.com/reproduce
 ---
 
 Reproducing data science work is the main objective of environment management. This site details three strategies for reproducing R environments over time. To select a strategy, you will need to answer two questions:  
