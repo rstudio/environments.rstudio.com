@@ -1,2 +1,4 @@
 http://environments.posit.co/* https://environments.rstudio.com/:splat 302!
 https://environments.posit.co/* https://environments.rstudio.com/:splat 302!
+http://environments.rstudio.com/* https://solutions.rstudio.com/environments/:splat 302!
+https://environments.rstudio.com/* https://solutions.rstudio.com/environments/:splat 302!
