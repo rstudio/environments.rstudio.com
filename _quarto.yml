@@ -1,0 +1,46 @@
+project:
+  type: website
+  output-dir: _site
+website:
+  title: "Environments"
+  google-analytics: "UA-20375833-3"
+  site-url: https://environments.rstudio.com
+  repo-url: https://github.com/rstudio/environments.rstudio.com
+  repo-actions: [edit, issue]
+  page-navigation: true
+  navbar:
+    right:
+      - text: "Use Cases"
+        menu:
+        - text: "Safely Upgrade Packages"
+          href: upgrades.qmd
+        - text: "Validate your Environment"
+          href: validation.qmd
+        - text: "Deploy to Production"
+          href: deploy.qmd
+        - text: "Collaborate within a Team"
+          href: collaborate.qmd
+      - text: "Strategies"
+        menu:
+        - text: "Strategy Map"
+          href: reproduce.qmd
+        - text: "Snapshot and Restore"
+          href: snapshot.qmd
+        - text: "Shared Baseline"
+          href: shared.qmd
+        - text: "Validated"
+          href: validated.qmd
+      - text: "Tools"
+        menu:
+        - text: "Installing - pak / remotes"
+          href: installation.qmd
+        - text: "Repositories - RStudio Package Manager"
+          href: repositories.qmd
+        - text: "Libraries - renv"
+          href: libraries.qmd
+        - text: "R Versions"
+          href: R-installation.qmd
+        - text: "Docker"
+          href: Docker.qmd
+        - text: "Python"
+          href: python.qmd

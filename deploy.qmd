@@ -1,0 +1,370 @@
+---
+title: "Production Deployment"
+---
+
+Data products built in R, such as dashboards, web applications, reports, and APIs,
+are increasingly deployed to production. While specific definitions of production
+can vary, everyone agrees that production content should be stable. Most production
+systems use a variation of the [Snapshot and Restore](snapshot.qmd) strategy. Here,
+we focus on examples of production systems that apply the snapshot and restore strategy.
+This page also describes [staging environments](deploy.qmd#testing-and-staging-environments),
+[acceptable differences](deploy.qmd#acceptable-differences) between development and production
+environments, and [strategies for upgrading](upgrades.qmd) production environments.
+
+This page focuses on reproducible environments for production content. There are other 
+important concerns for placing R code in production:
+
+- [version control](https://happygitwithr.com/)
+- [unit testing](http://r-pkgs.had.co.nz/tests.html) and [integration testing](https://rstudio.github.io/shinytest/articles/shinytest.html)
+- [performance profiling](https://rstudio.github.io/profvis/) and [load testing](https://rstudio.github.io/shinyloadtest/)
+- [data security](https://db.rstudio.com/best-practices/deployment/) 
+
+
+# Development to Production
+
+Production systems come in different shapes and sizes. Some organizations store
+code in Git and use continuous integration tools like Jenkins to deploy content.
+Other organizations might use containers and an orchestration tool like Kubernetes.
+Or, you may use infrastructure-as-code tooling like Chef or Puppet to deploy
+products onto physical, virtual, or cloud servers.
+
+Regardless of the specific implementation, there are three basic steps required to
+deploy R environments to production:
+
+1. In the development environment, the data product's dependencies should be **snapshotted**.
+2. In production, an **isolated** environment should be created for the data product.
+3. In the isolated environment, the dependencies should be **restored** exactly, with matching versions.
+
+<aside>
+A simple checklist:   
+- [ ] snapshot  
+- [ ] isolate  
+- [ ] restore    
+</aside>
+
+These steps are the heart of the ["snapshot and restore"
+strategy](./snapshot.html) for reproducing environments. The following two
+examples showcase implementations of this strategy in production systems.
+These examples are not exhaustive, and you can
+certainly design other processes. All implementations should meet the key
+requirements of snapshot, isolate, and restore.
+
+
+## Example: RStudio Connect
+
+```{r}
+#| echo: false
+#| fig.cap: "Summary of the Snapshot and Restore Strategy Applied in RStudio Connect"
+library(gt)
+library(tibble)
+library(magrittr)
+dat <- tribble(
+  ~step, ~handledby,
+  "Snapshot", "Manifest file is created during publication",
+  "Isolate", "RStudio Connect creates an isolated package library for each piece of content",
+  "Restore", "Connect installs the packages listed in the manifest into the isolated library"
+)
+
+dat %>% 
+  gt(rowname_col = "step") %>% 
+  cols_label(handledby = "RStudio Connect Implementation")
+```
+
+[RStudio Connect](https://rstudio.com/products/connect) is a publishing platform
+for data products, that *automatically implements the snapshot and restore strategy*
+when users publish content. If you're using RStudio Connect, you don't need to
+manually manage this process. Here is what happens when a data product is deployed:
+
+1. The version of R in use, the current [repository](repositories.qmd), and the
+list of R packages are recorded in a manifest file. Users typically don't see this file,
+but if you'd like to explore it, run `rsconnect::writeManifest()` from within your
+project's working directory in the development environment. Here is a sample from a manifest file:
+
+```
+{
+  "version": 1,
+  "locale": "en_US",
+  "platform": "3.4.4",
+  "metadata": {
+    "appmode": "api",
+    "primary_rmd": null,
+    "primary_html": null,
+    "content_category": null,
+    "has_parameters": false
+  },
+  "packages": {
+    "BH": {
+      "Source": "CRAN",
+      "Repository": "https://cran.rstudio.com/",
+      "description": {
+        "Package": "BH",
+        "Type": "Package",
+        "Title": "Boost C++ Header Files",
+        "Version": "1.66.0-1",
+        "Date": "2018-02-12",
+        "Author": "Dirk Eddelbuettel, John W. Emerson and Michael J. Kane",
+        "Maintainer": "Dirk Eddelbuettel <edd@debian.org>",
+```
+
+2. The manifest file, application code, and supporting files are sent to the production RStudio Connect server.
+
+3. The RStudio Connect server creates an isolated library for each piece of content.
+
+4. The required packages are restored into the isolated library using the manifest file.
+As an example, if content A depends on `ISLR` 1.0 and content B depends on `ISLR` 2.0,
+the appropriate version will be installed into the separate content libraries.
+RStudio Connect maintains a cache so that packages are appropriately reused when possible.
+
+
+## Example: `renv` and Docker
+
+In this example, a Docker container is used to isolate the data product, and  `renv`
+is used to snapshot and restore the appropriate package environment. More details
+are available for using [R with Docker here](docker.qmd).
+
+```{r}
+#| echo: false
+#| fig.cap: "Summary of the Snapshot and Restore Strategy Applied with Docker and renv"
+library(gt)
+library(tibble)
+library(magrittr)
+dat <- tribble(
+  ~step, ~handledby,
+  "Snapshot", "renv::snapshot() creates a lock file from the development environment",
+  "Isolate", "The Docker container creates an isolated environment for the data product",
+  "Restore", "renv::restore() is run in the Docker container to recreate the package environment"
+)
+
+dat %>% 
+  gt(rowname_col = "step") %>% 
+  cols_label(handledby = "Docker + renv Implementation")
+```
+
+
+1. In the development environment, create a `renv.lock` file for the project by running
+`renv::snapshot()`. The lock file records the version of the R packages in use.
+Commit this lock file alongside the code.
+
+2. Create a Dockerfile, starting with the appropriate version of R:
+
+```bash
+# start with the appropriate version of R
+FROM rstudio/r-base:3.4-bionic
+
+# install git
+RUN apt-get install -y git
+
+# clone the code base
+RUN git clone https://ourgit.example.com/user/project.git
+
+# install renv
+RUN R -e 'install.packages("renv", repos = "https://r-pkgs.example.com")'
+
+# restore the package environment
+RUN R -e 'setwd("./project"); renv::restore()'
+
+# run the data product
+CMD ...
+```
+
+In this example, the version of R is controlled by the base image, using an image
+provided by RStudio that includes R. Other alternatives also work, such as
+including the commands to [install R](R-installation.qmd). You can determine the
+R version from the `renv` lock file:
+
+```bash
+cat renv.lock | grep -A1 "\[R\]" | sed -En "s/Version=(.*)$/\1/p"
+```
+
+3. Build and deploy the docker image. This image contains the environment for your
+production code. The image can then be used as the basis for containers to execute your code.
+
+# Testing and Staging Environments
+
+The focus so far has been deploying R environments to production systems. With proper
+record keeping and environment isolation, there is a high chance that deployed content
+will work as expected. However, for systems that require minimal downtime, it is still
+imperative to test content in a pre-production system before officially deploying to
+production. The concept is simple:
+
+1. Create and maintain a clone of the production system.
+2. Follow the steps described above to deploy the data product to the production clone.
+3. If everything works as expected, re-run the steps to deploy the data product into production.
+
+```{r}
+#| echo: false
+library(DiagrammeR) 
+grViz("
+digraph repos {
+  graph [layout = dot
+        rankdir = LR]
+  
+  
+  node[shape = box]
+  'Dev'
+  
+  node[fillcolor = grey, style = filled]
+  'Staging'; 'Prod'
+  
+  Dev -> Staging
+  Staging -> Prod
+}      
+")
+```
+<aside>
+Staging and Production should be identical clones!
+</aside>
+
+While conceptually simple, in practice there are two challenges:
+
+1. Ensuring the staging environment is a true clone of production.
+2. Repeating the same steps on both the clone and production system.
+
+To solve these problems, most organizations use either containers or infrastructure-as-code.
+Luckily the idea is straight forward: instead of manually running this process,
+automate as much as possible by writing explicit code that accomplishes steps 1 and 2.
+The specific details for implementing these steps would require an entire website
+all their own, but most R users do not need to worry about re-inventing this process.
+Typically organizations will have a "DevOps" team or strategy in place for staging content.
+The main task for the R user is explaining how those tools should be adapted for
+data products using R. The adaptation is simply including our *snapshot, isolate, and restore* steps.
+
+## Example: RStudio Connect with Git, Jenkins, and Chef
+
+In this example, a DevOps team maintains staging and production servers using Chef.
+They also maintain an enterprise Git application and use Jenkins for continuous integration.
+The current DevOps strategy relies on Git branches. Branches of a repository are automatically
+deployed to staging, whereas the master branch is deployed to production.
+To integrate R based data products:
+
+1. The DevOps team should create Chef recipes responsible for installing multiple 
+versions of R onto the staging and production servers.
+
+2. The DevOps team should create a Chef recipe to install and configure RStudio Connect.
+
+3. The DevOps team should configure Jenkins to deploy a repository's branches to the
+staging environment. Jenkins should also be configured to deploy the master branch
+to production. In both cases, the Jenkins pipeline will consist of bash shell scripts
+that clone the Git repository, create a tar file, and then call RStudio Connect API
+endpoints to deploy. Example [shell scripts are available](https://github.com/rstudio/connect-api-deploy-shiny/tree/main/deploy).
+
+3. When the R user is ready to deploy content, they should start by running
+`rsconnect::writeManifest()` inside of the development environment. The resulting
+manifest file should be included alongside the application code in a Git commit to a staging branch.
+
+4. Following the commit, Jenkins will deploy the code to the staging RStudio
+Connect environment, using the automatic process [described above](deploy.qmd#example-rstudio-connect).
+The R user should confirm the content looks correct.
+
+5. The user or admin can merge the staging branch into the master branch. 
+This merge triggers a deployment to the production server.
+
+```{r}
+#| echo: false
+library(DiagrammeR) 
+grViz("
+digraph repos {
+  graph [layout = dot
+        rankdir = LR]
+  
+  
+  node[shape = box]
+  'Dev'; 'Git Branch'; 'Jenkins'; 'Connect Staging'; 'Git Master'; 'Connect Prod'; 'Jenkins '
+  
+  node[fillcolor = grey, style = filled]
+  'Dependency Manifest'; 'Code'
+  
+  node[fillcolor = grey, style = filled, shape = oval]
+  Approval
+  
+  Dev -> 'Dependency Manifest'
+  Dev -> 'Code'
+  'Code' -> 'Git Branch'
+  'Dependency Manifest' -> 'Git Branch'
+  'Git Branch' -> 'Jenkins'
+  'Jenkins' -> 'Connect Staging'
+  'Connect Staging' -> Approval
+  Approval -> 'Git Master'
+  'Git Master' -> 'Jenkins '
+  'Jenkins ' -> 'Connect Prod' 
+}      
+")
+```
+
+More details are available [here](https://solutions.rstudio.com/r/apps/shiny-data/).
+
+# Acceptable Differences 
+
+We've now described three environments: development, staging/testing, and production.
+The key to success is keeping these environments as similar as possible. However,
+what happens if your development environment is a Windows desktop, and production
+is a Linux server? This section outlines differences that are acceptable:
+the R patch version and the R source.
+
+
+## R Patch Version
+
+R's version scheme has there components, the major version, the minor version,
+and a patch. For example, R version 3.5.2 has:
+- Major version: 3  
+- Minor version: 5  
+- Patch version: 2  
+
+Major versions are released rarely. Minor versions are released once a year in
+the spring. Patch versions are released on a regular, as-needed basis.
+*R packages are compatible across patch versions, but not major or minor versions*!.
+As an example, a package built on version 3.5.1 will work on 3.5.2,
+but is not guaranteed to work on 3.6.0.
+
+For the reason above, we recommend that development and production systems have
+the same available major.minor version, but the patch version could vary. For example,
+content created in the development environment using R version 3.5.1 could be
+deployed to a production environment using 3.5.2.
+
+**R packages do not follow these same rules, and package versions should match exactly!**
+
+## R Package Source
+
+It is possible for development and production environments to have different operating
+systems. For example, development could be performed on a Windows desktop, while
+production lives on a Linux server.
+
+While possible, this setup is not recommended. Instead, many organizations prefer to
+standardize on a single operating system, usually Linux.
+[RStudio Workbench](https://www.rstudio.com/products/workbench/) makes it easy for
+R users to develop in an environment that more closely resembles production.
+
+In the case where operating systems vary, the source of an R package may vary as well.
+Using the scenario above, R packages on Windows are typically installed from
+[pre-compiled CRAN binaries](repositories.qmd#binary-packages). When the same packages
+are restored on a Linux system, they are normally installed from source. This difference
+will not impact behavior, but it explains why information about the package
+(name, version, repository) is transferred as opposed to transferring the installed package library.
+
+
+# Environment Upgrades
+
+In production, one does not simply upgrade packages or system dependencies!
+These tips can enable successful maintenance of your production system overtime:
+
+- *R Packages*: You should **not** be worried about upgrading R packages. Recall,
+the whole goal of the [Snapshot and Restore](snapshot.qmd) strategy is to recreate
+the necessary development dependencies in an isolated environment. To upgrade R packages,
+start by [upgrading them in development](upgrades.qmd), testing that the content works,
+and following the process to redeploy.
+- *R Versions*: New R versions should be **added instead of upgraded**. Production
+systems must have multiple versions of R. As content is updated and redeployed, old
+versions of R will become less used and can eventually be removed. In order to
+accomplish this goal, **R should be installed from source**, not from a system repository
+using `apt` or `yum`. See [R Installations](R-installation.qmd) for details.
+- *System Dependencies*: System dependencies such as shared objects, compilers, or
+even the operating system are updated less frequently. Normally, these components
+are stable or strictly backwards compatible within an operating system release.
+These components should be updated in a staging environment. Often, major updates
+will require rebuilding R and redeploying content. For limited downtime, we recommend
+creating a clone of production, applying the update, and redeploying content.
+Once complete, swap the DNS records for this clone with the original production server.
+Production systems using [Docker containers](docker.qmd) can mitigate this challenge,
+because Docker containers tend to isolate the entire system environment per data product. 
+
+
