@@ -190,7 +190,7 @@ local({
 3. Run R as root, and install the desired baseline packages. Overtime, as requests for new packages come in, install them in the same way. Consistency is guaranteed because you are always installing from the same frozen repository.
 
 ```
-sudo /opt/R/3.4.4./bin/R -e 'install.packages("ggplot2")'
+sudo /opt/R/3.4.4/bin/R -e 'install.packages("ggplot2")'
 ```    
 
 4. Users access packages on the server without any need to install, e.g.: `library(ggplot2)`
